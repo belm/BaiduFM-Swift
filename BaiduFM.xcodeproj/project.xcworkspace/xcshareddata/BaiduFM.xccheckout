@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>E8E99C13-91D9-408B-A954-40F395F7A403</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BaiduFM</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>E377873BE7F2CED237EF08505F12BD14670B444A</key>
+		<string>github.com:belm/BaiduFM-Swift.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>BaiduFM.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>E377873BE7F2CED237EF08505F12BD14670B444A</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:belm/BaiduFM-Swift.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E377873BE7F2CED237EF08505F12BD14670B444A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E377873BE7F2CED237EF08505F12BD14670B444A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>BaiduFM-Swift</string>
+		</dict>
+	</array>
+</dict>
+</plist>
