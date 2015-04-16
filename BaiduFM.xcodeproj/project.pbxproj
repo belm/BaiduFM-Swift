@@ -10,11 +10,11 @@
 		672D47B81ADBBE1200C46409 /* MusicListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672D47B71ADBBE1200C46409 /* MusicListTableViewController.swift */; };
 		676670C51ADD5F2500FBF425 /* DataCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676670C41ADD5F2500FBF425 /* DataCenter.swift */; };
 		678B673D1ADB929400557CB3 /* ChannelTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */; };
+		678E36211AE004E100E124B9 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678E361F1AE004E100E124B9 /* Alamofire.framework */; };
+		678E36221AE004E100E124B9 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678E36201AE004E100E124B9 /* SwiftyJSON.framework */; };
+		678E36231AE004EA00E124B9 /* Alamofire.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 678E361F1AE004E100E124B9 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		678E36241AE004EA00E124B9 /* SwiftyJSON.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 678E36201AE004E100E124B9 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		679DCB281ADE859100191D94 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679DCB271ADE859100191D94 /* Common.swift */; };
-		67DADD4D1ADF6A2B00D0C6BC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67DADD4C1ADF6A2B00D0C6BC /* Alamofire.framework */; };
-		67DADD4F1ADF6A5400D0C6BC /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67DADD4E1ADF6A5400D0C6BC /* SwiftyJSON.framework */; };
-		67DADD501ADF6A7E00D0C6BC /* SwiftyJSON.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67DADD4E1ADF6A5400D0C6BC /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		67DADD511ADF6A7E00D0C6BC /* Alamofire.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67DADD4C1ADF6A2B00D0C6BC /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67F0AEBF1AD9FF8C000CB588 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */; };
 		67F0AEC11AD9FF8C000CB588 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEC01AD9FF8C000CB588 /* ViewController.swift */; };
 		67F0AEC41AD9FF8C000CB588 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67F0AEC21AD9FF8C000CB588 /* Main.storyboard */; };
@@ -44,8 +44,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				67DADD501ADF6A7E00D0C6BC /* SwiftyJSON.framework in CopyFiles */,
-				67DADD511ADF6A7E00D0C6BC /* Alamofire.framework in CopyFiles */,
+				678E36231AE004EA00E124B9 /* Alamofire.framework in CopyFiles */,
+				678E36241AE004EA00E124B9 /* SwiftyJSON.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,9 +56,9 @@
 		673DB82C1ADCB614006D904B /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		676670C41ADD5F2500FBF425 /* DataCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCenter.swift; sourceTree = "<group>"; };
 		678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelTableViewController.swift; sourceTree = "<group>"; };
+		678E361F1AE004E100E124B9 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Librarys/Alamofire.framework; sourceTree = "<group>"; };
+		678E36201AE004E100E124B9 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Librarys/SwiftyJSON.framework; sourceTree = "<group>"; };
 		679DCB271ADE859100191D94 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
-		67DADD4C1ADF6A2B00D0C6BC /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Alamofire.framework; sourceTree = "<group>"; };
-		67DADD4E1ADF6A5400D0C6BC /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SwiftyJSON.framework; sourceTree = "<group>"; };
 		67F0AEB91AD9FF8C000CB588 /* BaiduFM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BaiduFM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		67F0AEBD1AD9FF8C000CB588 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -81,8 +81,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				67F0AEF01ADA6EFE000CB588 /* MediaPlayer.framework in Frameworks */,
-				67DADD4D1ADF6A2B00D0C6BC /* Alamofire.framework in Frameworks */,
-				67DADD4F1ADF6A5400D0C6BC /* SwiftyJSON.framework in Frameworks */,
+				678E36211AE004E100E124B9 /* Alamofire.framework in Frameworks */,
+				678E36221AE004E100E124B9 /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,16 +99,25 @@
 		672D47B61ADB92BA00C46409 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				67F0AEC01AD9FF8C000CB588 /* ViewController.swift */,
 				678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */,
 				672D47B71ADBBE1200C46409 /* MusicListTableViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
 		};
+		678E361E1AE0042300E124B9 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				679DCB271ADE859100191D94 /* Common.swift */,
+				67F0AEE61ADA0784000CB588 /* HttpRequest.swift */,
+			);
+			name = Common;
+			sourceTree = "<group>";
+		};
 		67F0AEB01AD9FF8C000CB588 = {
 			isa = PBXGroup;
 			children = (
-				67F0AEEF1ADA6EFE000CB588 /* MediaPlayer.framework */,
 				67F0AEBB1AD9FF8C000CB588 /* BaiduFM */,
 				67F0AED11AD9FF8C000CB588 /* BaiduFMTests */,
 				67F0AEBA1AD9FF8C000CB588 /* Products */,
@@ -127,12 +136,12 @@
 		67F0AEBB1AD9FF8C000CB588 /* BaiduFM */ = {
 			isa = PBXGroup;
 			children = (
+				678E361E1AE0042300E124B9 /* Common */,
 				673DB82C1ADCB614006D904B /* MyPlayground.playground */,
 				672D47B61ADB92BA00C46409 /* Views */,
 				67F0AEE31ADA043E000CB588 /* Library */,
 				67F0AEDE1AD9FFDC000CB588 /* Model */,
 				67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */,
-				67F0AEC01AD9FF8C000CB588 /* ViewController.swift */,
 				67F0AEC21AD9FF8C000CB588 /* Main.storyboard */,
 				67F0AEC51AD9FF8C000CB588 /* Images.xcassets */,
 				67F0AEC71AD9FF8C000CB588 /* LaunchScreen.xib */,
@@ -170,9 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				67F0AEDF1AD9FFE7000CB588 /* Channel.swift */,
-				679DCB271ADE859100191D94 /* Common.swift */,
 				67F0AEE11ADA03A8000CB588 /* Song.swift */,
-				67F0AEE61ADA0784000CB588 /* HttpRequest.swift */,
 				676670C41ADD5F2500FBF425 /* DataCenter.swift */,
 			);
 			name = Model;
@@ -181,8 +188,9 @@
 		67F0AEE31ADA043E000CB588 /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				67DADD4E1ADF6A5400D0C6BC /* SwiftyJSON.framework */,
-				67DADD4C1ADF6A2B00D0C6BC /* Alamofire.framework */,
+				678E361F1AE004E100E124B9 /* Alamofire.framework */,
+				678E36201AE004E100E124B9 /* SwiftyJSON.framework */,
+				67F0AEEF1ADA6EFE000CB588 /* MediaPlayer.framework */,
 			);
 			name = Library;
 			sourceTree = "<group>";
@@ -428,6 +436,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/BaiduFM",
+					"$(PROJECT_DIR)/BaiduFM/Librarys",
 				);
 				INFOPLIST_FILE = BaiduFM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -442,6 +451,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/BaiduFM",
+					"$(PROJECT_DIR)/BaiduFM/Librarys",
 				);
 				INFOPLIST_FILE = BaiduFM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
