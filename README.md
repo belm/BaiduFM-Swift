@@ -19,7 +19,11 @@
 
 
 ##项目截图
+- 首页![项目截图1](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_01.jpg?raw=true)
 
+- 歌曲分类![项目截图2](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_02.jpg?raw=true)
+
+- 歌曲列表![项目截图3](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_03.jpg?raw=true)
 
 ##项目使用注意事项
 -项目里使用的第三方库是真机调试版本，如需模拟器版本调试，用文件夹iphonesimulator里面库替换即可
