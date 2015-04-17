@@ -62,6 +62,8 @@
 
 -播放音乐改用AVAudioPlayer
 
+-第三方合并
+
 ##联系我
 - [QQ邮箱](mailto:belm@vip.qq.com)
 
