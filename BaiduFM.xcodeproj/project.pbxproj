@@ -10,10 +10,6 @@
 		672D47B81ADBBE1200C46409 /* MusicListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672D47B71ADBBE1200C46409 /* MusicListTableViewController.swift */; };
 		676670C51ADD5F2500FBF425 /* DataCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676670C41ADD5F2500FBF425 /* DataCenter.swift */; };
 		6783E0341AE0D6E400D9D5FC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6783E0321AE0D6D800D9D5FC /* AVFoundation.framework */; };
-		6783E03D1AE0D86300D9D5FC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6783E03B1AE0D86300D9D5FC /* Alamofire.framework */; };
-		6783E03E1AE0D86300D9D5FC /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6783E03C1AE0D86300D9D5FC /* SwiftyJSON.framework */; };
-		6783E03F1AE0D87100D9D5FC /* Alamofire.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6783E03B1AE0D86300D9D5FC /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6783E0401AE0D87700D9D5FC /* SwiftyJSON.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6783E03C1AE0D86300D9D5FC /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		678B673D1ADB929400557CB3 /* ChannelTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */; };
 		679DCB281ADE859100191D94 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679DCB271ADE859100191D94 /* Common.swift */; };
 		67F0AEBF1AD9FF8C000CB588 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */; };
@@ -26,6 +22,7 @@
 		67F0AEE21ADA03A8000CB588 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEE11ADA03A8000CB588 /* Song.swift */; };
 		67F0AEE71ADA0784000CB588 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEE61ADA0784000CB588 /* HttpRequest.swift */; };
 		67F0AEF01ADA6EFE000CB588 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67F0AEEF1ADA6EFE000CB588 /* MediaPlayer.framework */; };
+		F964CFD7279512DD676A4FEE /* Pods_BaiduFM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DFAF1C2E553F9D6B4D386F3 /* Pods_BaiduFM.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,20 +42,17 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6783E0401AE0D87700D9D5FC /* SwiftyJSON.framework in CopyFiles */,
-				6783E03F1AE0D87100D9D5FC /* Alamofire.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3D93CC2857D85D497AE0052A /* Pods-BaiduFM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFM.release.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFM/Pods-BaiduFM.release.xcconfig"; sourceTree = "<group>"; };
 		672D47B71ADBBE1200C46409 /* MusicListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicListTableViewController.swift; sourceTree = "<group>"; };
 		673DB82C1ADCB614006D904B /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		676670C41ADD5F2500FBF425 /* DataCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCenter.swift; sourceTree = "<group>"; };
 		6783E0321AE0D6D800D9D5FC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		6783E03B1AE0D86300D9D5FC /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Librarys/iphonesimulator/Alamofire.framework; sourceTree = "<group>"; };
-		6783E03C1AE0D86300D9D5FC /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Librarys/iphonesimulator/SwiftyJSON.framework; sourceTree = "<group>"; };
 		678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelTableViewController.swift; sourceTree = "<group>"; };
 		679DCB271ADE859100191D94 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		67F0AEB91AD9FF8C000CB588 /* BaiduFM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BaiduFM.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +69,8 @@
 		67F0AEE11ADA03A8000CB588 /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		67F0AEE61ADA0784000CB588 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
 		67F0AEEF1ADA6EFE000CB588 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		7676E308C864DAF9BA887037 /* Pods-BaiduFM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFM/Pods-BaiduFM.debug.xcconfig"; sourceTree = "<group>"; };
+		9DFAF1C2E553F9D6B4D386F3 /* Pods_BaiduFM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BaiduFM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,10 +78,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6783E03E1AE0D86300D9D5FC /* SwiftyJSON.framework in Frameworks */,
 				6783E0341AE0D6E400D9D5FC /* AVFoundation.framework in Frameworks */,
-				6783E03D1AE0D86300D9D5FC /* Alamofire.framework in Frameworks */,
 				67F0AEF01ADA6EFE000CB588 /* MediaPlayer.framework in Frameworks */,
+				F964CFD7279512DD676A4FEE /* Pods_BaiduFM.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +119,8 @@
 				67F0AEBB1AD9FF8C000CB588 /* BaiduFM */,
 				67F0AED11AD9FF8C000CB588 /* BaiduFMTests */,
 				67F0AEBA1AD9FF8C000CB588 /* Products */,
+				A44732D7A8100059FF6B3791 /* Pods */,
+				D16A7CFBB847F60AA65C6F17 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -191,12 +188,27 @@
 		67F0AEE31ADA043E000CB588 /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				6783E03B1AE0D86300D9D5FC /* Alamofire.framework */,
-				6783E03C1AE0D86300D9D5FC /* SwiftyJSON.framework */,
 				6783E0321AE0D6D800D9D5FC /* AVFoundation.framework */,
 				67F0AEEF1ADA6EFE000CB588 /* MediaPlayer.framework */,
 			);
 			name = Library;
+			sourceTree = "<group>";
+		};
+		A44732D7A8100059FF6B3791 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7676E308C864DAF9BA887037 /* Pods-BaiduFM.debug.xcconfig */,
+				3D93CC2857D85D497AE0052A /* Pods-BaiduFM.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		D16A7CFBB847F60AA65C6F17 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9DFAF1C2E553F9D6B4D386F3 /* Pods_BaiduFM.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,10 +218,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 67F0AED81AD9FF8C000CB588 /* Build configuration list for PBXNativeTarget "BaiduFM" */;
 			buildPhases = (
+				93A247EDCB855C33CB200A9C /* Check Pods Manifest.lock */,
 				67F0AEB51AD9FF8C000CB588 /* Sources */,
 				67F0AEB61AD9FF8C000CB588 /* Frameworks */,
 				67F0AEB71AD9FF8C000CB588 /* Resources */,
 				67F0AEE81ADA2751000CB588 /* CopyFiles */,
+				45F669CBB9ED63A21DDB4B6D /* Embed Pods Frameworks */,
+				D5D730DE5EB9306609B4F7D4 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -294,6 +309,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		45F669CBB9ED63A21DDB4B6D /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BaiduFM/Pods-BaiduFM-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		93A247EDCB855C33CB200A9C /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D5D730DE5EB9306609B4F7D4 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BaiduFM/Pods-BaiduFM-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		67F0AEB51AD9FF8C000CB588 /* Sources */ = {
@@ -435,6 +498,7 @@
 		};
 		67F0AED91AD9FF8C000CB588 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7676E308C864DAF9BA887037 /* Pods-BaiduFM.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -451,6 +515,7 @@
 		};
 		67F0AEDA1AD9FF8C000CB588 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D93CC2857D85D497AE0052A /* Pods-BaiduFM.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (

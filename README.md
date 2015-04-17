@@ -28,9 +28,7 @@
 - 歌曲列表![项目截图3](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_03.jpg?raw=true)
 
 ##项目使用注意事项
--项目里使用的第三方库是真机调试版本，如需模拟器版本调试，用文件夹iphonesimulator里面库替换即可
-
--遇到编译错误，可能是Build Phases里面的Copy Files未导入第三方库
+-项目里使用COCOAPODS管理第三方库，运行前请执行pod install安装依赖库
 
 ##项目使用的第三方库
 
