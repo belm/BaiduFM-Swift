@@ -102,22 +102,6 @@ class MusicListTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         
         DataCenter.shareDataCenter.curPlayIndex = indexPath.row
-
-        /*
-        var info = DataCenter.shareDataCenter.curPlaySongLink!
-        //println(info.lrcLink)
-        
-        var songUrl = Common.getCanPlaySongUrl(info.songLink)
-        DataCenter.shareDataCenter.mp.stop()
-        
-        DataCenter.shareDataCenter.mp.contentURL = NSURL(string: songUrl)
-        DataCenter.shareDataCenter.mp.prepareToPlay()
-        DataCenter.shareDataCenter.mp.play()
-        
-        HttpRequest.getLrc(info.lrcLink, callback: { lrc -> Void in
-            //println(lrc)
-        })
-*/
     }
 
 }

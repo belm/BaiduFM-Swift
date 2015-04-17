@@ -13,7 +13,8 @@ class Common {
     class func getCanPlaySongUrl(url: String)->String{
         
         if url.hasPrefix("http://file.qianqian.com"){
-            return url.substringToIndex(advance(url.startIndex, 114))
+            return replaceString("&src=.+", replace: url, place: "")!
+            //return url.substringToIndex(advance(url.startIndex, 114))
         }
         return url
     }
