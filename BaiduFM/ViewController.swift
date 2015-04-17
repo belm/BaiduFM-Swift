@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MediaPlayer
 
 class ViewController: UIViewController {
 
@@ -120,6 +121,8 @@ class ViewController: UIViewController {
             self.nameLabel.text = info!.name
             self.artistLabel.text = "-" + info!.artistName + "-"
             self.albumLabel.text = info!.albumName
+            
+            self.showNowPlay(info!)
         }
     }
     
@@ -173,6 +176,21 @@ class ViewController: UIViewController {
             DataCenter.shareDataCenter.curPlayIndex = 0
         }
         self.start(DataCenter.shareDataCenter.curPlayIndex)
+    }
+    
+    func showNowPlay(info:SongInfo){
+    
+        //var showImg = Common.getIndexPageImage(info)
+        var img = UIImage(data: NSData(contentsOfURL: NSURL(string: info.songPicRadio)!)!)
+        var item = MPMediaItemArtwork(image: img)
+        
+        var dic:[NSObject : AnyObject] = [:]
+        dic[MPMediaItemPropertyTitle] = info.name
+        dic[MPMediaItemPropertyArtist] = info.artistName
+        dic[MPMediaItemPropertyAlbumTitle] = info.albumName
+        dic[MPMediaItemPropertyArtwork] = item
+        
+        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = dic
     }
     
     override func didReceiveMemoryWarning() {
