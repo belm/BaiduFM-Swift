@@ -19,6 +19,10 @@
 
 -支持后台播放
 
+-锁屏显示歌曲专辑信息
+
+-锁屏控制音乐下一曲/上一曲、暂停播放
+
 
 ##项目截图
 - 项目首页![项目截图1](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_01.jpg?raw=true)
@@ -62,7 +66,7 @@
 
 -播放音乐改用AVAudioPlayer
 
--第三方库合并
+-第三方库合并(已经改用COCOAPODS管理)
 
 ##联系我
 - [QQ邮箱](mailto:belm@vip.qq.com)

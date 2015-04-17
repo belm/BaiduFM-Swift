@@ -157,17 +157,20 @@ class ViewController: UIViewController {
     
     
     @IBAction func prevSong(sender: UIButton) {
-        
-        DataCenter.shareDataCenter.curPlayIndex--
-        if DataCenter.shareDataCenter.curPlayIndex < 0 {
-            DataCenter.shareDataCenter.curPlayIndex = DataCenter.shareDataCenter.curShowAllSongId.count-1
-        }
-        self.start(DataCenter.shareDataCenter.curPlayIndex)
+        self.prev()
     }
     
     
     @IBAction func nextSong(sender: UIButton) {
         self.next()
+    }
+    
+    func prev(){
+        DataCenter.shareDataCenter.curPlayIndex--
+        if DataCenter.shareDataCenter.curPlayIndex < 0 {
+            DataCenter.shareDataCenter.curPlayIndex = DataCenter.shareDataCenter.curShowAllSongId.count-1
+        }
+        self.start(DataCenter.shareDataCenter.curPlayIndex)
     }
     
     func next(){
@@ -178,6 +181,7 @@ class ViewController: UIViewController {
         self.start(DataCenter.shareDataCenter.curPlayIndex)
     }
     
+    //锁屏显示歌曲专辑信息
     func showNowPlay(info:SongInfo){
     
         //var showImg = Common.getIndexPageImage(info)
@@ -193,12 +197,37 @@ class ViewController: UIViewController {
         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = dic
     }
     
+    //接受锁屏事件
+    override func remoteControlReceivedWithEvent(event: UIEvent) {
+        
+        if event.type == UIEventType.RemoteControl{
+            switch event.subtype {
+                case UIEventSubtype.RemoteControlPlay:
+                    DataCenter.shareDataCenter.mp.play()
+                case UIEventSubtype.RemoteControlPause:
+                    DataCenter.shareDataCenter.mp.pause()
+                case UIEventSubtype.RemoteControlTogglePlayPause:
+                    self.togglePlayPause()
+                case UIEventSubtype.RemoteControlPreviousTrack:
+                    self.prev()
+                case UIEventSubtype.RemoteControlNextTrack:
+                    self.next()
+                default:break
+            }
+        }
+    }
+    
+    func togglePlayPause(){
+        self.changePlayStatus(self.playButton);
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
     @IBAction func changePlayStatus(sender: UIButton) {
+        
         if DataCenter.shareDataCenter.curPlayStatus == 1 {
             DataCenter.shareDataCenter.curPlayStatus = 2
             DataCenter.shareDataCenter.mp.pause()
@@ -208,7 +237,6 @@ class ViewController: UIViewController {
             DataCenter.shareDataCenter.mp.play()
             self.playButton.setImage(UIImage(named: "player_btn_pause_normal"), forState: UIControlState.Normal)
         }
-        
     }
 
 }
