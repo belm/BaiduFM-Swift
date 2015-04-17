@@ -37,7 +37,7 @@
 - 歌曲列表![项目截图3](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_03.jpg?raw=true)
 
 ##项目使用注意事项
--项目里使用COCOAPODS管理第三方库，运行前请执行pod install安装依赖库
+-项目里使用[COCOAPODS](https://github.com/cocoapods/cocoapods)管理第三方库，运行前请执行pod install安装依赖库
 
 ##项目使用的第三方库
 
@@ -71,7 +71,7 @@
 
 -播放音乐改用AVAudioPlayer
 
--第三方库合并(已经改用COCOAPODS管理)
+-第三方库合并(已经改用[COCOAPODS](https://github.com/cocoapods/cocoapods)管理)
 
 ##联系我
 - [QQ邮箱](mailto:belm@vip.qq.com)
