@@ -10,6 +10,13 @@ import Foundation
 
 class Common {
     
+    /**
+    获取可以播放的音乐
+    
+    :param: url 音乐播放URL
+    
+    :returns: 可以播放的URL
+    */
     class func getCanPlaySongUrl(url: String)->String{
         
         if url.hasPrefix("http://file.qianqian.com"){
@@ -19,6 +26,13 @@ class Common {
         return url
     }
     
+    /**
+    获取首页显示图片
+    
+    :param: info 歌曲信息
+    
+    :returns: 首页显示的图片
+    */
     class func getIndexPageImage(info :SongInfo) -> String{
         
         if info.songPicBig.isEmpty == false {
@@ -32,6 +46,13 @@ class Common {
         return info.songPicSmall
     }
     
+    /**
+    获取友好显示的时间
+    
+    :param: seconds 秒数
+    
+    :returns: 友好的时间显示
+    */
     class func getMinuteDisplay(seconds: Int) ->String{
         
         var minute = Int(seconds/60)
@@ -43,6 +64,15 @@ class Common {
         return "\(minuteStr):\(secondStr)"
     }
     
+    /**
+    正则替换字符串
+    
+    :param: pattern 正则表达式
+    :param: replace 需要被替换的字符串
+    :param: place   用来替换的字符串
+    
+    :returns: 替换后的字符串
+    */
     class func replaceString(pattern:String, replace:String, place:String)->String?{
         
         var exp =  NSRegularExpression(pattern: pattern, options: NSRegularExpressionOptions.CaseInsensitive, error: nil)
