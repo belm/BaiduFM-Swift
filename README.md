@@ -51,7 +51,7 @@
 
 -get，set，didSet
 
--在线播放网络mp3 API
+-使用MPMoviePlayerController在线播放网络mp3 
 
 ##待完成功能
 -下载歌曲到本地
@@ -59,6 +59,8 @@
 -收藏喜欢的音乐
 
 -背景播放支持
+
+-播放音乐改用AVAudioPlayer
 
 ##联系我
 - [QQ邮箱](mailto:belm@vip.qq.com)
