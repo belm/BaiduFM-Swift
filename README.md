@@ -47,6 +47,8 @@
 
 -[JSON解析SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON)
 
+-[SQLite数据库FMDB](https://github.com/ccgus/fmdb)
+
 ##使用的swift知识点
 -网络请求
 
