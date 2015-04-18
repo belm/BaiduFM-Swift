@@ -18,6 +18,9 @@
 		67B3F1931AE1DA3F0061068C /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F18C1AE1DA3F0061068C /* FMDatabaseQueue.m */; };
 		67B3F1941AE1DA3F0061068C /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F18F1AE1DA3F0061068C /* FMResultSet.m */; };
 		67B3F1961AE1DA590061068C /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B3F1951AE1DA590061068C /* libsqlite3.dylib */; };
+		67B3F19B1AE1DC510061068C /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F19A1AE1DC510061068C /* Utils.swift */; };
+		67B3F19D1AE1E0570061068C /* BaseDb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F19C1AE1E0570061068C /* BaseDb.swift */; };
+		67B3F19F1AE1EAC10061068C /* SongList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F19E1AE1EAC10061068C /* SongList.swift */; };
 		67F0AEBF1AD9FF8C000CB588 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */; };
 		67F0AEC11AD9FF8C000CB588 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEC01AD9FF8C000CB588 /* ViewController.swift */; };
 		67F0AEC41AD9FF8C000CB588 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67F0AEC21AD9FF8C000CB588 /* Main.storyboard */; };
@@ -28,6 +31,9 @@
 		67F0AEE21ADA03A8000CB588 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEE11ADA03A8000CB588 /* Song.swift */; };
 		67F0AEE71ADA0784000CB588 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEE61ADA0784000CB588 /* HttpRequest.swift */; };
 		67F0AEF01ADA6EFE000CB588 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67F0AEEF1ADA6EFE000CB588 /* MediaPlayer.framework */; };
+		67F66D1B1AE21FB10070009D /* RecentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F66D1A1AE21FB10070009D /* RecentTableViewController.swift */; };
+		67F66D1D1AE21FBD0070009D /* DownloadTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F66D1C1AE21FBD0070009D /* DownloadTableViewController.swift */; };
+		67F66D1F1AE21FCE0070009D /* LikeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F66D1E1AE21FCE0070009D /* LikeTableViewController.swift */; };
 		F964CFD7279512DD676A4FEE /* Pods_BaiduFM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DFAF1C2E553F9D6B4D386F3 /* Pods_BaiduFM.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -74,6 +80,9 @@
 		67B3F18E1AE1DA3F0061068C /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		67B3F18F1AE1DA3F0061068C /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		67B3F1951AE1DA590061068C /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		67B3F19A1AE1DC510061068C /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		67B3F19C1AE1E0570061068C /* BaseDb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDb.swift; sourceTree = "<group>"; };
+		67B3F19E1AE1EAC10061068C /* SongList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongList.swift; sourceTree = "<group>"; };
 		67F0AEB91AD9FF8C000CB588 /* BaiduFM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BaiduFM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		67F0AEBD1AD9FF8C000CB588 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +97,9 @@
 		67F0AEE11ADA03A8000CB588 /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		67F0AEE61ADA0784000CB588 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
 		67F0AEEF1ADA6EFE000CB588 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		67F66D1A1AE21FB10070009D /* RecentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentTableViewController.swift; sourceTree = "<group>"; };
+		67F66D1C1AE21FBD0070009D /* DownloadTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadTableViewController.swift; sourceTree = "<group>"; };
+		67F66D1E1AE21FCE0070009D /* LikeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikeTableViewController.swift; sourceTree = "<group>"; };
 		7676E308C864DAF9BA887037 /* Pods-BaiduFM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFM/Pods-BaiduFM.debug.xcconfig"; sourceTree = "<group>"; };
 		9DFAF1C2E553F9D6B4D386F3 /* Pods_BaiduFM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BaiduFM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -120,6 +132,9 @@
 				67F0AEC01AD9FF8C000CB588 /* ViewController.swift */,
 				678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */,
 				672D47B71ADBBE1200C46409 /* MusicListTableViewController.swift */,
+				67F66D1A1AE21FB10070009D /* RecentTableViewController.swift */,
+				67F66D1C1AE21FBD0070009D /* DownloadTableViewController.swift */,
+				67F66D1E1AE21FCE0070009D /* LikeTableViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -129,6 +144,7 @@
 			children = (
 				679DCB271ADE859100191D94 /* Common.swift */,
 				67F0AEE61ADA0784000CB588 /* HttpRequest.swift */,
+				67B3F19A1AE1DC510061068C /* Utils.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -150,6 +166,15 @@
 			);
 			name = fmdb;
 			path = Libs/fmdb;
+			sourceTree = "<group>";
+		};
+		67B3F1971AE1DB140061068C /* DataBase */ = {
+			isa = PBXGroup;
+			children = (
+				67B3F19C1AE1E0570061068C /* BaseDb.swift */,
+				67B3F19E1AE1EAC10061068C /* SongList.swift */,
+			);
+			name = DataBase;
 			sourceTree = "<group>";
 		};
 		67F0AEB01AD9FF8C000CB588 = {
@@ -175,6 +200,7 @@
 		67F0AEBB1AD9FF8C000CB588 /* BaiduFM */ = {
 			isa = PBXGroup;
 			children = (
+				67B3F1971AE1DB140061068C /* DataBase */,
 				678E361E1AE0042300E124B9 /* Common */,
 				673DB82C1ADCB614006D904B /* MyPlayground.playground */,
 				672D47B61ADB92BA00C46409 /* Views */,
@@ -405,15 +431,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67F66D1F1AE21FCE0070009D /* LikeTableViewController.swift in Sources */,
 				672D47B81ADBBE1200C46409 /* MusicListTableViewController.swift in Sources */,
+				67F66D1D1AE21FBD0070009D /* DownloadTableViewController.swift in Sources */,
 				67B3F1921AE1DA3F0061068C /* FMDatabasePool.m in Sources */,
 				67B3F1941AE1DA3F0061068C /* FMResultSet.m in Sources */,
 				67F0AEE21ADA03A8000CB588 /* Song.swift in Sources */,
 				67F0AEE71ADA0784000CB588 /* HttpRequest.swift in Sources */,
 				67B3F1931AE1DA3F0061068C /* FMDatabaseQueue.m in Sources */,
 				67B3F1901AE1DA3F0061068C /* FMDatabase.m in Sources */,
+				67B3F19F1AE1EAC10061068C /* SongList.swift in Sources */,
+				67B3F19B1AE1DC510061068C /* Utils.swift in Sources */,
+				67B3F19D1AE1E0570061068C /* BaseDb.swift in Sources */,
 				678B673D1ADB929400557CB3 /* ChannelTableViewController.swift in Sources */,
 				679DCB281ADE859100191D94 /* Common.swift in Sources */,
+				67F66D1B1AE21FB10070009D /* RecentTableViewController.swift in Sources */,
 				67F0AEC11AD9FF8C000CB588 /* ViewController.swift in Sources */,
 				67B3F1911AE1DA3F0061068C /* FMDatabaseAdditions.m in Sources */,
 				67F0AEE01AD9FFE7000CB588 /* Channel.swift in Sources */,

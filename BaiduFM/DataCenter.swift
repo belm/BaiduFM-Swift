@@ -74,4 +74,7 @@ class DataCenter {
     var curPlaySongLink:SongLink? = nil
     
     var curPlayStatus = 0 //0初始 1播放 2暂时 3停止
+    
+    //db操作
+    var dbSongList:SongList = SongList()
 }

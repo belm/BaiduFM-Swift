@@ -46,7 +46,6 @@ class HttpRequest {
     class func getSongList(ch_name:String, callback:[String]?->Void)->Void{
         
         var songList:[String]? = nil
-       // var url = "http://fm.baidu.com/data4/ch_name=" + ch_name + "&item_id=64563148&action_no=3&userid=0&baiduid=A00E7A25513FC0682678976A517407D7%3AFG%3D1?_=1428801573673"
         var url = "http://fm.baidu.com/dev/api/?tn=playlist&id=" + ch_name + "&hashcode=310d03041bffd10803bc3ee8913e2726&_=1428917601565"
        // println(url)
         Alamofire.request(.GET, url).responseJSON{ (_, _, json, error) -> Void in
@@ -155,5 +154,24 @@ class HttpRequest {
                 callback(nil)
             }
         }
+    }
+    
+    class func downloadFile(songUrl:String, dest:String){
+        
+        /*
+        var dbDirectory = Utils.documentPath().stringByAppendingPathComponent("download")
+        if !NSFileManager.defaultManager().fileExistsAtPath(dbDirectory){
+            NSFileManager.defaultManager().createDirectoryAtPath(dbDirectory, withIntermediateDirectories: false, attributes: nil, error: nil)
+        }
+        */
+        
+        let destination = Alamofire.Request.suggestedDownloadDestination(directory: .DocumentDirectory, domain: .UserDomainMask)
+        Alamofire.download(Method.GET, songUrl, destination)
+            .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
+                println("bytesRead:\(bytesRead),totalBytesRead:\(totalBytesRead),totalBytesExpectedToRead:\(totalBytesRead)")
+            }
+            .response { (request, response, _, error) in
+                println(response)
+            }
     }
 }

@@ -26,6 +26,8 @@
 
 -锁屏控制音乐下一曲/上一曲、暂停播放
 
+-新增收藏列表，最近播放列表，下载歌曲列表（暂时不能播放，待完善)
+
 
 ##项目截图
 - 锁屏显示、播放控制![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_00.jpg?raw=true)
@@ -63,9 +65,9 @@
 -使用MPMoviePlayerController在线播放网络mp3 
 
 ##待完成功能
--下载歌曲到本地
+-下载歌曲到本地(完善中)
 
--收藏喜欢的音乐
+-收藏喜欢的音乐(完善中)
 
 -背景播放支持(已经完成)
 

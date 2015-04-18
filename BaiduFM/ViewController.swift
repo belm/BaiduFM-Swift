@@ -54,6 +54,9 @@ class ViewController: UIViewController {
                 if let songlist = list {
                     DataCenter.shareDataCenter.currentAllSongId = list!
                     self.loadSongData()
+                }else{
+                    var alert = UIAlertView(title: "提示", message: "请连接网络", delegate: nil, cancelButtonTitle: "确定")
+                    alert.show()
                 }
             })
         }else{
@@ -110,6 +113,7 @@ class ViewController: UIViewController {
        // println(DataCenter.shareDataCenter.curPlayIndex)
         self.showInfo()
         self.showLink()
+        self.addRecentSong()
     }
     
     func showInfo(){
@@ -152,6 +156,19 @@ class ViewController: UIViewController {
                 }
                 
             })
+        }
+    }
+    
+    //添加最近播放
+    func addRecentSong(){
+        
+        var info = DataCenter.shareDataCenter.curPlaySongInfo
+        var link = DataCenter.shareDataCenter.curPlaySongLink
+        
+        if DataCenter.shareDataCenter.dbSongList.insert(info!, link: link!){
+            println("\(info!.id)添加最近播放成功")
+        }else{
+            println("\(info!.id)添加最近播放失败")
         }
     }
     
@@ -236,6 +253,35 @@ class ViewController: UIViewController {
             DataCenter.shareDataCenter.curPlayStatus = 1
             DataCenter.shareDataCenter.mp.play()
             self.playButton.setImage(UIImage(named: "player_btn_pause_normal"), forState: UIControlState.Normal)
+        }
+    }
+    
+    @IBAction func downloadSong(sender: UIButton) {
+        
+        var info = DataCenter.shareDataCenter.curPlaySongLink
+
+        if let song = info {
+            
+            HttpRequest.downloadFile(song.songLink, dest: "")
+            
+            if DataCenter.shareDataCenter.dbSongList.updateDownloadStatus(song.id){
+                println("\(song.id)下载成功")
+            }else{
+                println("\(song.id)下载失败")
+            }
+        }
+    }
+    
+    @IBAction func likeSong(sender: UIButton) {
+        
+        var info = DataCenter.shareDataCenter.curPlaySongInfo
+        
+        if let song = info {
+            if DataCenter.shareDataCenter.dbSongList.updateLikeStatus(song.id, status: 1){
+                println("\(song.id)收藏成功")
+            }else{
+                println("\(song.id)收藏失败")
+            }
         }
     }
 

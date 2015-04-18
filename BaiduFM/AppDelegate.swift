@@ -22,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error: nil)
         AVAudioSession.sharedInstance().setActive(true, error: nil)
         UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
+        
+        var db = BaseDb()
 
         return true
     }

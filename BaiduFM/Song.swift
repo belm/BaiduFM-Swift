@@ -8,6 +8,21 @@
 
 import Foundation
 
+struct Song{
+    var sid:String
+    var name:String
+    var artist:String
+    var album:String
+    var song_url:String
+    var pic_url:String
+    var lrc_url:String
+    var time:Int
+    var is_dl:Int
+    var dl_file:String
+    var is_like:Int
+    var is_recent:Int
+}
+
 struct SongInfo {
     var id:String
     var name:String
