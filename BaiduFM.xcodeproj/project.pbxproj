@@ -12,6 +12,12 @@
 		6783E0341AE0D6E400D9D5FC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6783E0321AE0D6D800D9D5FC /* AVFoundation.framework */; };
 		678B673D1ADB929400557CB3 /* ChannelTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */; };
 		679DCB281ADE859100191D94 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679DCB271ADE859100191D94 /* Common.swift */; };
+		67B3F1901AE1DA3F0061068C /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F1861AE1DA3F0061068C /* FMDatabase.m */; };
+		67B3F1911AE1DA3F0061068C /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F1881AE1DA3F0061068C /* FMDatabaseAdditions.m */; };
+		67B3F1921AE1DA3F0061068C /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F18A1AE1DA3F0061068C /* FMDatabasePool.m */; };
+		67B3F1931AE1DA3F0061068C /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F18C1AE1DA3F0061068C /* FMDatabaseQueue.m */; };
+		67B3F1941AE1DA3F0061068C /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F18F1AE1DA3F0061068C /* FMResultSet.m */; };
+		67B3F1961AE1DA590061068C /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B3F1951AE1DA590061068C /* libsqlite3.dylib */; };
 		67F0AEBF1AD9FF8C000CB588 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */; };
 		67F0AEC11AD9FF8C000CB588 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEC01AD9FF8C000CB588 /* ViewController.swift */; };
 		67F0AEC41AD9FF8C000CB588 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67F0AEC21AD9FF8C000CB588 /* Main.storyboard */; };
@@ -55,6 +61,19 @@
 		6783E0321AE0D6D800D9D5FC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelTableViewController.swift; sourceTree = "<group>"; };
 		679DCB271ADE859100191D94 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
+		67B3F1811AE1DA2C0061068C /* BaiduFM-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BaiduFM-Bridging-Header.h"; sourceTree = "<group>"; };
+		67B3F1851AE1DA3F0061068C /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		67B3F1861AE1DA3F0061068C /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		67B3F1871AE1DA3F0061068C /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		67B3F1881AE1DA3F0061068C /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		67B3F1891AE1DA3F0061068C /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		67B3F18A1AE1DA3F0061068C /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		67B3F18B1AE1DA3F0061068C /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		67B3F18C1AE1DA3F0061068C /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		67B3F18D1AE1DA3F0061068C /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		67B3F18E1AE1DA3F0061068C /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		67B3F18F1AE1DA3F0061068C /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		67B3F1951AE1DA590061068C /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		67F0AEB91AD9FF8C000CB588 /* BaiduFM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BaiduFM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		67F0AEBD1AD9FF8C000CB588 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67B3F1961AE1DA590061068C /* libsqlite3.dylib in Frameworks */,
 				6783E0341AE0D6E400D9D5FC /* AVFoundation.framework in Frameworks */,
 				67F0AEF01ADA6EFE000CB588 /* MediaPlayer.framework in Frameworks */,
 				F964CFD7279512DD676A4FEE /* Pods_BaiduFM.framework in Frameworks */,
@@ -113,6 +133,25 @@
 			name = Common;
 			sourceTree = "<group>";
 		};
+		67B3F1841AE1DA3F0061068C /* fmdb */ = {
+			isa = PBXGroup;
+			children = (
+				67B3F1851AE1DA3F0061068C /* FMDatabase.h */,
+				67B3F1861AE1DA3F0061068C /* FMDatabase.m */,
+				67B3F1871AE1DA3F0061068C /* FMDatabaseAdditions.h */,
+				67B3F1881AE1DA3F0061068C /* FMDatabaseAdditions.m */,
+				67B3F1891AE1DA3F0061068C /* FMDatabasePool.h */,
+				67B3F18A1AE1DA3F0061068C /* FMDatabasePool.m */,
+				67B3F18B1AE1DA3F0061068C /* FMDatabaseQueue.h */,
+				67B3F18C1AE1DA3F0061068C /* FMDatabaseQueue.m */,
+				67B3F18D1AE1DA3F0061068C /* FMDB.h */,
+				67B3F18E1AE1DA3F0061068C /* FMResultSet.h */,
+				67B3F18F1AE1DA3F0061068C /* FMResultSet.m */,
+			);
+			name = fmdb;
+			path = Libs/fmdb;
+			sourceTree = "<group>";
+		};
 		67F0AEB01AD9FF8C000CB588 = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +185,7 @@
 				67F0AEC51AD9FF8C000CB588 /* Images.xcassets */,
 				67F0AEC71AD9FF8C000CB588 /* LaunchScreen.xib */,
 				67F0AEBC1AD9FF8C000CB588 /* Supporting Files */,
+				67B3F1811AE1DA2C0061068C /* BaiduFM-Bridging-Header.h */,
 			);
 			path = BaiduFM;
 			sourceTree = "<group>";
@@ -188,6 +228,7 @@
 		67F0AEE31ADA043E000CB588 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				67B3F1841AE1DA3F0061068C /* fmdb */,
 				6783E0321AE0D6D800D9D5FC /* AVFoundation.framework */,
 				67F0AEEF1ADA6EFE000CB588 /* MediaPlayer.framework */,
 			);
@@ -206,6 +247,7 @@
 		D16A7CFBB847F60AA65C6F17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				67B3F1951AE1DA590061068C /* libsqlite3.dylib */,
 				9DFAF1C2E553F9D6B4D386F3 /* Pods_BaiduFM.framework */,
 			);
 			name = Frameworks;
@@ -364,11 +406,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				672D47B81ADBBE1200C46409 /* MusicListTableViewController.swift in Sources */,
+				67B3F1921AE1DA3F0061068C /* FMDatabasePool.m in Sources */,
+				67B3F1941AE1DA3F0061068C /* FMResultSet.m in Sources */,
 				67F0AEE21ADA03A8000CB588 /* Song.swift in Sources */,
 				67F0AEE71ADA0784000CB588 /* HttpRequest.swift in Sources */,
+				67B3F1931AE1DA3F0061068C /* FMDatabaseQueue.m in Sources */,
+				67B3F1901AE1DA3F0061068C /* FMDatabase.m in Sources */,
 				678B673D1ADB929400557CB3 /* ChannelTableViewController.swift in Sources */,
 				679DCB281ADE859100191D94 /* Common.swift in Sources */,
 				67F0AEC11AD9FF8C000CB588 /* ViewController.swift in Sources */,
+				67B3F1911AE1DA3F0061068C /* FMDatabaseAdditions.m in Sources */,
 				67F0AEE01AD9FFE7000CB588 /* Channel.swift in Sources */,
 				676670C51ADD5F2500FBF425 /* DataCenter.swift in Sources */,
 				67F0AEBF1AD9FF8C000CB588 /* AppDelegate.swift in Sources */,
@@ -501,6 +548,7 @@
 			baseConfigurationReference = 7676E308C864DAF9BA887037 /* Pods-BaiduFM.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/BaiduFM",
@@ -510,6 +558,8 @@
 				INFOPLIST_FILE = BaiduFM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BaiduFM/BaiduFM-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -518,6 +568,7 @@
 			baseConfigurationReference = 3D93CC2857D85D497AE0052A /* Pods-BaiduFM.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/BaiduFM",
@@ -527,6 +578,7 @@
 				INFOPLIST_FILE = BaiduFM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BaiduFM/BaiduFM-Bridging-Header.h";
 			};
 			name = Release;
 		};
