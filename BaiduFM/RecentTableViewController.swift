@@ -53,8 +53,13 @@ class RecentTableViewController: UITableViewController {
         
         cell.textLabel?.text = song.name
         cell.detailTextLabel?.text = song.artist
-        cell.imageView?.image = UIImage(data: NSData(contentsOfURL: NSURL(string:song.pic_url)!)!)
         
+        if let url = NSURL(string:song.pic_url) {
+            if let data = NSData(contentsOfURL: url){
+                cell.imageView?.image = UIImage(data: data)
+            }
+        }
+    
         return cell
     }
 
