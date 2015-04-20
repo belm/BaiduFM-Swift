@@ -509,7 +509,7 @@
         <scene sceneID="bA1-gC-NSB">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1se-R6-62q" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="recents" id="p0t-ne-Wcn"/>
+                    <tabBarItem key="tabBarItem" title="" systemItem="recents" id="p0t-ne-Wcn"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="m0Y-zR-f8P">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

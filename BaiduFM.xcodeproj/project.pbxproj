@@ -588,6 +588,7 @@
 					"$(PROJECT_DIR)/BaiduFM/Librarys/iphonesimulator",
 				);
 				INFOPLIST_FILE = BaiduFM/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BaiduFM/BaiduFM-Bridging-Header.h";
@@ -608,6 +609,7 @@
 					"$(PROJECT_DIR)/BaiduFM/Librarys/iphonesimulator",
 				);
 				INFOPLIST_FILE = BaiduFM/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BaiduFM/BaiduFM-Bridging-Header.h";
