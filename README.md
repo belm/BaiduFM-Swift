@@ -1,4 +1,11 @@
 # BaiduFM-Swift
+[![](http://img.shields.io/badge/build-passing-4BC51D.svg)]()
+[![](http://img.shields.io/badge/OS%20X-10.10.3-blue.svg)]() 
+[![](http://img.shields.io/badge/xcode-6.3-blue.svg)]()
+[![](http://img.shields.io/badge/iOS-8.0%2B-blue.svg)]() 
+[![](http://img.shields.io/badge/Swift-1.2-blue.svg)]() 
+[![CocoaPods compatible](https://img.shields.io/badge/CocoaPods-compatible-4BC51D.svg)](https://github.com/cocoapods/cocoapods)
+
 百度FM, swift语言实现，基于最新xcode6.3+swift1.2,初步只是为了实现功能，代码比较粗燥，后面有时间会整理。
 
 ##API接口申明
