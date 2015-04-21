@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MJRefresh
 
 class MusicListTableViewController: UITableViewController {
     
@@ -25,10 +26,9 @@ class MusicListTableViewController: UITableViewController {
         })
         
         //下拉刷新
-        var refreshCtl = UIRefreshControl()
-        refreshCtl.addTarget(self, action: Selector("refreshList"), forControlEvents: UIControlEvents.ValueChanged)
-        refreshCtl.attributedTitle = NSAttributedString(string: "刷新列表")
-        self.refreshControl = refreshCtl
+        self.tableView.addLegendHeaderWithRefreshingTarget(self, refreshingAction: Selector("refreshList"))
+        
+        self.tableView.addLegendFooterWithRefreshingTarget(self, refreshingAction: Selector("loadMore"))
     }
     
     func loadSongData(){
@@ -42,9 +42,8 @@ class MusicListTableViewController: UITableViewController {
             DataCenter.shareDataCenter.curShowAllSongInfo = info!
             self.tableView.reloadData()
             
-            if self.refreshControl!.refreshing {
-                self.refreshControl?.endRefreshing()
-            }
+            self.tableView.header.endRefreshing()
+            self.tableView.footer.endRefreshing()
         })
         
         HttpRequest.getSongLinkList(self.curChannelList, callback: { (link) -> Void in
@@ -65,7 +64,17 @@ class MusicListTableViewController: UITableViewController {
         loadSongData()
     }
     
-    
+    func loadMore(){
+
+        DataCenter.shareDataCenter.curShowEndIndex += 20
+        
+        if DataCenter.shareDataCenter.curShowEndIndex > DataCenter.shareDataCenter.currentAllSongId.count{
+            DataCenter.shareDataCenter.curShowEndIndex = DataCenter.shareDataCenter.currentAllSongId.count
+            DataCenter.shareDataCenter.curShowStartIndex = DataCenter.shareDataCenter.curShowEndIndex-20
+        }
+        
+        loadSongData()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
