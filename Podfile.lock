@@ -1,11 +1,13 @@
 PODS:
   - Alamofire (1.2.0)
   - Async (1.2.0)
+  - MJRefresh (1.4.5)
   - SwiftyJSON (2.2.0)
 
 DEPENDENCIES:
   - Alamofire (~> 1.2)
   - Async (from `https://github.com/duemunk/Async.git`)
+  - MJRefresh
   - SwiftyJSON (>= 2.2)
 
 EXTERNAL SOURCES:
@@ -20,6 +22,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: d765c5c1713aa64106b0228aaa600a1e6851f68d
   Async: aba7b48a4cd05dae27d1affce2f48f2ed61e75f9
+  MJRefresh: 4b24394e577ea399fbc926e5b6072317aae2c152
   SwiftyJSON: 0b3e6c07af17ff745e77e8e9984097b55c956e5c
 
 COCOAPODS: 0.36.4

@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-BaiduFM-MJRefresh.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-BaiduFM-SwiftyJSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -27,22 +32,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>57933A411B65FB9EA3E135D8</key>
+		<key>0C218AD9EAC901517E933BFC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B91D40CC7C0A2085C4FBDC38</key>
+		<key>158B26D0203550505F32AF54</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CA54CEFE5D5E7EDB09807755</key>
+		<key>34A033016D7CD60B9929BD57</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EA1D34F9C0A2096360901E0C</key>
+		<key>4539783D49895B52FD6C33EA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FDC29B5764B457B4C97CFE83</key>
 		<dict>
 			<key>primary</key>
 			<true/>
