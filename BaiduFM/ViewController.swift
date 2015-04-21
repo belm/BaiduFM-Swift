@@ -146,6 +146,8 @@ class ViewController: UIViewController {
             DataCenter.shareDataCenter.mp.play()
             DataCenter.shareDataCenter.curPlayStatus = 1
             
+            self.playButton.setImage(UIImage(named: "player_btn_pause_normal"), forState: UIControlState.Normal)
+            
             self.songTimeLengthLabel?.text = Common.getMinuteDisplay(link!.time)
             //\\[\\d{2}:\\d{2}\\.\\d{2}\\]
             HttpRequest.getLrc(link!.lrcLink, callback: { lrc -> Void in
