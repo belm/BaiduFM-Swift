@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var albumLabel: UILabel!
-    @IBOutlet weak var imgView: UIImageView!
+    @IBOutlet weak var imgView: RoundImageView!
     @IBOutlet weak var sizeLabel: UILabel!
     @IBOutlet weak var lengthLabel: UILabel!
     
@@ -128,6 +128,8 @@ class ViewController: UIViewController {
             self.nameLabel.text = info!.name
             self.artistLabel.text = "-" + info!.artistName + "-"
             self.albumLabel.text = info!.albumName
+            
+            self.imgView.rotation()
             
             self.showNowPlay(info!)
         }

@@ -11,6 +11,7 @@
 		676670C51ADD5F2500FBF425 /* DataCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676670C41ADD5F2500FBF425 /* DataCenter.swift */; };
 		6783E0341AE0D6E400D9D5FC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6783E0321AE0D6D800D9D5FC /* AVFoundation.framework */; };
 		678B673D1ADB929400557CB3 /* ChannelTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */; };
+		678CFA7A1AE6133E0009B643 /* RoundImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678CFA791AE6133E0009B643 /* RoundImageView.swift */; };
 		679DCB281ADE859100191D94 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679DCB271ADE859100191D94 /* Common.swift */; };
 		67B3F1901AE1DA3F0061068C /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F1861AE1DA3F0061068C /* FMDatabase.m */; };
 		67B3F1911AE1DA3F0061068C /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F1881AE1DA3F0061068C /* FMDatabaseAdditions.m */; };
@@ -66,6 +67,7 @@
 		676670C41ADD5F2500FBF425 /* DataCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCenter.swift; sourceTree = "<group>"; };
 		6783E0321AE0D6D800D9D5FC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelTableViewController.swift; sourceTree = "<group>"; };
+		678CFA791AE6133E0009B643 /* RoundImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundImageView.swift; sourceTree = "<group>"; };
 		679DCB271ADE859100191D94 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		67B3F1811AE1DA2C0061068C /* BaiduFM-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BaiduFM-Bridging-Header.h"; sourceTree = "<group>"; };
 		67B3F1851AE1DA3F0061068C /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				67F66D1A1AE21FB10070009D /* RecentTableViewController.swift */,
 				67F66D1C1AE21FBD0070009D /* DownloadTableViewController.swift */,
 				67F66D1E1AE21FCE0070009D /* LikeTableViewController.swift */,
+				678CFA791AE6133E0009B643 /* RoundImageView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -442,6 +445,7 @@
 				67B3F1901AE1DA3F0061068C /* FMDatabase.m in Sources */,
 				67B3F19F1AE1EAC10061068C /* SongList.swift in Sources */,
 				67B3F19B1AE1DC510061068C /* Utils.swift in Sources */,
+				678CFA7A1AE6133E0009B643 /* RoundImageView.swift in Sources */,
 				67B3F19D1AE1E0570061068C /* BaseDb.swift in Sources */,
 				678B673D1ADB929400557CB3 /* ChannelTableViewController.swift in Sources */,
 				679DCB281ADE859100191D94 /* Common.swift in Sources */,

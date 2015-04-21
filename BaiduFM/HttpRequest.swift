@@ -130,7 +130,20 @@ class HttpRequest {
                     let size = list["size"].int
                     let rate = list["rate"].int
                     
-                    var songLink = SongLink(id: id, name: name, lrcLink: lrcLink, linkCode: linkCode!, songLink: link, format: format, time: time!, size: size!, rate: rate!)
+                    var t = 0, s = 0, r = 0
+                    if time != nil {
+                        t = time!
+                    }
+                    
+                    if size != nil {
+                        s = size!
+                    }
+                    
+                    if rate != nil {
+                        r = rate!
+                    }
+                    
+                    var songLink = SongLink(id: id, name: name, lrcLink: lrcLink, linkCode: linkCode!, songLink: link, format: format, time: t, size: s, rate: r)
                     ret.append(songLink)
                 }
                 callback(ret)

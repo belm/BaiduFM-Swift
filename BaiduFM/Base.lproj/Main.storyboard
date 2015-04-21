@@ -13,12 +13,12 @@
                         <viewControllerLayoutGuide type="top" id="yLu-4d-Vc2"/>
                         <viewControllerLayoutGuide type="bottom" id="pHo-99-0hM"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                    <view key="view" alpha="0.80000000000000004" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="10f-TH-a2W">
-                                <rect key="frame" x="225" y="127" width="150" height="150"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="10f-TH-a2W" customClass="RoundImageView" customModule="BaiduFM" customModuleProvider="target">
+                                <rect key="frame" x="225" y="125" width="150" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="98o-Xm-5a9"/>
                                     <constraint firstAttribute="width" constant="150" id="QwZ-Ly-a8f"/>
@@ -135,6 +135,14 @@
                                     <action selector="likeSong:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cWR-RZ-Sth"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nz0-Rb-D3r" customClass="RoundImageView" customModule="BaiduFM" customModuleProvider="target">
+                                <rect key="frame" x="275" y="175" width="50" height="50"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="H2Q-8z-mL6"/>
+                                    <constraint firstAttribute="height" constant="50" id="MnV-N9-VNk"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.4863544082727731" green="0.37386448019841534" blue="0.73974116160000003" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -154,6 +162,7 @@
                             <constraint firstItem="YBN-PX-Qx0" firstAttribute="top" secondItem="10f-TH-a2W" secondAttribute="bottom" constant="10" id="NgP-by-DCx"/>
                             <constraint firstItem="ZHu-Jg-8aM" firstAttribute="top" secondItem="10f-TH-a2W" secondAttribute="bottom" constant="18" id="PST-F0-hQ3"/>
                             <constraint firstItem="10f-TH-a2W" firstAttribute="leading" secondItem="sek-X9-G8b" secondAttribute="trailing" constant="10" id="PhB-jR-vEO"/>
+                            <constraint firstAttribute="centerX" secondItem="Nz0-Rb-D3r" secondAttribute="centerX" id="Q7f-cz-rhQ"/>
                             <constraint firstAttribute="centerX" secondItem="bry-i1-d0x" secondAttribute="centerX" id="Rg2-FX-Vff"/>
                             <constraint firstAttribute="centerX" secondItem="LUT-8n-Cc1" secondAttribute="centerX" id="StV-Me-AzR"/>
                             <constraint firstItem="G9O-eE-5Qo" firstAttribute="top" secondItem="ZHu-Jg-8aM" secondAttribute="bottom" constant="20" id="WeB-EM-Ddi"/>
@@ -164,8 +173,10 @@
                             <constraint firstAttribute="centerX" secondItem="d5T-oP-9VV" secondAttribute="centerX" id="cXf-Z2-Waw"/>
                             <constraint firstItem="2pu-Bg-AiJ" firstAttribute="top" secondItem="ZHu-Jg-8aM" secondAttribute="bottom" constant="20" id="d5B-NX-xMP"/>
                             <constraint firstAttribute="centerX" secondItem="ZHu-Jg-8aM" secondAttribute="centerX" id="ePb-vT-xX7"/>
+                            <constraint firstItem="10f-TH-a2W" firstAttribute="centerX" secondItem="Nz0-Rb-D3r" secondAttribute="centerX" id="f4W-0t-uet"/>
                             <constraint firstItem="2pu-Bg-AiJ" firstAttribute="leading" secondItem="G9O-eE-5Qo" secondAttribute="trailing" constant="50" id="hH4-MN-MQo"/>
                             <constraint firstItem="10f-TH-a2W" firstAttribute="top" secondItem="LUT-8n-Cc1" secondAttribute="bottom" constant="10" id="jGE-g1-SYD"/>
+                            <constraint firstItem="10f-TH-a2W" firstAttribute="centerY" secondItem="Nz0-Rb-D3r" secondAttribute="centerY" id="jP3-MQ-lCd"/>
                             <constraint firstItem="G9O-eE-5Qo" firstAttribute="leading" secondItem="p9J-6j-7ga" secondAttribute="trailing" constant="50" id="l2P-jq-eoA"/>
                             <constraint firstAttribute="centerY" secondItem="10f-TH-a2W" secondAttribute="centerY" id="oYP-rZ-UAN"/>
                             <constraint firstItem="bry-i1-d0x" firstAttribute="top" secondItem="G9O-eE-5Qo" secondAttribute="bottom" constant="10" id="qhX-DC-vIg"/>
@@ -181,6 +192,7 @@
                                 <exclude reference="jGE-g1-SYD"/>
                                 <exclude reference="oYP-rZ-UAN"/>
                                 <exclude reference="w0F-rc-zeF"/>
+                                <exclude reference="Q7f-cz-rhQ"/>
                                 <exclude reference="93q-1k-A4o"/>
                             </mask>
                         </variation>
@@ -214,7 +226,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2224" y="-551"/>
+            <point key="canvasLocation" x="1180" y="-871"/>
         </scene>
         <!--歌曲分类-->
         <scene sceneID="QuF-A8-5Hd">
