@@ -8,6 +8,7 @@
 
 import UIKit
 import MediaPlayer
+import Async
 
 class ViewController: UIViewController {
 
@@ -111,9 +112,11 @@ class ViewController: UIViewController {
     func start(index:Int){
         DataCenter.shareDataCenter.curPlayIndex = index
        // println(DataCenter.shareDataCenter.curPlayIndex)
-        self.showInfo()
-        self.showLink()
-        self.addRecentSong()
+        Async.main{
+            self.showInfo()
+            self.showLink()
+            self.addRecentSong()
+        }
     }
     
     func showInfo(){
@@ -172,14 +175,17 @@ class ViewController: UIViewController {
         }
     }
     
-    
     @IBAction func prevSong(sender: UIButton) {
-        self.prev()
+        Async.background{
+            self.prev()
+        }
     }
     
     
     @IBAction func nextSong(sender: UIButton) {
-        self.next()
+        Async.background{
+            self.next()
+        }
     }
     
     func prev(){

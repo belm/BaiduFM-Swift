@@ -1,13 +1,25 @@
 PODS:
   - Alamofire (1.2.0)
+  - Async (1.2.0)
   - SwiftyJSON (2.2.0)
 
 DEPENDENCIES:
   - Alamofire (~> 1.2)
+  - Async (from `https://github.com/duemunk/Async.git`)
   - SwiftyJSON (>= 2.2)
+
+EXTERNAL SOURCES:
+  Async:
+    :git: https://github.com/duemunk/Async.git
+
+CHECKOUT OPTIONS:
+  Async:
+    :commit: ceb4051b248787cc860dd0e7169b1386e29345cf
+    :git: https://github.com/duemunk/Async.git
 
 SPEC CHECKSUMS:
   Alamofire: d765c5c1713aa64106b0228aaa600a1e6851f68d
+  Async: aba7b48a4cd05dae27d1affce2f48f2ed61e75f9
   SwiftyJSON: 0b3e6c07af17ff745e77e8e9984097b55c956e5c
 
-COCOAPODS: 0.36.3
+COCOAPODS: 0.36.4
