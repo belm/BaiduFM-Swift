@@ -65,6 +65,19 @@ class ViewController: UIViewController {
         }
         
         self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("progresstimer:"), userInfo: nil, repeats: true)
+        
+        //从后台激活通知
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("appDidBecomeActive"), name: UIApplicationDidBecomeActiveNotification, object: nil)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        println("viewDidAppear")
+        self.imgView.rotation()
+    }
+    
+    func appDidBecomeActive(){
+        println("appDidBecomeActive")
+         self.imgView.rotation()
     }
     
     func progresstimer(time:NSTimer){
