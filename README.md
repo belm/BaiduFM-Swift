@@ -13,7 +13,7 @@
 
 ##功能
 
--可以下拉刷新歌曲列表
+-可以下拉刷新,上拉加载更多歌曲列表
 
 -歌词自动滚动
 
@@ -69,7 +69,7 @@
 
 -swift单例
 
--下拉刷新UIRefreshControl，歌曲进度UIProgressView，歌词滚动UITextView
+-下拉刷新、上拉加载更多MJRefresh，歌曲进度UIProgressView，歌词滚动UITextView
 
 -闭包
 
