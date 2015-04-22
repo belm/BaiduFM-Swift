@@ -9,10 +9,11 @@
 import UIKit
 import MediaPlayer
 import Async
+import LTMorphingLabel
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var nameLabel: LTMorphingLabel!
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var albumLabel: UILabel!
     @IBOutlet weak var imgView: RoundImageView!
@@ -32,6 +33,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        self.nameLabel.morphingEffect = .Fall
         
         var storeChannel = NSUserDefaults.standardUserDefaults().valueForKey("LAST_PLAY_CHANNEL_ID") as? String
         if storeChannel != nil {
@@ -272,10 +275,12 @@ class ViewController: UIViewController {
             DataCenter.shareDataCenter.curPlayStatus = 2
             DataCenter.shareDataCenter.mp.pause()
             self.playButton.setImage(UIImage(named: "player_btn_play_normal"), forState: UIControlState.Normal)
+            self.imgView.layer.removeAllAnimations()
         }else{
             DataCenter.shareDataCenter.curPlayStatus = 1
             DataCenter.shareDataCenter.mp.play()
             self.playButton.setImage(UIImage(named: "player_btn_pause_normal"), forState: UIControlState.Normal)
+            self.imgView.rotation()
         }
     }
     

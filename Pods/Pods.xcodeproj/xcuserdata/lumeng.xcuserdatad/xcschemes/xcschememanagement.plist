@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-BaiduFM-LTMorphingLabel.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-BaiduFM-MJRefresh.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,27 +37,32 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0C218AD9EAC901517E933BFC</key>
+		<key>57140454267453A6FDB7CDA3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>158B26D0203550505F32AF54</key>
+		<key>9C4CA46F4678D0D8259D6AD0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>34A033016D7CD60B9929BD57</key>
+		<key>9D970DCC7FE6D6F215C655C6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4539783D49895B52FD6C33EA</key>
+		<key>D2FBB8F62EDF0FF5451DA35F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>FDC29B5764B457B4C97CFE83</key>
+		<key>E4036CBA41E633791F6235FE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FDDD88D67EDF26917565ADF8</key>
 		<dict>
 			<key>primary</key>
 			<true/>

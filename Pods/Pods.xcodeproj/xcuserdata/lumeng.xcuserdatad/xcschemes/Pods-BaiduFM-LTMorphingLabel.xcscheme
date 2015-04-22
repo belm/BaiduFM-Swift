@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "57140454267453A6FDB7CDA3"
-               BuildableName = "Async.framework"
-               BlueprintName = "Pods-BaiduFM-Async"
+               BlueprintIdentifier = "D2FBB8F62EDF0FF5451DA35F"
+               BuildableName = "LTMorphingLabel.framework"
+               BlueprintName = "Pods-BaiduFM-LTMorphingLabel"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

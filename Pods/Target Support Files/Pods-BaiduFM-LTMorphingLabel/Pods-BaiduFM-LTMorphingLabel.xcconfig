@@ -1,0 +1,1 @@
+PODS_BAIDUFM_LTMORPHINGLABEL_OTHER_LDFLAGS = -framework "Foundation" -framework "QuartzCore" -framework "UIKit"

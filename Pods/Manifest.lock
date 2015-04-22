@@ -1,12 +1,14 @@
 PODS:
-  - Alamofire (1.2.0)
+  - Alamofire (1.2.1)
   - Async (1.2.0)
+  - LTMorphingLabel (0.0.6)
   - MJRefresh (1.4.5)
   - SwiftyJSON (2.2.0)
 
 DEPENDENCIES:
   - Alamofire (~> 1.2)
   - Async (from `https://github.com/duemunk/Async.git`)
+  - LTMorphingLabel (~> 0.0.6)
   - MJRefresh
   - SwiftyJSON (>= 2.2)
 
@@ -20,8 +22,9 @@ CHECKOUT OPTIONS:
     :git: https://github.com/duemunk/Async.git
 
 SPEC CHECKSUMS:
-  Alamofire: d765c5c1713aa64106b0228aaa600a1e6851f68d
+  Alamofire: 1acfdf179aff68b41a48dff70c1ac7fa263e2bcb
   Async: aba7b48a4cd05dae27d1affce2f48f2ed61e75f9
+  LTMorphingLabel: bce7121dd7a5d01b3f39f7a27e91a4d162ddea4a
   MJRefresh: 4b24394e577ea399fbc926e5b6072317aae2c152
   SwiftyJSON: 0b3e6c07af17ff745e77e8e9984097b55c956e5c
 

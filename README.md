@@ -60,6 +60,8 @@
 
 -[MJRefresh](https://github.com/CoderMJLee/MJRefresh)
 
+-[文字效果LTMorphingLabel](https://github.com/lexrus/LTMorphingLabel)
+
 ##使用的swift知识点
 -网络请求
 
