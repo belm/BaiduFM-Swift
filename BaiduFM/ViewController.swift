@@ -172,6 +172,8 @@ class ViewController: UIViewController {
     
     func show(showImg:String,name:String,artistName:String,albumName:String,songLink:String,time:Int, lrcLink:String){
         
+        self.navigationItem.title = DataCenter.shareDataCenter.currentChannelName
+        
         //info
        
         self.imgView.image = UIImage(data: NSData(contentsOfURL: NSURL(string: showImg)!)!)
