@@ -56,10 +56,7 @@ class ChannelTableViewController: UITableViewController {
         
         var channel = DataCenter.shareDataCenter.channelListInfo[indexPath.row]
         DataCenter.shareDataCenter.currentChannel = channel.id
-        
-        NSUserDefaults.standardUserDefaults().setValue(channel.id, forKey: "LAST_PLAY_CHANNEL_ID")
-        NSUserDefaults.standardUserDefaults().setValue(channel.name, forKey: "LAST_PLAY_CHANNEL_NAME")
-        
+        DataCenter.shareDataCenter.currentChannelName = channel.name
     }
 
 }

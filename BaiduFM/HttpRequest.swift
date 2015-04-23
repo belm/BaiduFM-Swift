@@ -178,7 +178,10 @@ class HttpRequest {
         }
         */
         
+        println(Utils.documentPath())
+        
         let destination = Alamofire.Request.suggestedDownloadDestination(directory: .DocumentDirectory, domain: .UserDomainMask)
+
         Alamofire.download(Method.GET, songUrl, destination)
             .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
                 println("bytesRead:\(bytesRead),totalBytesRead:\(totalBytesRead),totalBytesExpectedToRead:\(totalBytesRead)")
