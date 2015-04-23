@@ -76,6 +76,10 @@ class ViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("musicListClick"), name: MUSIC_LIST_CLICK_NOTIFYCATION, object: nil)
     }
     
+    deinit{
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func viewDidAppear(animated: Bool) {
         println("viewDidAppear")
         self.imgView.rotation()
