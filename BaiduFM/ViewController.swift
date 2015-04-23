@@ -71,6 +71,9 @@ class ViewController: UIViewController {
         
         //从后台激活通知
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("appDidBecomeActive"), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        
+        //监听歌曲列表点击
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("musicListClick"), name: MUSIC_LIST_CLICK_NOTIFYCATION, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -81,6 +84,10 @@ class ViewController: UIViewController {
     func appDidBecomeActive(){
         println("appDidBecomeActive")
          self.imgView.rotation()
+    }
+    
+    func musicListClick(){
+        self.start(DataCenter.shareDataCenter.curPlayIndex)
     }
     
     func progresstimer(time:NSTimer){
@@ -187,6 +194,10 @@ class ViewController: UIViewController {
         
         var info = DataCenter.shareDataCenter.curPlaySongInfo
         var link = DataCenter.shareDataCenter.curPlaySongLink
+        
+        if info == nil || link == nil {
+            return
+        }
         
         if DataCenter.shareDataCenter.dbSongList.insert(info!, link: link!){
             println("\(info!.id)添加最近播放成功")

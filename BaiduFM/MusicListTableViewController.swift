@@ -111,6 +111,10 @@ class MusicListTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         
         DataCenter.shareDataCenter.curPlayIndex = indexPath.row
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(MUSIC_LIST_CLICK_NOTIFYCATION, object: nil)
+        
+        self.navigationController?.popToRootViewControllerAnimated(true)
     }
 
 }
