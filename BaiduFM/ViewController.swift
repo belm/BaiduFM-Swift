@@ -36,21 +36,15 @@ class ViewController: UIViewController {
         
         self.nameLabel.morphingEffect = .Fall
         
-        var storeChannel = NSUserDefaults.standardUserDefaults().valueForKey("LAST_PLAY_CHANNEL_ID") as? String
-        if storeChannel != nil {
-            DataCenter.shareDataCenter.currentChannel = storeChannel!
-        }else{
-            storeChannel = DataCenter.shareDataCenter.currentChannel
+        self.currentChannel = DataCenter.shareDataCenter.currentChannel
+        
+        if let storeChannel = NSUserDefaults.standardUserDefaults().valueForKey("LAST_PLAY_CHANNEL_ID") as? String{
+            self.currentChannel = storeChannel
         }
         
-        var storeChannelName = NSUserDefaults.standardUserDefaults().valueForKey("LAST_PLAY_CHANNEL_NAME") as? String
-        if storeChannelName == nil {
-            storeChannelName = DataCenter.shareDataCenter.currentChannelName
+        if let channelName = NSUserDefaults.standardUserDefaults().valueForKey("LAST_PLAY_CHANNEL_NAME") as? String{
+            DataCenter.shareDataCenter.currentChannelName = channelName
         }
-        
-        self.navigationItem.title = storeChannelName
-        
-        self.currentChannel = storeChannel!
         
         if DataCenter.shareDataCenter.currentAllSongId.count == 0{
             println("load data")
@@ -140,6 +134,8 @@ class ViewController: UIViewController {
         
         if DataCenter.shareDataCenter.curShowAllSongInfo.count == 0 {
             HttpRequest.getSongInfoList(DataCenter.shareDataCenter.curShowAllSongId, callback: { (info) -> Void in
+                
+                if info == nil {return}
                 DataCenter.shareDataCenter.curShowAllSongInfo = info!
                 
                 HttpRequest.getSongLinkList(DataCenter.shareDataCenter.curShowAllSongId, callback: { (link) -> Void in
