@@ -64,6 +64,17 @@ class DownloadTableViewController: UITableViewController {
         
         return cell
     }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        var song = self.list![indexPath.row]
+        var data:Dictionary<String,AnyObject> = ["song":song]
+        NSNotificationCenter.defaultCenter().postNotificationName(OTHER_MUSIC_LIST_CLICK_NOTIFICATION, object: nil, userInfo: data)
+        
+        //导航控制器 跳转到root播放页面
+        self.tabBarController?.selectedIndex = 0
+        var mainView = self.tabBarController?.viewControllers![0] as! UINavigationController
+        mainView.popToRootViewControllerAnimated(true)
+    }
 
     /*
     // Override to support conditional editing of the table view.

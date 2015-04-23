@@ -73,7 +73,10 @@ class ViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("appDidBecomeActive"), name: UIApplicationDidBecomeActiveNotification, object: nil)
         
         //监听歌曲列表点击
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("musicListClick"), name: MUSIC_LIST_CLICK_NOTIFYCATION, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("musicListClick"), name: CHANNEL_MUSIC_LIST_CLICK_NOTIFICATION, object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("otherMusicListClick:"), name: OTHER_MUSIC_LIST_CLICK_NOTIFICATION, object: nil)
+        
     }
     
     deinit{
@@ -82,16 +85,29 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         println("viewDidAppear")
-        self.imgView.rotation()
+        if !self.imgView.isAnimating() && DataCenter.shareDataCenter.curPlayStatus == 1{
+            self.imgView.rotation()
+        }
     }
     
     func appDidBecomeActive(){
         println("appDidBecomeActive")
-         self.imgView.rotation()
+        if !self.imgView.isAnimating() && DataCenter.shareDataCenter.curPlayStatus == 1{
+            self.imgView.rotation()
+        }
     }
     
     func musicListClick(){
         self.start(DataCenter.shareDataCenter.curPlayIndex)
+    }
+    
+    func otherMusicListClick(notification:NSNotification){
+        
+        var info = notification.userInfo as! [String:AnyObject]
+        var song = info["song"] as! Song
+        println("\(song.name)")
+        
+        self.show(song.pic_url, name: song.name, artistName: song.artist, albumName: song.album, songLink: song.song_url, time: song.time, lrcLink: song.lrc_url)
     }
     
     func progresstimer(time:NSTimer){
@@ -127,6 +143,7 @@ class ViewController: UIViewController {
                 DataCenter.shareDataCenter.curShowAllSongInfo = info!
                 
                 HttpRequest.getSongLinkList(DataCenter.shareDataCenter.curShowAllSongId, callback: { (link) -> Void in
+                    
                     DataCenter.shareDataCenter.curShowAllSongLink = link!
                     self.start(0)
                 })
@@ -140,57 +157,57 @@ class ViewController: UIViewController {
         DataCenter.shareDataCenter.curPlayIndex = index
        // println(DataCenter.shareDataCenter.curPlayIndex)
         Async.main{
-            self.showInfo()
-            self.showLink()
+            var info = DataCenter.shareDataCenter.curPlaySongInfo
+            var link = DataCenter.shareDataCenter.curPlaySongLink
+            
+            if info == nil || link == nil {return}
+            
+            var showImg = Common.getIndexPageImage(info!)
+            
+            self.show(showImg, name: info!.name, artistName: info!.artistName, albumName: info!.albumName, songLink: link!.songLink, time: link!.time, lrcLink: link!.lrcLink)
+        
             self.addRecentSong()
         }
     }
     
-    func showInfo(){
+    func show(showImg:String,name:String,artistName:String,albumName:String,songLink:String,time:Int, lrcLink:String){
         
-        var info = DataCenter.shareDataCenter.curPlaySongInfo
-        if info != nil {
-            var showImg = Common.getIndexPageImage(info!)
-            self.imgView.image = UIImage(data: NSData(contentsOfURL: NSURL(string: showImg)!)!)
-            self.nameLabel.text = info!.name
-            self.artistLabel.text = "-" + info!.artistName + "-"
-            self.albumLabel.text = info!.albumName
-            
-            self.imgView.rotation()
-            
-            self.showNowPlay(info!)
-        }
-    }
-    
-    func showLink(){
+        //info
+       
+        self.imgView.image = UIImage(data: NSData(contentsOfURL: NSURL(string: showImg)!)!)
+        self.nameLabel.text = name
+        self.artistLabel.text = "-" + artistName + "-"
+        self.albumLabel.text = albumName
         
-        var link = DataCenter.shareDataCenter.curPlaySongLink
-        if link != nil {
-            DataCenter.shareDataCenter.mp.stop()
-            var songUrl = Common.getCanPlaySongUrl(link!.songLink)
-            DataCenter.shareDataCenter.mp.contentURL = NSURL(string: songUrl)
-            DataCenter.shareDataCenter.mp.prepareToPlay()
-            DataCenter.shareDataCenter.mp.play()
-            DataCenter.shareDataCenter.curPlayStatus = 1
-            
-            self.playButton.setImage(UIImage(named: "player_btn_pause_normal"), forState: UIControlState.Normal)
-            
-            self.songTimeLengthLabel?.text = Common.getMinuteDisplay(link!.time)
-            //\\[\\d{2}:\\d{2}\\.\\d{2}\\]
-            HttpRequest.getLrc(link!.lrcLink, callback: { lrc -> Void in
-                var lrcAfter:String? = Common.replaceString("\\[[\\w|\\.|\\:|\\-]*\\]", replace: lrc!, place: "")
-                if let lrcDis = lrcAfter {
-                    
-                    if lrcDis.hasPrefix("<!DOCTYPE"){
-                        self.txtView.text = "暂无歌词"
-                    }else{
-                        self.txtView.text = lrcDis
-                    }
-                    
+        self.imgView.rotation()
+        
+        self.showNowPlay(showImg, name: name, artistName: artistName, albumName: albumName)
+        
+        //link 
+        DataCenter.shareDataCenter.mp.stop()
+        var songUrl = Common.getCanPlaySongUrl(songLink)
+        DataCenter.shareDataCenter.mp.contentURL = NSURL(string: songUrl)
+        DataCenter.shareDataCenter.mp.prepareToPlay()
+        DataCenter.shareDataCenter.mp.play()
+        DataCenter.shareDataCenter.curPlayStatus = 1
+        
+        self.playButton.setImage(UIImage(named: "player_btn_pause_normal"), forState: UIControlState.Normal)
+        
+        self.songTimeLengthLabel?.text = Common.getMinuteDisplay(time)
+        //\\[\\d{2}:\\d{2}\\.\\d{2}\\]
+        HttpRequest.getLrc(lrcLink, callback: { lrc -> Void in
+            var lrcAfter:String? = Common.replaceString("\\[[\\w|\\.|\\:|\\-]*\\]", replace: lrc!, place: "")
+            if let lrcDis = lrcAfter {
+                
+                if lrcDis.hasPrefix("<!DOCTYPE"){
+                    self.txtView.text = "暂无歌词"
+                }else{
+                    self.txtView.text = lrcDis
                 }
                 
-            })
-        }
+            }
+            
+        })
     }
     
     //添加最近播放
@@ -240,16 +257,16 @@ class ViewController: UIViewController {
     }
     
     //锁屏显示歌曲专辑信息
-    func showNowPlay(info:SongInfo){
+    func showNowPlay(songPic:String,name:String,artistName:String,albumName:String){
     
         //var showImg = Common.getIndexPageImage(info)
-        var img = UIImage(data: NSData(contentsOfURL: NSURL(string: info.songPicRadio)!)!)
+        var img = UIImage(data: NSData(contentsOfURL: NSURL(string: songPic)!)!)
         var item = MPMediaItemArtwork(image: img)
         
         var dic:[NSObject : AnyObject] = [:]
-        dic[MPMediaItemPropertyTitle] = info.name
-        dic[MPMediaItemPropertyArtist] = info.artistName
-        dic[MPMediaItemPropertyAlbumTitle] = info.albumName
+        dic[MPMediaItemPropertyTitle] = name
+        dic[MPMediaItemPropertyArtist] = artistName
+        dic[MPMediaItemPropertyAlbumTitle] = albumName
         dic[MPMediaItemPropertyArtwork] = item
         
         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = dic

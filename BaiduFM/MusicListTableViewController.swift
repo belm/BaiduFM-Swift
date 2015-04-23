@@ -112,7 +112,7 @@ class MusicListTableViewController: UITableViewController {
         
         DataCenter.shareDataCenter.curPlayIndex = indexPath.row
         
-        NSNotificationCenter.defaultCenter().postNotificationName(MUSIC_LIST_CLICK_NOTIFYCATION, object: nil)
+        NSNotificationCenter.defaultCenter().postNotificationName(CHANNEL_MUSIC_LIST_CLICK_NOTIFICATION, object: nil)
         
         self.navigationController?.popToRootViewControllerAnimated(true)
     }

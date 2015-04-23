@@ -73,6 +73,8 @@ class DataCenter {
     //当前播放歌曲的info信息
     var curPlaySongLink:SongLink? = nil
     
+    var curSong:Song? = nil
+    
     var curPlayStatus = 0 //0初始 1播放 2暂时 3停止
     
     //db操作

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Song{
+class Song:NSObject{
     var sid:String
     var name:String
     var artist:String
@@ -21,6 +21,24 @@ struct Song{
     var dl_file:String
     var is_like:Int
     var is_recent:Int
+    
+    init(sid:String,name:String,artist:String,album:String,song_url:String,pic_url:String,lrc_url:String,time:Int,is_dl:Int,dl_file:String,is_like:Int,is_recent:Int) {
+
+        self.sid = sid
+        self.name = name
+        self.artist = artist
+        self.album = album
+        self.song_url = song_url
+        self.pic_url = pic_url
+        self.lrc_url = lrc_url
+        self.time = time
+        self.is_dl = is_dl
+        self.dl_file = dl_file
+        self.is_like = is_like
+        self.is_recent = is_recent
+        
+        super.init()
+    }
 }
 
 struct SongInfo {
