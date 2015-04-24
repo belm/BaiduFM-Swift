@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var albumLabel: UILabel!
     @IBOutlet weak var imgView: RoundImageView!
+    @IBOutlet weak var bgImageView: UIImageView!
     @IBOutlet weak var sizeLabel: UILabel!
     @IBOutlet weak var lengthLabel: UILabel!
     
@@ -35,6 +36,12 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         self.nameLabel.morphingEffect = .Fall
+        
+        //背景图片模糊效果
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.frame.size = CGSize(width: view.frame.width, height: view.frame.height)
+        self.bgImageView.addSubview(blurView)
         
         self.currentChannel = DataCenter.shareDataCenter.currentChannel
         
@@ -176,9 +183,10 @@ class ViewController: UIViewController {
         self.nameLabel.text = name
         self.artistLabel.text = "-" + artistName + "-"
         self.albumLabel.text = albumName
-        
+        self.bgImageView.image = UIImage(data: NSData(contentsOfURL: NSURL(string: showImg)!)!)
         self.imgView.rotation()
         
+        //锁屏显示
         self.showNowPlay(showImg, name: name, artistName: artistName, albumName: albumName)
         
         //link 
@@ -317,16 +325,28 @@ class ViewController: UIViewController {
     @IBAction func downloadSong(sender: UIButton) {
         
         var info = DataCenter.shareDataCenter.curPlaySongLink
-
+        
+        var musicDir = Utils.documentPath().stringByAppendingPathComponent("download")
+        if !NSFileManager.defaultManager().fileExistsAtPath(musicDir){
+            NSFileManager.defaultManager().createDirectoryAtPath(musicDir, withIntermediateDirectories: false, attributes: nil, error: nil)
+        }
+        var musicPath = musicDir.stringByAppendingPathComponent(info!.id + "." + info!.format)
+        
         if let song = info {
-            
-            HttpRequest.downloadFile(song.songLink, dest: "")
-            
-            if DataCenter.shareDataCenter.dbSongList.updateDownloadStatus(song.id){
-                println("\(song.id)下载成功")
-            }else{
-                println("\(song.id)下载失败")
-            }
+            println(musicPath)
+            HttpRequest.downloadFile(song.songLink, filePath: { (path:NSURL) -> Void in
+                println("下载完成")
+                //重命名文件
+                if(NSFileManager.defaultManager().moveItemAtURL(path, toURL: NSURL(string: musicPath)!, error: nil)){
+                    if DataCenter.shareDataCenter.dbSongList.updateDownloadStatus(song.id){
+                        println("\(song.id)更新db成功")
+                    }else{
+                        println("\(song.id)更新db失败")
+                    }
+                }else{
+                    println("重命名文件失败")
+                }
+            })
         }
     }
     
