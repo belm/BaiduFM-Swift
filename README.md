@@ -79,6 +79,8 @@
 
 -使用MPMoviePlayerController在线播放网络mp3 
 
+-NSNotificationCenter传值
+
 ##待完成功能
 -下载歌曲到本地(完善中)
 

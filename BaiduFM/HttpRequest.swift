@@ -169,7 +169,23 @@ class HttpRequest {
         }
     }
     
-    class func downloadFile(songUrl:String, dest:String){
+    class func downloadFile(songUrl:String, filePath:(path:NSURL)->Void){
+        
+        
+        Alamofire.download(Method.GET, songUrl, { (temporaryURL, response) in
+            
+            if let directoryURL = NSFileManager.defaultManager()
+                .URLsForDirectory(.DocumentDirectory,
+                    inDomains: .UserDomainMask)[0]
+                as? NSURL {
+                let pathComponent = response.suggestedFilename
+                var ret = directoryURL.URLByAppendingPathComponent(pathComponent!)
+                filePath(path: ret)
+                return ret
+            }
+            filePath(path: temporaryURL)
+            return temporaryURL
+        })
         
         /*
         var dbDirectory = Utils.documentPath().stringByAppendingPathComponent("download")
@@ -178,6 +194,7 @@ class HttpRequest {
         }
         */
         
+        /*
         println(Utils.documentPath())
         
         let destination = Alamofire.Request.suggestedDownloadDestination(directory: .DocumentDirectory, domain: .UserDomainMask)
@@ -189,5 +206,6 @@ class HttpRequest {
             .response { (request, response, _, error) in
                 println(response)
             }
+        */
     }
 }

@@ -100,7 +100,7 @@
                                     <action selector="nextSong:" destination="BYZ-38-t0r" eventType="touchUpInside" id="d4p-h6-DEt"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="bry-i1-d0x">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.5" contentMode="scaleToFill" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="bry-i1-d0x">
                                 <rect key="frame" x="150" y="372" width="300" height="280"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="280" id="Gcj-8o-Yal"/>
