@@ -9,9 +9,29 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>Glance - 百度FM WatchKit App.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>9</integer>
+		</dict>
+		<key>Notification - 百度FM WatchKit App.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>8</integer>
+		</dict>
+		<key>百度FM WatchKit App.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>7</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>67806C871AEA8C70002D94D1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>67F0AEB81AD9FF8C000CB588</key>
 		<dict>
 			<key>primary</key>
