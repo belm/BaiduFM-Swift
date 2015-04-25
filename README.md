@@ -95,6 +95,8 @@
 
 -第三方库合并(已经改用[COCOAPODS](https://github.com/cocoapods/cocoapods)管理)
 
+-支持Apple Watch
+
 ##联系我
 - [QQ邮箱](mailto:belm@vip.qq.com)
 
