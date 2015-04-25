@@ -227,7 +227,9 @@
                         <outlet property="bgImageView" destination="8Co-1s-it1" id="zxg-dB-UGt"/>
                         <outlet property="imgView" destination="10f-TH-a2W" id="K3C-M6-2jb"/>
                         <outlet property="nameLabel" destination="d5T-oP-9VV" id="5dO-8m-gIA"/>
+                        <outlet property="nextButton" destination="2pu-Bg-AiJ" id="iiz-hC-WBl"/>
                         <outlet property="playButton" destination="G9O-eE-5Qo" id="tOX-0d-Mka"/>
+                        <outlet property="prevButton" destination="p9J-6j-7ga" id="nM8-Fj-L1Q"/>
                         <outlet property="progressView" destination="ZHu-Jg-8aM" id="UWl-P0-zgg"/>
                         <outlet property="songTimeLengthLabel" destination="YBN-PX-Qx0" id="yVh-8d-a6h"/>
                         <outlet property="songTimePlayLabel" destination="lk4-Kj-DMK" id="xmc-K8-r5X"/>
@@ -377,7 +379,13 @@
                             <outlet property="delegate" destination="5G2-De-H6U" id="NaS-zm-K6r"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="下载列表" id="uId-9w-RdI"/>
+                    <navigationItem key="navigationItem" title="下载列表" id="uId-9w-RdI">
+                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="GEG-2R-Q3f">
+                            <connections>
+                                <action selector="delAllSong:" destination="5G2-De-H6U" id="dP2-Re-Rrb"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uf5-Tn-8LR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

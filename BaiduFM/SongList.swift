@@ -129,6 +129,16 @@ class SongList:BaseDb {
         return false
     }
     
+    func cleanDownloadList()->Bool{
+        if self.open(){
+            var sql = "update tbl_song_list set is_dl = 0"
+            var ret = self.db.executeUpdate(sql, withArgumentsInArray: nil)
+            self.close()
+            return ret
+        }
+        return false
+    }
+    
     func updateDownloadStatus(sid:String)->Bool{
         if self.open(){
             var sql = "UPDATE tbl_song_list set is_dl=1 WHERE sid=?"

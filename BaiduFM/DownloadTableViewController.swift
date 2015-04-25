@@ -83,6 +83,13 @@ class DownloadTableViewController: UITableViewController {
         })
     }
 
+    @IBAction func delAllSong(sender: UIBarButtonItem) {
+        
+        Common.cleanAllDownloadSong()
+        self.loadData()
+    }
+    
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

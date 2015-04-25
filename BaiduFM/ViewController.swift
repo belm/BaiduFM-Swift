@@ -27,6 +27,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var txtView: UITextView!
     @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var prevButton: UIButton!
+    @IBOutlet weak var nextButton: UIButton!
+    
     
     var timer:NSTimer? = nil
     var currentChannel = ""
@@ -159,7 +162,21 @@ class ViewController: UIViewController {
     func start(index:Int){
         DataCenter.shareDataCenter.curPlayIndex = index
        // println(DataCenter.shareDataCenter.curPlayIndex)
+        
         Async.main{
+            
+            if index == 0 {
+                self.prevButton.enabled = false
+            }else{
+                self.prevButton.enabled = true
+            }
+            
+            if index == DataCenter.shareDataCenter.curShowAllSongId.count - 1 {
+                self.nextButton.enabled = false
+            }else{
+                self.nextButton.enabled = true
+            }
+            
             var info = DataCenter.shareDataCenter.curPlaySongInfo
             var link = DataCenter.shareDataCenter.curPlaySongLink
             
@@ -275,8 +292,8 @@ class ViewController: UIViewController {
     
     //锁屏显示歌曲专辑信息
     func showNowPlay(songPic:String,name:String,artistName:String,albumName:String){
-    
-        //var showImg = Common.getIndexPageImage(info)
+        
+        //var showImg = Common.getIndexPageImage(info)        
         var img = UIImage(data: NSData(contentsOfURL: NSURL(string: songPic)!)!)
         var item = MPMediaItemArtwork(image: img)
         

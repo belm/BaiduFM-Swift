@@ -92,5 +92,15 @@ class Common {
         var musicPath = musicDir.stringByAppendingPathComponent(songId + "." + format)
         return musicPath
     }
+    
+    class func cleanAllDownloadSong(){
+       
+        //删除歌曲文件夹
+        var musicDir = Utils.documentPath().stringByAppendingPathComponent("download")
+        NSFileManager.defaultManager().removeItemAtPath(musicDir, error: nil)
+        
+        //更新db
+        DataCenter.shareDataCenter.dbSongList.cleanDownloadList()
+    }
 
 }
