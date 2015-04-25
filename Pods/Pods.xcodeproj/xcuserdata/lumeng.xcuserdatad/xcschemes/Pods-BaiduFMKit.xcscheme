@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0630"
+   LastUpgradeVersion = "0510"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6797967F1AEC542700FF780F"
-               BuildableName = "BaiduFMKit.framework"
-               BlueprintName = "BaiduFMKit"
-               ReferencedContainer = "container:BaiduFM.xcodeproj">
+               BlueprintIdentifier = "C31133E5B96E10DFCBE3C084"
+               BuildableName = "Pods_BaiduFMKit.framework"
+               BlueprintName = "Pods-BaiduFMKit"
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -39,15 +39,6 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6797967F1AEC542700FF780F"
-            BuildableName = "BaiduFMKit.framework"
-            BlueprintName = "BaiduFMKit"
-            ReferencedContainer = "container:BaiduFM.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -57,15 +48,6 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6797967F1AEC542700FF780F"
-            BuildableName = "BaiduFMKit.framework"
-            BlueprintName = "BaiduFMKit"
-            ReferencedContainer = "container:BaiduFM.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "67806C871AEA8C70002D94D1"
-               BuildableName = "&#x767e;&#x5ea6;FM WatchKit App.app"
-               BlueprintName = "&#x767e;&#x5ea6;FM WatchKit App"
+               BuildableName = "BaiduFM WatchKit App.app"
+               BlueprintName = "BaiduFM WatchKit App"
                ReferencedContainer = "container:BaiduFM.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,8 +29,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "67806C781AEA8C70002D94D1"
-               BuildableName = "&#x767e;&#x5ea6;FM WatchKit Extension.appex"
-               BlueprintName = "&#x767e;&#x5ea6;FM WatchKit Extension"
+               BuildableName = "BaiduFM WatchKit Extension.appex"
+               BlueprintName = "BaiduFM WatchKit Extension"
                ReferencedContainer = "container:BaiduFM.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -76,6 +76,20 @@
                ReferencedContainer = "container:BaiduFM.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "679796891AEC542800FF780F"
+               BuildableName = "BaiduFMKitTests.xctest"
+               BlueprintName = "BaiduFMKitTests"
+               ReferencedContainer = "container:BaiduFM.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -104,13 +118,23 @@
                ReferencedContainer = "container:BaiduFM.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "679796891AEC542800FF780F"
+               BuildableName = "BaiduFMKitTests.xctest"
+               BlueprintName = "BaiduFMKitTests"
+               ReferencedContainer = "container:BaiduFM.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "67806C871AEA8C70002D94D1"
-            BuildableName = "&#x767e;&#x5ea6;FM WatchKit App.app"
-            BlueprintName = "&#x767e;&#x5ea6;FM WatchKit App"
+            BuildableName = "BaiduFM WatchKit App.app"
+            BlueprintName = "BaiduFM WatchKit App"
             ReferencedContainer = "container:BaiduFM.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -124,8 +148,7 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES"
-      launchAutomaticallySubstyle = "4"
-      notificationPayloadFile = "&#x767e;&#x5ea6;FM WatchKit Extension/PushNotificationPayload.apns">
+      launchAutomaticallySubstyle = "4">
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.springboard"
@@ -133,8 +156,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "67806C871AEA8C70002D94D1"
-            BuildableName = "&#x767e;&#x5ea6;FM WatchKit App.app"
-            BlueprintName = "&#x767e;&#x5ea6;FM WatchKit App"
+            BuildableName = "BaiduFM WatchKit App.app"
+            BlueprintName = "BaiduFM WatchKit App"
             ReferencedContainer = "container:BaiduFM.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
@@ -142,8 +165,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "67806C871AEA8C70002D94D1"
-            BuildableName = "&#x767e;&#x5ea6;FM WatchKit App.app"
-            BlueprintName = "&#x767e;&#x5ea6;FM WatchKit App"
+            BuildableName = "BaiduFM WatchKit App.app"
+            BlueprintName = "BaiduFM WatchKit App"
             ReferencedContainer = "container:BaiduFM.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -156,8 +179,7 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES"
-      launchAutomaticallySubstyle = "4"
-      notificationPayloadFile = "&#x767e;&#x5ea6;FM WatchKit Extension/PushNotificationPayload.apns">
+      launchAutomaticallySubstyle = "4">
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.springboard"
@@ -165,8 +187,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "67806C871AEA8C70002D94D1"
-            BuildableName = "&#x767e;&#x5ea6;FM WatchKit App.app"
-            BlueprintName = "&#x767e;&#x5ea6;FM WatchKit App"
+            BuildableName = "BaiduFM WatchKit App.app"
+            BlueprintName = "BaiduFM WatchKit App"
             ReferencedContainer = "container:BaiduFM.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
@@ -174,8 +196,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "67806C871AEA8C70002D94D1"
-            BuildableName = "&#x767e;&#x5ea6;FM WatchKit App.app"
-            BlueprintName = "&#x767e;&#x5ea6;FM WatchKit App"
+            BuildableName = "BaiduFM WatchKit App.app"
+            BlueprintName = "BaiduFM WatchKit App"
             ReferencedContainer = "container:BaiduFM.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

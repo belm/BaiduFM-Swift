@@ -8,85 +8,101 @@
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>5</integer>
 		</dict>
 		<key>Pods-BaiduFM-Async.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>6</integer>
 		</dict>
 		<key>Pods-BaiduFM-Kingfisher.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>7</integer>
 		</dict>
 		<key>Pods-BaiduFM-LTMorphingLabel.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>8</integer>
 		</dict>
 		<key>Pods-BaiduFM-MJRefresh.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>9</integer>
 		</dict>
 		<key>Pods-BaiduFM-SwiftyJSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>10</integer>
 		</dict>
 		<key>Pods-BaiduFM.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>4</integer>
+		</dict>
+		<key>Pods-BaiduFMKit-Alamofire.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-BaiduFMKit-SwiftyJSON.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-BaiduFMKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>2D4F13E504E59C7372E30ACD</key>
+		<key>1598D28CA88DAF1DFEEA1B7E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8A7A2C3B3FDBD6F1145241B7</key>
+		<key>1DC29DACD18034DDF4DAD9CB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A490360F28BC8EF23B1DA2EC</key>
+		<key>3037D88F9E4183E973D12603</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CB1B4491599960214E5A33D9</key>
+		<key>44D3AAED6DB3FD3DA02333E4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CC70A41BB6E546543A5C36DF</key>
+		<key>4D2A8516D2FEC0C1B8051791</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E13C2508E33B02D03FBFE9CD</key>
+		<key>6088F535D291554F6C5369BB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E19FCD2F7E80E6311C6A6BAF</key>
+		<key>B916E257B15F8B779C0D5FCF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C31133E5B96E10DFCBE3C084</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E9CCDF51666C66B25F1F0250</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EBC975B07CF07930399CC95B</key>
 		<dict>
 			<key>primary</key>
 			<true/>

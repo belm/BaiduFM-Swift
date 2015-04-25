@@ -62,6 +62,20 @@
                ReferencedContainer = "container:BaiduFM.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "679796891AEC542800FF780F"
+               BuildableName = "BaiduFMKitTests.xctest"
+               BlueprintName = "BaiduFMKitTests"
+               ReferencedContainer = "container:BaiduFM.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -97,6 +111,16 @@
                BlueprintIdentifier = "67B9C2EF1AEBF43300107696"
                BuildableName = "BaiduFmKitTests.xctest"
                BlueprintName = "BaiduFmKitTests"
+               ReferencedContainer = "container:BaiduFM.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "679796891AEC542800FF780F"
+               BuildableName = "BaiduFMKitTests.xctest"
+               BlueprintName = "BaiduFMKitTests"
                ReferencedContainer = "container:BaiduFM.xcodeproj">
             </BuildableReference>
          </TestableReference>

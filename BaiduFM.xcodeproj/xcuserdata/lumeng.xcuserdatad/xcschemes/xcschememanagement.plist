@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>BaiduFMKit.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>12</integer>
+		</dict>
 		<key>BaiduFm.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -17,7 +22,7 @@
 		<key>BaiduFmKit.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>12</integer>
+			<integer>4</integer>
 		</dict>
 		<key>Glance - 百度FM WatchKit App.xcscheme</key>
 		<dict>
@@ -38,6 +43,16 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>67806C871AEA8C70002D94D1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6797967F1AEC542700FF780F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>679796891AEC542800FF780F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

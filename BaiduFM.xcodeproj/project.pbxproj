@@ -7,84 +7,64 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		672D47B81ADBBE1200C46409 /* MusicListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672D47B71ADBBE1200C46409 /* MusicListTableViewController.swift */; };
-		676670C51ADD5F2500FBF425 /* DataCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676670C41ADD5F2500FBF425 /* DataCenter.swift */; };
-		67806C7F1AEA8C70002D94D1 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67806C7E1AEA8C70002D94D1 /* InterfaceController.swift */; };
-		67806C811AEA8C70002D94D1 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67806C801AEA8C70002D94D1 /* NotificationController.swift */; };
-		67806C831AEA8C70002D94D1 /* GlanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67806C821AEA8C70002D94D1 /* GlanceController.swift */; };
-		67806C851AEA8C70002D94D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67806C841AEA8C70002D94D1 /* Images.xcassets */; };
-		67806C891AEA8C70002D94D1 /* 百度FM WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 67806C881AEA8C70002D94D1 /* 百度FM WatchKit App.app */; };
-		67806C911AEA8C70002D94D1 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67806C8F1AEA8C70002D94D1 /* Interface.storyboard */; };
-		67806C931AEA8C70002D94D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67806C921AEA8C70002D94D1 /* Images.xcassets */; };
-		67806C971AEA8C70002D94D1 /* 百度FM WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 67806C791AEA8C70002D94D1 /* 百度FM WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6783E0341AE0D6E400D9D5FC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6783E0321AE0D6D800D9D5FC /* AVFoundation.framework */; };
-		678B673D1ADB929400557CB3 /* ChannelTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */; };
-		678CFA7A1AE6133E0009B643 /* RoundImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678CFA791AE6133E0009B643 /* RoundImageView.swift */; };
-		679DCB281ADE859100191D94 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679DCB271ADE859100191D94 /* Common.swift */; };
+		679796851AEC542700FF780F /* BaiduFMKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 679796841AEC542700FF780F /* BaiduFMKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6797968B1AEC542800FF780F /* BaiduFMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 679796801AEC542700FF780F /* BaiduFMKit.framework */; };
+		679796941AEC542800FF780F /* BaiduFMKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679796931AEC542800FF780F /* BaiduFMKitTests.swift */; };
+		679796971AEC542800FF780F /* BaiduFMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 679796801AEC542700FF780F /* BaiduFMKit.framework */; };
+		679796981AEC542800FF780F /* BaiduFMKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 679796801AEC542700FF780F /* BaiduFMKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67B3F1901AE1DA3F0061068C /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F1861AE1DA3F0061068C /* FMDatabase.m */; };
 		67B3F1911AE1DA3F0061068C /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F1881AE1DA3F0061068C /* FMDatabaseAdditions.m */; };
 		67B3F1921AE1DA3F0061068C /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F18A1AE1DA3F0061068C /* FMDatabasePool.m */; };
 		67B3F1931AE1DA3F0061068C /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F18C1AE1DA3F0061068C /* FMDatabaseQueue.m */; };
 		67B3F1941AE1DA3F0061068C /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F18F1AE1DA3F0061068C /* FMResultSet.m */; };
 		67B3F1961AE1DA590061068C /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B3F1951AE1DA590061068C /* libsqlite3.dylib */; };
-		67B3F19B1AE1DC510061068C /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F19A1AE1DC510061068C /* Utils.swift */; };
-		67B3F19D1AE1E0570061068C /* BaseDb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F19C1AE1E0570061068C /* BaseDb.swift */; };
-		67B3F19F1AE1EAC10061068C /* SongList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F19E1AE1EAC10061068C /* SongList.swift */; };
-		67B9C2EB1AEBF43300107696 /* BaiduFmKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 67B9C2EA1AEBF43300107696 /* BaiduFmKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		67B9C2F11AEBF43300107696 /* BaiduFmKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B9C2E61AEBF43300107696 /* BaiduFmKit.framework */; };
-		67B9C2FD1AEBF43300107696 /* BaiduFmKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B9C2E61AEBF43300107696 /* BaiduFmKit.framework */; };
-		67B9C2FE1AEBF43300107696 /* BaiduFmKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67B9C2E61AEBF43300107696 /* BaiduFmKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67B9C31F1AEBF60D00107696 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C31B1AEBF60D00107696 /* Common.swift */; };
+		67B9C3221AEBF60D00107696 /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C31C1AEBF60D00107696 /* Const.swift */; };
+		67B9C3251AEBF60D00107696 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C31D1AEBF60D00107696 /* HttpRequest.swift */; };
+		67B9C3281AEBF60D00107696 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C31E1AEBF60D00107696 /* Utils.swift */; };
+		67B9C32E1AEBF61E00107696 /* BaseDb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C32C1AEBF61E00107696 /* BaseDb.swift */; };
+		67B9C32F1AEBF61E00107696 /* SongList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C32D1AEBF61E00107696 /* SongList.swift */; };
+		67B9C3341AEBF62900107696 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C3311AEBF62900107696 /* Channel.swift */; };
+		67B9C3371AEBF62900107696 /* DataCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C3321AEBF62900107696 /* DataCenter.swift */; };
+		67B9C33A1AEBF62900107696 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C3331AEBF62900107696 /* Song.swift */; };
+		67B9C3451AEBF63100107696 /* ChannelTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C33E1AEBF63100107696 /* ChannelTableViewController.swift */; };
+		67B9C3481AEBF63100107696 /* DownloadTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C33F1AEBF63100107696 /* DownloadTableViewController.swift */; };
+		67B9C34B1AEBF63100107696 /* LikeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C3401AEBF63100107696 /* LikeTableViewController.swift */; };
+		67B9C34E1AEBF63100107696 /* MusicListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C3411AEBF63100107696 /* MusicListTableViewController.swift */; };
+		67B9C3511AEBF63100107696 /* RecentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C3421AEBF63100107696 /* RecentTableViewController.swift */; };
+		67B9C3541AEBF63100107696 /* RoundImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C3431AEBF63100107696 /* RoundImageView.swift */; };
+		67B9C3571AEBF63100107696 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B9C3441AEBF63100107696 /* ViewController.swift */; };
 		67F0AEBF1AD9FF8C000CB588 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */; };
-		67F0AEC11AD9FF8C000CB588 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEC01AD9FF8C000CB588 /* ViewController.swift */; };
 		67F0AEC41AD9FF8C000CB588 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67F0AEC21AD9FF8C000CB588 /* Main.storyboard */; };
 		67F0AEC61AD9FF8C000CB588 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67F0AEC51AD9FF8C000CB588 /* Images.xcassets */; };
 		67F0AEC91AD9FF8C000CB588 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 67F0AEC71AD9FF8C000CB588 /* LaunchScreen.xib */; };
-		67F0AEE01AD9FFE7000CB588 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEDF1AD9FFE7000CB588 /* Channel.swift */; };
-		67F0AEE21ADA03A8000CB588 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEE11ADA03A8000CB588 /* Song.swift */; };
-		67F0AEE71ADA0784000CB588 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEE61ADA0784000CB588 /* HttpRequest.swift */; };
 		67F0AEF01ADA6EFE000CB588 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67F0AEEF1ADA6EFE000CB588 /* MediaPlayer.framework */; };
-		67F66D1B1AE21FB10070009D /* RecentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F66D1A1AE21FB10070009D /* RecentTableViewController.swift */; };
-		67F66D1D1AE21FBD0070009D /* DownloadTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F66D1C1AE21FBD0070009D /* DownloadTableViewController.swift */; };
-		67F66D1F1AE21FCE0070009D /* LikeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F66D1E1AE21FCE0070009D /* LikeTableViewController.swift */; };
-		67F89BDD1AE8816800EAB2F3 /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F89BDC1AE8816800EAB2F3 /* Const.swift */; };
+		B8DFB83A2EF1D044B9156B1B /* Pods_BaiduFMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 539C21E6C3568DC7CA06B506 /* Pods_BaiduFMKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F964CFD7279512DD676A4FEE /* Pods_BaiduFM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DFAF1C2E553F9D6B4D386F3 /* Pods_BaiduFM.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		67806C8A1AEA8C70002D94D1 /* PBXContainerItemProxy */ = {
+		6797968C1AEC542800FF780F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 67F0AEB11AD9FF8C000CB588 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 67806C871AEA8C70002D94D1;
-			remoteInfo = "百度FM WatchKit App";
+			remoteGlobalIDString = 6797967F1AEC542700FF780F;
+			remoteInfo = BaiduFMKit;
 		};
-		67806C941AEA8C70002D94D1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 67F0AEB11AD9FF8C000CB588 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 67806C781AEA8C70002D94D1;
-			remoteInfo = "百度FM WatchKit Extension";
-		};
-		67B9C2F21AEBF43300107696 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 67F0AEB11AD9FF8C000CB588 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 67B9C2E51AEBF43300107696;
-			remoteInfo = BaiduFmKit;
-		};
-		67B9C2F41AEBF43300107696 /* PBXContainerItemProxy */ = {
+		6797968E1AEC542800FF780F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 67F0AEB11AD9FF8C000CB588 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 67F0AEB81AD9FF8C000CB588;
 			remoteInfo = BaiduFM;
 		};
-		67B9C2FB1AEBF43300107696 /* PBXContainerItemProxy */ = {
+		679796951AEC542800FF780F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 67F0AEB11AD9FF8C000CB588 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 67B9C2E51AEBF43300107696;
-			remoteInfo = BaiduFmKit;
+			remoteGlobalIDString = 6797967F1AEC542700FF780F;
+			remoteInfo = BaiduFMKit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -95,7 +75,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				67806C971AEA8C70002D94D1 /* 百度FM WatchKit Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -106,7 +85,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				67B9C2FE1AEBF43300107696 /* BaiduFmKit.framework in CopyFiles */,
+				679796981AEC542800FF780F /* BaiduFMKit.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,24 +93,15 @@
 
 /* Begin PBXFileReference section */
 		3D93CC2857D85D497AE0052A /* Pods-BaiduFM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFM.release.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFM/Pods-BaiduFM.release.xcconfig"; sourceTree = "<group>"; };
-		672D47B71ADBBE1200C46409 /* MusicListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicListTableViewController.swift; sourceTree = "<group>"; };
+		539C21E6C3568DC7CA06B506 /* Pods_BaiduFMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BaiduFMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		673DB82C1ADCB614006D904B /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
-		676670C41ADD5F2500FBF425 /* DataCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCenter.swift; sourceTree = "<group>"; };
-		67806C791AEA8C70002D94D1 /* 百度FM WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "百度FM WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		67806C7C1AEA8C70002D94D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		67806C7D1AEA8C70002D94D1 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
-		67806C7E1AEA8C70002D94D1 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
-		67806C801AEA8C70002D94D1 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
-		67806C821AEA8C70002D94D1 /* GlanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceController.swift; sourceTree = "<group>"; };
-		67806C841AEA8C70002D94D1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		67806C881AEA8C70002D94D1 /* 百度FM WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "百度FM WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		67806C8E1AEA8C70002D94D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		67806C901AEA8C70002D94D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
-		67806C921AEA8C70002D94D1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6783E0321AE0D6D800D9D5FC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelTableViewController.swift; sourceTree = "<group>"; };
-		678CFA791AE6133E0009B643 /* RoundImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundImageView.swift; sourceTree = "<group>"; };
-		679DCB271ADE859100191D94 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
+		679796801AEC542700FF780F /* BaiduFMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BaiduFMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		679796831AEC542700FF780F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		679796841AEC542700FF780F /* BaiduFMKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaiduFMKit.h; sourceTree = "<group>"; };
+		6797968A1AEC542800FF780F /* BaiduFMKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BaiduFMKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		679796921AEC542800FF780F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		679796931AEC542800FF780F /* BaiduFMKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduFMKitTests.swift; sourceTree = "<group>"; };
 		67B3F1811AE1DA2C0061068C /* BaiduFM-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BaiduFM-Bridging-Header.h"; sourceTree = "<group>"; };
 		67B3F1851AE1DA3F0061068C /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		67B3F1861AE1DA3F0061068C /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
@@ -145,52 +115,50 @@
 		67B3F18E1AE1DA3F0061068C /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		67B3F18F1AE1DA3F0061068C /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		67B3F1951AE1DA590061068C /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		67B3F19A1AE1DC510061068C /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		67B3F19C1AE1E0570061068C /* BaseDb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDb.swift; sourceTree = "<group>"; };
-		67B3F19E1AE1EAC10061068C /* SongList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongList.swift; sourceTree = "<group>"; };
-		67B9C2E61AEBF43300107696 /* BaiduFmKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BaiduFmKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		67B9C2E91AEBF43300107696 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		67B9C2EA1AEBF43300107696 /* BaiduFmKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaiduFmKit.h; sourceTree = "<group>"; };
-		67B9C2F01AEBF43300107696 /* BaiduFmKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BaiduFmKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		67B9C30D1AEBF4F500107696 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "Pods/../build/Debug-iphoneos/Pods-BaiduFM/Alamofire.framework"; sourceTree = "<group>"; };
+		67B9C31B1AEBF60D00107696 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
+		67B9C31C1AEBF60D00107696 /* Const.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
+		67B9C31D1AEBF60D00107696 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
+		67B9C31E1AEBF60D00107696 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		67B9C32C1AEBF61E00107696 /* BaseDb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDb.swift; sourceTree = "<group>"; };
+		67B9C32D1AEBF61E00107696 /* SongList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongList.swift; sourceTree = "<group>"; };
+		67B9C3311AEBF62900107696 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
+		67B9C3321AEBF62900107696 /* DataCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCenter.swift; sourceTree = "<group>"; };
+		67B9C3331AEBF62900107696 /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
+		67B9C33E1AEBF63100107696 /* ChannelTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelTableViewController.swift; sourceTree = "<group>"; };
+		67B9C33F1AEBF63100107696 /* DownloadTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadTableViewController.swift; sourceTree = "<group>"; };
+		67B9C3401AEBF63100107696 /* LikeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikeTableViewController.swift; sourceTree = "<group>"; };
+		67B9C3411AEBF63100107696 /* MusicListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicListTableViewController.swift; sourceTree = "<group>"; };
+		67B9C3421AEBF63100107696 /* RecentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentTableViewController.swift; sourceTree = "<group>"; };
+		67B9C3431AEBF63100107696 /* RoundImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundImageView.swift; sourceTree = "<group>"; };
+		67B9C3441AEBF63100107696 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		67F0AEB91AD9FF8C000CB588 /* BaiduFM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BaiduFM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		67F0AEBD1AD9FF8C000CB588 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		67F0AEC01AD9FF8C000CB588 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		67F0AEC31AD9FF8C000CB588 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		67F0AEC51AD9FF8C000CB588 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		67F0AEC81AD9FF8C000CB588 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		67F0AEDF1AD9FFE7000CB588 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
-		67F0AEE11ADA03A8000CB588 /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
-		67F0AEE61ADA0784000CB588 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
 		67F0AEEF1ADA6EFE000CB588 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		67F66D1A1AE21FB10070009D /* RecentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentTableViewController.swift; sourceTree = "<group>"; };
-		67F66D1C1AE21FBD0070009D /* DownloadTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadTableViewController.swift; sourceTree = "<group>"; };
-		67F66D1E1AE21FCE0070009D /* LikeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikeTableViewController.swift; sourceTree = "<group>"; };
-		67F89BDC1AE8816800EAB2F3 /* Const.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
 		7676E308C864DAF9BA887037 /* Pods-BaiduFM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFM/Pods-BaiduFM.debug.xcconfig"; sourceTree = "<group>"; };
 		9DFAF1C2E553F9D6B4D386F3 /* Pods_BaiduFM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BaiduFM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ACCAB1701F832FAF75951DB3 /* Pods-BaiduFMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFMKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFMKit/Pods-BaiduFMKit.release.xcconfig"; sourceTree = "<group>"; };
+		C6F4DBDC48596B62A2979EB9 /* Pods-BaiduFMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFMKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFMKit/Pods-BaiduFMKit.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		67806C761AEA8C70002D94D1 /* Frameworks */ = {
+		6797967C1AEC542700FF780F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8DFB83A2EF1D044B9156B1B /* Pods_BaiduFMKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		67B9C2E21AEBF43300107696 /* Frameworks */ = {
+		679796871AEC542800FF780F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		67B9C2ED1AEBF43300107696 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				67B9C2F11AEBF43300107696 /* BaiduFmKit.framework in Frameworks */,
+				6797968B1AEC542800FF780F /* BaiduFMKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,7 +168,7 @@
 			files = (
 				67B3F1961AE1DA590061068C /* libsqlite3.dylib in Frameworks */,
 				6783E0341AE0D6E400D9D5FC /* AVFoundation.framework in Frameworks */,
-				67B9C2FD1AEBF43300107696 /* BaiduFmKit.framework in Frameworks */,
+				679796971AEC542800FF780F /* BaiduFMKit.framework in Frameworks */,
 				67F0AEF01ADA6EFE000CB588 /* MediaPlayer.framework in Frameworks */,
 				F964CFD7279512DD676A4FEE /* Pods_BaiduFM.framework in Frameworks */,
 			);
@@ -209,70 +177,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		672D47B61ADB92BA00C46409 /* Views */ = {
+		679796811AEC542700FF780F /* BaiduFMKit */ = {
 			isa = PBXGroup;
 			children = (
-				67F0AEC01AD9FF8C000CB588 /* ViewController.swift */,
-				678B673C1ADB929400557CB3 /* ChannelTableViewController.swift */,
-				672D47B71ADBBE1200C46409 /* MusicListTableViewController.swift */,
-				67F66D1A1AE21FB10070009D /* RecentTableViewController.swift */,
-				67F66D1C1AE21FBD0070009D /* DownloadTableViewController.swift */,
-				67F66D1E1AE21FCE0070009D /* LikeTableViewController.swift */,
-				678CFA791AE6133E0009B643 /* RoundImageView.swift */,
+				679796841AEC542700FF780F /* BaiduFMKit.h */,
+				679796821AEC542700FF780F /* Supporting Files */,
 			);
-			name = Views;
+			path = BaiduFMKit;
 			sourceTree = "<group>";
 		};
-		67806C7A1AEA8C70002D94D1 /* BaiduFMWatchKit Extension */ = {
+		679796821AEC542700FF780F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				67806C7E1AEA8C70002D94D1 /* InterfaceController.swift */,
-				67806C801AEA8C70002D94D1 /* NotificationController.swift */,
-				67806C821AEA8C70002D94D1 /* GlanceController.swift */,
-				67806C841AEA8C70002D94D1 /* Images.xcassets */,
-				67806C7B1AEA8C70002D94D1 /* Supporting Files */,
-			);
-			name = "BaiduFMWatchKit Extension";
-			path = "百度FM WatchKit Extension";
-			sourceTree = "<group>";
-		};
-		67806C7B1AEA8C70002D94D1 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				67806C7C1AEA8C70002D94D1 /* Info.plist */,
-				67806C7D1AEA8C70002D94D1 /* PushNotificationPayload.apns */,
+				679796831AEC542700FF780F /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		67806C8C1AEA8C70002D94D1 /* BaiduFMWatchKit App */ = {
+		679796901AEC542800FF780F /* BaiduFMKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				67806C8F1AEA8C70002D94D1 /* Interface.storyboard */,
-				67806C921AEA8C70002D94D1 /* Images.xcassets */,
-				67806C8D1AEA8C70002D94D1 /* Supporting Files */,
+				679796931AEC542800FF780F /* BaiduFMKitTests.swift */,
+				679796911AEC542800FF780F /* Supporting Files */,
 			);
-			name = "BaiduFMWatchKit App";
-			path = "百度FM WatchKit App";
+			path = BaiduFMKitTests;
 			sourceTree = "<group>";
 		};
-		67806C8D1AEA8C70002D94D1 /* Supporting Files */ = {
+		679796911AEC542800FF780F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				67806C8E1AEA8C70002D94D1 /* Info.plist */,
+				679796921AEC542800FF780F /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		678E361E1AE0042300E124B9 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				679DCB271ADE859100191D94 /* Common.swift */,
-				67F0AEE61ADA0784000CB588 /* HttpRequest.swift */,
-				67B3F19A1AE1DC510061068C /* Utils.swift */,
-				67F89BDC1AE8816800EAB2F3 /* Const.swift */,
-			);
-			name = Common;
 			sourceTree = "<group>";
 		};
 		67B3F1841AE1DA3F0061068C /* fmdb */ = {
@@ -294,39 +230,56 @@
 			path = Libs/fmdb;
 			sourceTree = "<group>";
 		};
-		67B3F1971AE1DB140061068C /* DataBase */ = {
+		67B9C31A1AEBF60D00107696 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				67B3F19C1AE1E0570061068C /* BaseDb.swift */,
-				67B3F19E1AE1EAC10061068C /* SongList.swift */,
+				67B9C31B1AEBF60D00107696 /* Common.swift */,
+				67B9C31C1AEBF60D00107696 /* Const.swift */,
+				67B9C31D1AEBF60D00107696 /* HttpRequest.swift */,
+				67B9C31E1AEBF60D00107696 /* Utils.swift */,
 			);
-			name = DataBase;
+			path = Common;
 			sourceTree = "<group>";
 		};
-		67B9C2E71AEBF43300107696 /* BaiduFmKit */ = {
+		67B9C32B1AEBF61E00107696 /* DataBase */ = {
 			isa = PBXGroup;
 			children = (
-				67B9C2EA1AEBF43300107696 /* BaiduFmKit.h */,
-				67B9C2E81AEBF43300107696 /* Supporting Files */,
+				67B9C32C1AEBF61E00107696 /* BaseDb.swift */,
+				67B9C32D1AEBF61E00107696 /* SongList.swift */,
 			);
-			path = BaiduFmKit;
+			path = DataBase;
 			sourceTree = "<group>";
 		};
-		67B9C2E81AEBF43300107696 /* Supporting Files */ = {
+		67B9C3301AEBF62900107696 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				67B9C2E91AEBF43300107696 /* Info.plist */,
+				67B9C3311AEBF62900107696 /* Channel.swift */,
+				67B9C3321AEBF62900107696 /* DataCenter.swift */,
+				67B9C3331AEBF62900107696 /* Song.swift */,
 			);
-			name = "Supporting Files";
+			path = Model;
+			sourceTree = "<group>";
+		};
+		67B9C33D1AEBF63100107696 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				67B9C33E1AEBF63100107696 /* ChannelTableViewController.swift */,
+				67B9C33F1AEBF63100107696 /* DownloadTableViewController.swift */,
+				67B9C3401AEBF63100107696 /* LikeTableViewController.swift */,
+				67B9C3411AEBF63100107696 /* MusicListTableViewController.swift */,
+				67B9C3421AEBF63100107696 /* RecentTableViewController.swift */,
+				67B9C3431AEBF63100107696 /* RoundImageView.swift */,
+				67B9C3441AEBF63100107696 /* ViewController.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		67F0AEB01AD9FF8C000CB588 = {
 			isa = PBXGroup;
 			children = (
 				67F0AEBB1AD9FF8C000CB588 /* BaiduFM */,
-				67806C7A1AEA8C70002D94D1 /* BaiduFMWatchKit Extension */,
-				67806C8C1AEA8C70002D94D1 /* BaiduFMWatchKit App */,
-				67B9C2E71AEBF43300107696 /* BaiduFmKit */,
+				679796811AEC542700FF780F /* BaiduFMKit */,
+				679796901AEC542800FF780F /* BaiduFMKitTests */,
 				67F0AEBA1AD9FF8C000CB588 /* Products */,
 				A44732D7A8100059FF6B3791 /* Pods */,
 				D16A7CFBB847F60AA65C6F17 /* Frameworks */,
@@ -337,10 +290,8 @@
 			isa = PBXGroup;
 			children = (
 				67F0AEB91AD9FF8C000CB588 /* BaiduFM.app */,
-				67806C791AEA8C70002D94D1 /* 百度FM WatchKit Extension.appex */,
-				67806C881AEA8C70002D94D1 /* 百度FM WatchKit App.app */,
-				67B9C2E61AEBF43300107696 /* BaiduFmKit.framework */,
-				67B9C2F01AEBF43300107696 /* BaiduFmKitTests.xctest */,
+				679796801AEC542700FF780F /* BaiduFMKit.framework */,
+				6797968A1AEC542800FF780F /* BaiduFMKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -348,12 +299,12 @@
 		67F0AEBB1AD9FF8C000CB588 /* BaiduFM */ = {
 			isa = PBXGroup;
 			children = (
-				67B3F1971AE1DB140061068C /* DataBase */,
-				678E361E1AE0042300E124B9 /* Common */,
+				67B9C33D1AEBF63100107696 /* Views */,
+				67B9C3301AEBF62900107696 /* Model */,
+				67B9C32B1AEBF61E00107696 /* DataBase */,
+				67B9C31A1AEBF60D00107696 /* Common */,
 				673DB82C1ADCB614006D904B /* MyPlayground.playground */,
-				672D47B61ADB92BA00C46409 /* Views */,
 				67F0AEE31ADA043E000CB588 /* Library */,
-				67F0AEDE1AD9FFDC000CB588 /* Model */,
 				67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */,
 				67F0AEC21AD9FF8C000CB588 /* Main.storyboard */,
 				67F0AEC51AD9FF8C000CB588 /* Images.xcassets */,
@@ -372,16 +323,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		67F0AEDE1AD9FFDC000CB588 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				67F0AEDF1AD9FFE7000CB588 /* Channel.swift */,
-				67F0AEE11ADA03A8000CB588 /* Song.swift */,
-				676670C41ADD5F2500FBF425 /* DataCenter.swift */,
-			);
-			name = Model;
-			sourceTree = "<group>";
-		};
 		67F0AEE31ADA043E000CB588 /* Library */ = {
 			isa = PBXGroup;
 			children = (
@@ -397,6 +338,8 @@
 			children = (
 				7676E308C864DAF9BA887037 /* Pods-BaiduFM.debug.xcconfig */,
 				3D93CC2857D85D497AE0052A /* Pods-BaiduFM.release.xcconfig */,
+				C6F4DBDC48596B62A2979EB9 /* Pods-BaiduFMKit.debug.xcconfig */,
+				ACCAB1701F832FAF75951DB3 /* Pods-BaiduFMKit.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -404,8 +347,10 @@
 		D16A7CFBB847F60AA65C6F17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				67B9C30D1AEBF4F500107696 /* Alamofire.framework */,
 				67B3F1951AE1DA590061068C /* libsqlite3.dylib */,
 				9DFAF1C2E553F9D6B4D386F3 /* Pods_BaiduFM.framework */,
+				539C21E6C3568DC7CA06B506 /* Pods_BaiduFMKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -413,85 +358,55 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		67B9C2E31AEBF43300107696 /* Headers */ = {
+		6797967D1AEC542700FF780F /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67B9C2EB1AEBF43300107696 /* BaiduFmKit.h in Headers */,
+				679796851AEC542700FF780F /* BaiduFMKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		67806C781AEA8C70002D94D1 /* 百度FM WatchKit Extension */ = {
+		6797967F1AEC542700FF780F /* BaiduFMKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 67806C9D1AEA8C70002D94D1 /* Build configuration list for PBXNativeTarget "百度FM WatchKit Extension" */;
+			buildConfigurationList = 679796991AEC542800FF780F /* Build configuration list for PBXNativeTarget "BaiduFMKit" */;
 			buildPhases = (
-				67806C751AEA8C70002D94D1 /* Sources */,
-				67806C761AEA8C70002D94D1 /* Frameworks */,
-				67806C771AEA8C70002D94D1 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				67806C8B1AEA8C70002D94D1 /* PBXTargetDependency */,
-			);
-			name = "百度FM WatchKit Extension";
-			productName = "百度FM WatchKit Extension";
-			productReference = 67806C791AEA8C70002D94D1 /* 百度FM WatchKit Extension.appex */;
-			productType = "com.apple.product-type.watchkit-extension";
-		};
-		67806C871AEA8C70002D94D1 /* 百度FM WatchKit App */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 67806C9C1AEA8C70002D94D1 /* Build configuration list for PBXNativeTarget "百度FM WatchKit App" */;
-			buildPhases = (
-				67806C861AEA8C70002D94D1 /* Resources */,
+				9F331D00D4961DE14005F00B /* Check Pods Manifest.lock */,
+				6797967B1AEC542700FF780F /* Sources */,
+				6797967C1AEC542700FF780F /* Frameworks */,
+				6797967D1AEC542700FF780F /* Headers */,
+				6797967E1AEC542700FF780F /* Resources */,
+				2D883CF86730105C721E4FAE /* Embed Pods Frameworks */,
+				D306FA752A0931F1747191E9 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "百度FM WatchKit App";
-			productName = "百度FM WatchKit App";
-			productReference = 67806C881AEA8C70002D94D1 /* 百度FM WatchKit App.app */;
-			productType = "com.apple.product-type.application.watchapp";
-		};
-		67B9C2E51AEBF43300107696 /* BaiduFmKit */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 67B9C2FF1AEBF43400107696 /* Build configuration list for PBXNativeTarget "BaiduFmKit" */;
-			buildPhases = (
-				67B9C2E11AEBF43300107696 /* Sources */,
-				67B9C2E21AEBF43300107696 /* Frameworks */,
-				67B9C2E31AEBF43300107696 /* Headers */,
-				67B9C2E41AEBF43300107696 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = BaiduFmKit;
-			productName = BaiduFmKit;
-			productReference = 67B9C2E61AEBF43300107696 /* BaiduFmKit.framework */;
+			name = BaiduFMKit;
+			productName = BaiduFMKit;
+			productReference = 679796801AEC542700FF780F /* BaiduFMKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		67B9C2EF1AEBF43300107696 /* BaiduFmKitTests */ = {
+		679796891AEC542800FF780F /* BaiduFMKitTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 67B9C3021AEBF43400107696 /* Build configuration list for PBXNativeTarget "BaiduFmKitTests" */;
+			buildConfigurationList = 6797969C1AEC542800FF780F /* Build configuration list for PBXNativeTarget "BaiduFMKitTests" */;
 			buildPhases = (
-				67B9C2EC1AEBF43300107696 /* Sources */,
-				67B9C2ED1AEBF43300107696 /* Frameworks */,
-				67B9C2EE1AEBF43300107696 /* Resources */,
+				679796861AEC542800FF780F /* Sources */,
+				679796871AEC542800FF780F /* Frameworks */,
+				679796881AEC542800FF780F /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				67B9C2F31AEBF43300107696 /* PBXTargetDependency */,
-				67B9C2F51AEBF43300107696 /* PBXTargetDependency */,
+				6797968D1AEC542800FF780F /* PBXTargetDependency */,
+				6797968F1AEC542800FF780F /* PBXTargetDependency */,
 			);
-			name = BaiduFmKitTests;
-			productName = BaiduFmKitTests;
-			productReference = 67B9C2F01AEBF43300107696 /* BaiduFmKitTests.xctest */;
+			name = BaiduFMKitTests;
+			productName = BaiduFMKitTests;
+			productReference = 6797968A1AEC542800FF780F /* BaiduFMKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		67F0AEB81AD9FF8C000CB588 /* BaiduFM */ = {
@@ -510,8 +425,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				67806C951AEA8C70002D94D1 /* PBXTargetDependency */,
-				67B9C2FC1AEBF43300107696 /* PBXTargetDependency */,
+				679796961AEC542800FF780F /* PBXTargetDependency */,
 			);
 			name = BaiduFM;
 			productName = BaiduFM;
@@ -527,16 +441,10 @@
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = lumeng;
 				TargetAttributes = {
-					67806C781AEA8C70002D94D1 = {
+					6797967F1AEC542700FF780F = {
 						CreatedOnToolsVersion = 6.3.1;
 					};
-					67806C871AEA8C70002D94D1 = {
-						CreatedOnToolsVersion = 6.3.1;
-					};
-					67B9C2E51AEBF43300107696 = {
-						CreatedOnToolsVersion = 6.3.1;
-					};
-					67B9C2EF1AEBF43300107696 = {
+					679796891AEC542800FF780F = {
 						CreatedOnToolsVersion = 6.3.1;
 						TestTargetID = 67F0AEB81AD9FF8C000CB588;
 					};
@@ -559,41 +467,21 @@
 			projectRoot = "";
 			targets = (
 				67F0AEB81AD9FF8C000CB588 /* BaiduFM */,
-				67806C781AEA8C70002D94D1 /* 百度FM WatchKit Extension */,
-				67806C871AEA8C70002D94D1 /* 百度FM WatchKit App */,
-				67B9C2E51AEBF43300107696 /* BaiduFmKit */,
-				67B9C2EF1AEBF43300107696 /* BaiduFmKitTests */,
+				6797967F1AEC542700FF780F /* BaiduFMKit */,
+				679796891AEC542800FF780F /* BaiduFMKitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		67806C771AEA8C70002D94D1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				67806C851AEA8C70002D94D1 /* Images.xcassets in Resources */,
-				67806C891AEA8C70002D94D1 /* 百度FM WatchKit App.app in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		67806C861AEA8C70002D94D1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				67806C911AEA8C70002D94D1 /* Interface.storyboard in Resources */,
-				67806C931AEA8C70002D94D1 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		67B9C2E41AEBF43300107696 /* Resources */ = {
+		6797967E1AEC542700FF780F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		67B9C2EE1AEBF43300107696 /* Resources */ = {
+		679796881AEC542800FF780F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -613,6 +501,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2D883CF86730105C721E4FAE /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BaiduFMKit/Pods-BaiduFMKit-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		45F669CBB9ED63A21DDB4B6D /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -643,6 +546,36 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		9F331D00D4961DE14005F00B /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D306FA752A0931F1747191E9 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BaiduFMKit/Pods-BaiduFMKit-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D5D730DE5EB9306609B4F7D4 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -661,27 +594,18 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		67806C751AEA8C70002D94D1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				67806C811AEA8C70002D94D1 /* NotificationController.swift in Sources */,
-				67806C7F1AEA8C70002D94D1 /* InterfaceController.swift in Sources */,
-				67806C831AEA8C70002D94D1 /* GlanceController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		67B9C2E11AEBF43300107696 /* Sources */ = {
+		6797967B1AEC542700FF780F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		67B9C2EC1AEBF43300107696 /* Sources */ = {
+		679796861AEC542800FF780F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				679796941AEC542800FF780F /* BaiduFMKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -689,70 +613,52 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67F66D1F1AE21FCE0070009D /* LikeTableViewController.swift in Sources */,
-				672D47B81ADBBE1200C46409 /* MusicListTableViewController.swift in Sources */,
-				67F66D1D1AE21FBD0070009D /* DownloadTableViewController.swift in Sources */,
+				67B9C32F1AEBF61E00107696 /* SongList.swift in Sources */,
 				67B3F1921AE1DA3F0061068C /* FMDatabasePool.m in Sources */,
+				67B9C34B1AEBF63100107696 /* LikeTableViewController.swift in Sources */,
 				67B3F1941AE1DA3F0061068C /* FMResultSet.m in Sources */,
-				67F0AEE21ADA03A8000CB588 /* Song.swift in Sources */,
-				67F0AEE71ADA0784000CB588 /* HttpRequest.swift in Sources */,
+				67B9C3571AEBF63100107696 /* ViewController.swift in Sources */,
+				67B9C3341AEBF62900107696 /* Channel.swift in Sources */,
 				67B3F1931AE1DA3F0061068C /* FMDatabaseQueue.m in Sources */,
+				67B9C3511AEBF63100107696 /* RecentTableViewController.swift in Sources */,
+				67B9C34E1AEBF63100107696 /* MusicListTableViewController.swift in Sources */,
 				67B3F1901AE1DA3F0061068C /* FMDatabase.m in Sources */,
-				67B3F19F1AE1EAC10061068C /* SongList.swift in Sources */,
-				67B3F19B1AE1DC510061068C /* Utils.swift in Sources */,
-				678CFA7A1AE6133E0009B643 /* RoundImageView.swift in Sources */,
-				67B3F19D1AE1E0570061068C /* BaseDb.swift in Sources */,
-				678B673D1ADB929400557CB3 /* ChannelTableViewController.swift in Sources */,
-				679DCB281ADE859100191D94 /* Common.swift in Sources */,
-				67F66D1B1AE21FB10070009D /* RecentTableViewController.swift in Sources */,
-				67F0AEC11AD9FF8C000CB588 /* ViewController.swift in Sources */,
+				67B9C3451AEBF63100107696 /* ChannelTableViewController.swift in Sources */,
 				67B3F1911AE1DA3F0061068C /* FMDatabaseAdditions.m in Sources */,
-				67F0AEE01AD9FFE7000CB588 /* Channel.swift in Sources */,
-				676670C51ADD5F2500FBF425 /* DataCenter.swift in Sources */,
+				67B9C3541AEBF63100107696 /* RoundImageView.swift in Sources */,
+				67B9C3281AEBF60D00107696 /* Utils.swift in Sources */,
+				67B9C32E1AEBF61E00107696 /* BaseDb.swift in Sources */,
+				67B9C33A1AEBF62900107696 /* Song.swift in Sources */,
+				67B9C3481AEBF63100107696 /* DownloadTableViewController.swift in Sources */,
+				67B9C3251AEBF60D00107696 /* HttpRequest.swift in Sources */,
+				67B9C3371AEBF62900107696 /* DataCenter.swift in Sources */,
+				67B9C3221AEBF60D00107696 /* Const.swift in Sources */,
 				67F0AEBF1AD9FF8C000CB588 /* AppDelegate.swift in Sources */,
-				67F89BDD1AE8816800EAB2F3 /* Const.swift in Sources */,
+				67B9C31F1AEBF60D00107696 /* Common.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		67806C8B1AEA8C70002D94D1 /* PBXTargetDependency */ = {
+		6797968D1AEC542800FF780F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 67806C871AEA8C70002D94D1 /* 百度FM WatchKit App */;
-			targetProxy = 67806C8A1AEA8C70002D94D1 /* PBXContainerItemProxy */;
+			target = 6797967F1AEC542700FF780F /* BaiduFMKit */;
+			targetProxy = 6797968C1AEC542800FF780F /* PBXContainerItemProxy */;
 		};
-		67806C951AEA8C70002D94D1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 67806C781AEA8C70002D94D1 /* 百度FM WatchKit Extension */;
-			targetProxy = 67806C941AEA8C70002D94D1 /* PBXContainerItemProxy */;
-		};
-		67B9C2F31AEBF43300107696 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 67B9C2E51AEBF43300107696 /* BaiduFmKit */;
-			targetProxy = 67B9C2F21AEBF43300107696 /* PBXContainerItemProxy */;
-		};
-		67B9C2F51AEBF43300107696 /* PBXTargetDependency */ = {
+		6797968F1AEC542800FF780F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 67F0AEB81AD9FF8C000CB588 /* BaiduFM */;
-			targetProxy = 67B9C2F41AEBF43300107696 /* PBXContainerItemProxy */;
+			targetProxy = 6797968E1AEC542800FF780F /* PBXContainerItemProxy */;
 		};
-		67B9C2FC1AEBF43300107696 /* PBXTargetDependency */ = {
+		679796961AEC542800FF780F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 67B9C2E51AEBF43300107696 /* BaiduFmKit */;
-			targetProxy = 67B9C2FB1AEBF43300107696 /* PBXContainerItemProxy */;
+			target = 6797967F1AEC542700FF780F /* BaiduFMKit */;
+			targetProxy = 679796951AEC542800FF780F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		67806C8F1AEA8C70002D94D1 /* Interface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				67806C901AEA8C70002D94D1 /* Base */,
-			);
-			name = Interface.storyboard;
-			sourceTree = "<group>";
-		};
 		67F0AEC21AD9FF8C000CB588 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -772,64 +678,9 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		67806C981AEA8C70002D94D1 /* Debug */ = {
+		6797969A1AEC542800FF780F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "百度FM WatchKit Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		67806C991AEA8C70002D94D1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = "百度FM WatchKit Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		67806C9A1AEA8C70002D94D1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				IBSC_MODULE = __FM_WatchKit_Extension;
-				INFOPLIST_FILE = "百度FM WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
-			};
-			name = Debug;
-		};
-		67806C9B1AEA8C70002D94D1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				IBSC_MODULE = __FM_WatchKit_Extension;
-				INFOPLIST_FILE = "百度FM WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
-			};
-			name = Release;
-		};
-		67B9C3001AEBF43400107696 /* Debug */ = {
-			isa = XCBuildConfiguration;
+			baseConfigurationReference = C6F4DBDC48596B62A2979EB9 /* Pods-BaiduFMKit.debug.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -840,7 +691,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = BaiduFmKit/Info.plist;
+				INFOPLIST_FILE = BaiduFMKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -850,15 +701,16 @@
 			};
 			name = Debug;
 		};
-		67B9C3011AEBF43400107696 /* Release */ = {
+		6797969B1AEC542800FF780F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ACCAB1701F832FAF75951DB3 /* Pods-BaiduFMKit.release.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = BaiduFmKit/Info.plist;
+				INFOPLIST_FILE = BaiduFMKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -868,7 +720,7 @@
 			};
 			name = Release;
 		};
-		67B9C3031AEBF43400107696 /* Debug */ = {
+		6797969D1AEC542800FF780F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
@@ -879,21 +731,21 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = BaiduFmKitTests/Info.plist;
+				INFOPLIST_FILE = BaiduFMKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BaiduFM.app/BaiduFM";
 			};
 			name = Debug;
 		};
-		67B9C3041AEBF43400107696 /* Release */ = {
+		6797969E1AEC542800FF780F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = BaiduFmKitTests/Info.plist;
+				INFOPLIST_FILE = BaiduFMKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BaiduFM.app/BaiduFM";
@@ -1027,39 +879,23 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		67806C9C1AEA8C70002D94D1 /* Build configuration list for PBXNativeTarget "百度FM WatchKit App" */ = {
+		679796991AEC542800FF780F /* Build configuration list for PBXNativeTarget "BaiduFMKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				67806C9A1AEA8C70002D94D1 /* Debug */,
-				67806C9B1AEA8C70002D94D1 /* Release */,
+				6797969A1AEC542800FF780F /* Debug */,
+				6797969B1AEC542800FF780F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		67806C9D1AEA8C70002D94D1 /* Build configuration list for PBXNativeTarget "百度FM WatchKit Extension" */ = {
+		6797969C1AEC542800FF780F /* Build configuration list for PBXNativeTarget "BaiduFMKitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				67806C981AEA8C70002D94D1 /* Debug */,
-				67806C991AEA8C70002D94D1 /* Release */,
+				6797969D1AEC542800FF780F /* Debug */,
+				6797969E1AEC542800FF780F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
-		};
-		67B9C2FF1AEBF43400107696 /* Build configuration list for PBXNativeTarget "BaiduFmKit" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				67B9C3001AEBF43400107696 /* Debug */,
-				67B9C3011AEBF43400107696 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
-		67B9C3021AEBF43400107696 /* Build configuration list for PBXNativeTarget "BaiduFmKitTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				67B9C3031AEBF43400107696 /* Debug */,
-				67B9C3041AEBF43400107696 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
 		};
 		67F0AEB41AD9FF8C000CB588 /* Build configuration list for PBXProject "BaiduFM" */ = {
 			isa = XCConfigurationList;
