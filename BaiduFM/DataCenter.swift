@@ -54,6 +54,13 @@ class DataCenter {
     //当前显示歌曲列表
     var curShowAllSongId:[String]{
         get {
+            if curShowEndIndex > self.currentAllSongId.count {
+                curShowEndIndex =  self.currentAllSongId.count
+                curShowStartIndex = curShowEndIndex - 20
+            }
+            
+            curShowStartIndex = curShowStartIndex < 0 ? 0 :curShowStartIndex
+            
             return [] + currentAllSongId[curShowStartIndex ..< curShowEndIndex]
         }
     }

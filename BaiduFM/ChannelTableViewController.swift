@@ -57,6 +57,8 @@ class ChannelTableViewController: UITableViewController {
         var channel = DataCenter.shareDataCenter.channelListInfo[indexPath.row]
         DataCenter.shareDataCenter.currentChannel = channel.id
         DataCenter.shareDataCenter.currentChannelName = channel.name
+        DataCenter.shareDataCenter.curShowStartIndex = 0
+        DataCenter.shareDataCenter.curShowEndIndex = 20
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {

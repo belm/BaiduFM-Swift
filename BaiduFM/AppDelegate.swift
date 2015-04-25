@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import Kingfisher
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,6 +25,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
         
         var db = BaseDb()
+        
+        //初始化图片缓存库配置  Kingfisher
+        let downloader = KingfisherManager.sharedManager.downloader
+        downloader.downloadTimeout = 5
+        
+        let cache = KingfisherManager.sharedManager.cache
+        cache.maxDiskCacheSize = 100 * 1024 * 1024 //defalut is no limit
+        cache.maxCachePeriodInSecond = 60 * 60 * 24 * 10 //default is 7days
 
         return true
     }

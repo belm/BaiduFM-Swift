@@ -101,6 +101,7 @@ class MusicListTableViewController: UITableViewController {
         var info =  DataCenter.shareDataCenter.curShowAllSongInfo[indexPath.row]
         
         cell.textLabel?.text = info.name
+        //cell.imageView?.kf_setImageWithURL(NSURL(string: info.songPicRadio)!, placeholderImage: nil)
         cell.imageView?.image = UIImage(data: NSData(contentsOfURL: NSURL(string: info.songPicRadio)!)!)
         cell.detailTextLabel?.text = info.artistName
         // Configure the cell...

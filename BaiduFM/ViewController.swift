@@ -178,12 +178,14 @@ class ViewController: UIViewController {
         self.navigationItem.title = DataCenter.shareDataCenter.currentChannelName
         
         //info
-       
-        self.imgView.image = UIImage(data: NSData(contentsOfURL: NSURL(string: showImg)!)!)
+        
+        self.imgView.kf_setImageWithURL(NSURL(string: showImg)!)
+        //self.imgView.image = UIImage(data: NSData(contentsOfURL: NSURL(string: showImg)!)!)
         self.nameLabel.text = name
         self.artistLabel.text = "-" + artistName + "-"
         self.albumLabel.text = albumName
-        self.bgImageView.image = UIImage(data: NSData(contentsOfURL: NSURL(string: showImg)!)!)
+        self.bgImageView.kf_setImageWithURL(NSURL(string: showImg)!)
+        //self.bgImageView.image = UIImage(data: NSData(contentsOfURL: NSURL(string: showImg)!)!)
         self.imgView.rotation()
         
         //锁屏显示
