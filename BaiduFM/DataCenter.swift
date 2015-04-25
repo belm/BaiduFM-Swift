@@ -60,6 +60,7 @@ class DataCenter {
             }
             
             curShowStartIndex = curShowStartIndex < 0 ? 0 :curShowStartIndex
+
             
             return [] + currentAllSongId[curShowStartIndex ..< curShowEndIndex]
         }

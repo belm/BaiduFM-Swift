@@ -21,8 +21,9 @@ class Song:NSObject{
     var dl_file:String
     var is_like:Int
     var is_recent:Int
+    var format:String
     
-    init(sid:String,name:String,artist:String,album:String,song_url:String,pic_url:String,lrc_url:String,time:Int,is_dl:Int,dl_file:String,is_like:Int,is_recent:Int) {
+    init(sid:String,name:String,artist:String,album:String,song_url:String,pic_url:String,lrc_url:String,time:Int,is_dl:Int,dl_file:String,is_like:Int,is_recent:Int,format:String) {
 
         self.sid = sid
         self.name = name
@@ -36,6 +37,7 @@ class Song:NSObject{
         self.dl_file = dl_file
         self.is_like = is_like
         self.is_recent = is_recent
+        self.format = format
         
         super.init()
     }

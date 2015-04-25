@@ -108,7 +108,7 @@ class ViewController: UIViewController {
         var song = info["song"] as! Song
         println("\(song.name)")
         
-        self.show(song.pic_url, name: song.name, artistName: song.artist, albumName: song.album, songLink: song.song_url, time: song.time, lrcLink: song.lrc_url)
+        self.show(song.pic_url, name: song.name, artistName: song.artist, albumName: song.album, songLink: song.song_url, time: song.time, lrcLink: song.lrc_url, songId:song.sid, format:song.format)
     }
     
     func progresstimer(time:NSTimer){
@@ -167,13 +167,13 @@ class ViewController: UIViewController {
             
             var showImg = Common.getIndexPageImage(info!)
             
-            self.show(showImg, name: info!.name, artistName: info!.artistName, albumName: info!.albumName, songLink: link!.songLink, time: link!.time, lrcLink: link!.lrcLink)
+            self.show(showImg, name: info!.name, artistName: info!.artistName, albumName: info!.albumName, songLink: link!.songLink, time: link!.time, lrcLink: link!.lrcLink, songId:link!.id, format:link!.format)
         
             self.addRecentSong()
         }
     }
     
-    func show(showImg:String,name:String,artistName:String,albumName:String,songLink:String,time:Int, lrcLink:String){
+    func show(showImg:String,name:String,artistName:String,albumName:String,songLink:String,time:Int, lrcLink:String,songId:String,format:String){
         
         self.navigationItem.title = DataCenter.shareDataCenter.currentChannelName
         
@@ -194,7 +194,16 @@ class ViewController: UIViewController {
         //link 
         DataCenter.shareDataCenter.mp.stop()
         var songUrl = Common.getCanPlaySongUrl(songLink)
-        DataCenter.shareDataCenter.mp.contentURL = NSURL(string: songUrl)
+        
+        //如果已经下载 播放本地音乐
+        var musicFile = Common.musicLocalPath(songId, format: format)
+        if Common.fileIsExist(musicFile){
+            println("播放本地音乐")
+            DataCenter.shareDataCenter.mp.contentURL = NSURL(fileURLWithPath: musicFile)!
+        }else{
+            DataCenter.shareDataCenter.mp.contentURL = NSURL(string: songUrl)
+        }
+        
         DataCenter.shareDataCenter.mp.prepareToPlay()
         DataCenter.shareDataCenter.mp.play()
         DataCenter.shareDataCenter.curPlayStatus = 1
@@ -328,25 +337,25 @@ class ViewController: UIViewController {
         
         var info = DataCenter.shareDataCenter.curPlaySongLink
         
-        var musicDir = Utils.documentPath().stringByAppendingPathComponent("download")
-        if !NSFileManager.defaultManager().fileExistsAtPath(musicDir){
-            NSFileManager.defaultManager().createDirectoryAtPath(musicDir, withIntermediateDirectories: false, attributes: nil, error: nil)
+        var musicPath = Common.musicLocalPath(info!.id, format: info!.format)
+        
+        if Common.fileIsExist(musicPath){
+            println("文件已经存在")
+            return
         }
-        var musicPath = musicDir.stringByAppendingPathComponent(info!.id + "." + info!.format)
         
         if let song = info {
-            println(musicPath)
-            HttpRequest.downloadFile(song.songLink, filePath: { (path:NSURL) -> Void in
-                println("下载完成")
-                //重命名文件
-                if(NSFileManager.defaultManager().moveItemAtURL(path, toURL: NSURL(string: musicPath)!, error: nil)){
+            HttpRequest.downloadFile(song.songLink, musicPath: musicPath, filePath: { () -> Void in
+                println("下载完成\(musicPath)")
+                
+                if Common.fileIsExist(musicPath){
                     if DataCenter.shareDataCenter.dbSongList.updateDownloadStatus(song.id){
                         println("\(song.id)更新db成功")
                     }else{
                         println("\(song.id)更新db失败")
                     }
                 }else{
-                    println("重命名文件失败")
+                    println("\(musicPath)文件不存在")
                 }
             })
         }

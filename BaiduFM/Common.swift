@@ -78,5 +78,19 @@ class Common {
         var exp =  NSRegularExpression(pattern: pattern, options: NSRegularExpressionOptions.CaseInsensitive, error: nil)
         return exp?.stringByReplacingMatchesInString(replace, options: nil, range: NSRange(location: 0,length: count(replace)), withTemplate: place)
     }
+    
+    class func fileIsExist(filePath:String)->Bool{
+        return NSFileManager.defaultManager().fileExistsAtPath(filePath)
+    }
+    
+    class func musicLocalPath(songId:String, format:String) -> String{
+        
+        var musicDir = Utils.documentPath().stringByAppendingPathComponent("download")
+        if !NSFileManager.defaultManager().fileExistsAtPath(musicDir){
+            NSFileManager.defaultManager().createDirectoryAtPath(musicDir, withIntermediateDirectories: false, attributes: nil, error: nil)
+        }
+        var musicPath = musicDir.stringByAppendingPathComponent(songId + "." + format)
+        return musicPath
+    }
 
 }

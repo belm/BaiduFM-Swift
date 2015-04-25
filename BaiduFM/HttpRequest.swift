@@ -169,43 +169,13 @@ class HttpRequest {
         }
     }
     
-    class func downloadFile(songUrl:String, filePath:(path:NSURL)->Void){
-        
-        
-        Alamofire.download(Method.GET, songUrl, { (temporaryURL, response) in
-            
-            if let directoryURL = NSFileManager.defaultManager()
-                .URLsForDirectory(.DocumentDirectory,
-                    inDomains: .UserDomainMask)[0]
-                as? NSURL {
-                let pathComponent = response.suggestedFilename
-                var ret = directoryURL.URLByAppendingPathComponent(pathComponent!)
-                filePath(path: ret)
-                return ret
-            }
-            filePath(path: temporaryURL)
-            return temporaryURL
-        })
-        
-        /*
-        var dbDirectory = Utils.documentPath().stringByAppendingPathComponent("download")
-        if !NSFileManager.defaultManager().fileExistsAtPath(dbDirectory){
-            NSFileManager.defaultManager().createDirectoryAtPath(dbDirectory, withIntermediateDirectories: false, attributes: nil, error: nil)
+    class func downloadFile(songURL:String, musicPath:String, filePath:()->Void){
+        println("开始下载\(songURL)")
+        Alamofire.download(Method.GET, songURL, { (temporaryURL, response) in
+            let url = NSURL(fileURLWithPath: musicPath)!
+            return url
+        }).response { (request, response, _, error) -> Void in
+            filePath()
         }
-        */
-        
-        /*
-        println(Utils.documentPath())
-        
-        let destination = Alamofire.Request.suggestedDownloadDestination(directory: .DocumentDirectory, domain: .UserDomainMask)
-
-        Alamofire.download(Method.GET, songUrl, destination)
-            .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
-                println("bytesRead:\(bytesRead),totalBytesRead:\(totalBytesRead),totalBytesExpectedToRead:\(totalBytesRead)")
-            }
-            .response { (request, response, _, error) in
-                println(response)
-            }
-        */
     }
 }

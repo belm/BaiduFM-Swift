@@ -79,13 +79,14 @@ class SongList:BaseDb {
             let dl_file_tmp = rs.stringForColumn("dl_file")
             let is_like = Int(rs.intForColumn("is_like"))
             let is_recent = Int(rs.intForColumn("is_recent"))
+            let format = rs.stringForColumn("format")
             
             var dl_file = ""
             if dl_file_tmp != nil {
                 dl_file = dl_file_tmp as String
             }
             
-            var song = Song(sid: sid, name: name, artist: artist, album: album, song_url: song_url, pic_url: pic_url, lrc_url: lrc_url, time: time, is_dl: is_dl, dl_file: dl_file, is_like: is_like, is_recent: is_recent)
+            var song = Song(sid: sid, name: name, artist: artist, album: album, song_url: song_url, pic_url: pic_url, lrc_url: lrc_url, time: time, is_dl: is_dl, dl_file: dl_file, is_like: is_like, is_recent: is_recent,format:format)
             
             ret.append(song)
         }
@@ -104,12 +105,12 @@ class SongList:BaseDb {
             }
             
             if self.open(){
-                var sql = "INSERT INTO tbl_song_list(sid,name,artist,album,song_url,pic_url,lrc_url,time) VALUES(?,?,?,?,?,?,?,?)"
+                var sql = "INSERT INTO tbl_song_list(sid,name,artist,album,song_url,pic_url,lrc_url,time,format) VALUES(?,?,?,?,?,?,?,?,?)"
                 
                 var songUrl = Common.getCanPlaySongUrl(link.songLink)
                 var img = Common.getIndexPageImage(info)
                 
-                var args:[AnyObject] = [info.id,info.name,info.artistName,info.albumName,songUrl,img,link.lrcLink,link.time]
+                var args:[AnyObject] = [info.id,info.name,info.artistName,info.albumName,songUrl,img,link.lrcLink,link.time,link.format]
                 var ret = self.db.executeUpdate(sql, withArgumentsInArray: args)
                 self.close()
                 return ret
