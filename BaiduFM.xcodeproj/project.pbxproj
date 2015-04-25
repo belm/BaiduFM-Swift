@@ -195,7 +195,7 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
-		67806C7A1AEA8C70002D94D1 /* 百度FM WatchKit Extension */ = {
+		67806C7A1AEA8C70002D94D1 /* BaiduFMWatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
 				67806C7E1AEA8C70002D94D1 /* InterfaceController.swift */,
@@ -204,6 +204,7 @@
 				67806C841AEA8C70002D94D1 /* Images.xcassets */,
 				67806C7B1AEA8C70002D94D1 /* Supporting Files */,
 			);
+			name = "BaiduFMWatchKit Extension";
 			path = "百度FM WatchKit Extension";
 			sourceTree = "<group>";
 		};
@@ -216,13 +217,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		67806C8C1AEA8C70002D94D1 /* 百度FM WatchKit App */ = {
+		67806C8C1AEA8C70002D94D1 /* BaiduFMWatchKit App */ = {
 			isa = PBXGroup;
 			children = (
 				67806C8F1AEA8C70002D94D1 /* Interface.storyboard */,
 				67806C921AEA8C70002D94D1 /* Images.xcassets */,
 				67806C8D1AEA8C70002D94D1 /* Supporting Files */,
 			);
+			name = "BaiduFMWatchKit App";
 			path = "百度FM WatchKit App";
 			sourceTree = "<group>";
 		};
@@ -278,8 +280,8 @@
 			children = (
 				67F0AEBB1AD9FF8C000CB588 /* BaiduFM */,
 				67F0AED11AD9FF8C000CB588 /* BaiduFMTests */,
-				67806C7A1AEA8C70002D94D1 /* 百度FM WatchKit Extension */,
-				67806C8C1AEA8C70002D94D1 /* 百度FM WatchKit App */,
+				67806C7A1AEA8C70002D94D1 /* BaiduFMWatchKit Extension */,
+				67806C8C1AEA8C70002D94D1 /* BaiduFMWatchKit App */,
 				67F0AEBA1AD9FF8C000CB588 /* Products */,
 				A44732D7A8100059FF6B3791 /* Pods */,
 				D16A7CFBB847F60AA65C6F17 /* Frameworks */,
@@ -907,6 +909,7 @@
 				67806C9B1AEA8C70002D94D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		67806C9D1AEA8C70002D94D1 /* Build configuration list for PBXNativeTarget "百度FM WatchKit Extension" */ = {
 			isa = XCConfigurationList;
@@ -915,6 +918,7 @@
 				67806C991AEA8C70002D94D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		67F0AEB41AD9FF8C000CB588 /* Build configuration list for PBXProject "BaiduFM" */ = {
 			isa = XCConfigurationList;

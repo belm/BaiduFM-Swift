@@ -16,8 +16,7 @@ class HttpRequest {
         
         var channelList:[Channel]? = nil
         
-        let url = "http://fm.baidu.com/dev/api/?tn=channellist&hashcode=310d03041bffd10803bc3ee8913e2726&_=1428801468750"
-        Alamofire.request(.GET, url).responseJSON{ (_, _, json, error) -> Void in
+        Alamofire.request(.GET, http_channel_list_url).responseJSON{ (_, _, json, error) -> Void in
             if error == nil && json != nil {
                 
                 var data = JSON(json!)
@@ -46,7 +45,7 @@ class HttpRequest {
     class func getSongList(ch_name:String, callback:[String]?->Void)->Void{
         
         var songList:[String]? = nil
-        var url = "http://fm.baidu.com/dev/api/?tn=playlist&id=" + ch_name + "&hashcode=310d03041bffd10803bc3ee8913e2726&_=1428917601565"
+        var url = http_song_list_url + ch_name
        // println(url)
         Alamofire.request(.GET, url).responseJSON{ (_, _, json, error) -> Void in
             if error == nil && json != nil {
@@ -67,12 +66,11 @@ class HttpRequest {
     
     class func getSongInfoList(chidArray:[String], callback:[SongInfo]?->Void ){
         
-        let url = "http://fm.baidu.com/data/music/songinfo"
         var chids = join(",", chidArray)
         
         let params = ["songIds":chids]
         
-        Alamofire.request(.POST, url, parameters: params).responseJSON{ (_, _, json, error) -> Void in
+        Alamofire.request(.POST, http_song_info, parameters: params).responseJSON{ (_, _, json, error) -> Void in
             if error == nil && json != nil {
                 var data = JSON(json!)
                 
@@ -104,14 +102,12 @@ class HttpRequest {
     }
     
     class func getSongLinkList(chidArray:[String], callback:[SongLink]?->Void ) {
-        
-        let url = "http://fm.baidu.com/data/music/songlink"
     
         var chids = join(",", chidArray)
         
         let params = ["songIds":chids]
         
-        Alamofire.request(.POST, url, parameters: params).responseJSON{ (_, _, json, error) -> Void in
+        Alamofire.request(.POST, http_song_link, parameters: params).responseJSON{ (_, _, json, error) -> Void in
             if error == nil && json != nil {
                 var data = JSON(json!)
                 var lists = data["data"]["songList"]
@@ -155,10 +151,7 @@ class HttpRequest {
     
     class func getLrc(lrcUrl:String, callback:String?->Void) ->Void{
         
-        //http://fm.baidu.com/data2/lrc/14881153/14881153.lrc
-        
-        let baseUrl = "http://fm.baidu.com"
-        let url = baseUrl + lrcUrl
+        let url = http_song_lrc + lrcUrl
         Alamofire.request(.GET, url).responseString(encoding: NSUTF8StringEncoding){ (_, _, string, error) -> Void in
             
             if error == nil {
