@@ -30,12 +30,15 @@
 		67B3F19B1AE1DC510061068C /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F19A1AE1DC510061068C /* Utils.swift */; };
 		67B3F19D1AE1E0570061068C /* BaseDb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F19C1AE1E0570061068C /* BaseDb.swift */; };
 		67B3F19F1AE1EAC10061068C /* SongList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B3F19E1AE1EAC10061068C /* SongList.swift */; };
+		67B9C2EB1AEBF43300107696 /* BaiduFmKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 67B9C2EA1AEBF43300107696 /* BaiduFmKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		67B9C2F11AEBF43300107696 /* BaiduFmKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B9C2E61AEBF43300107696 /* BaiduFmKit.framework */; };
+		67B9C2FD1AEBF43300107696 /* BaiduFmKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B9C2E61AEBF43300107696 /* BaiduFmKit.framework */; };
+		67B9C2FE1AEBF43300107696 /* BaiduFmKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67B9C2E61AEBF43300107696 /* BaiduFmKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67F0AEBF1AD9FF8C000CB588 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */; };
 		67F0AEC11AD9FF8C000CB588 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEC01AD9FF8C000CB588 /* ViewController.swift */; };
 		67F0AEC41AD9FF8C000CB588 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67F0AEC21AD9FF8C000CB588 /* Main.storyboard */; };
 		67F0AEC61AD9FF8C000CB588 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67F0AEC51AD9FF8C000CB588 /* Images.xcassets */; };
 		67F0AEC91AD9FF8C000CB588 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 67F0AEC71AD9FF8C000CB588 /* LaunchScreen.xib */; };
-		67F0AED51AD9FF8C000CB588 /* BaiduFMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AED41AD9FF8C000CB588 /* BaiduFMTests.swift */; };
 		67F0AEE01AD9FFE7000CB588 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEDF1AD9FFE7000CB588 /* Channel.swift */; };
 		67F0AEE21ADA03A8000CB588 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEE11ADA03A8000CB588 /* Song.swift */; };
 		67F0AEE71ADA0784000CB588 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F0AEE61ADA0784000CB588 /* HttpRequest.swift */; };
@@ -62,12 +65,26 @@
 			remoteGlobalIDString = 67806C781AEA8C70002D94D1;
 			remoteInfo = "百度FM WatchKit Extension";
 		};
-		67F0AECF1AD9FF8C000CB588 /* PBXContainerItemProxy */ = {
+		67B9C2F21AEBF43300107696 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 67F0AEB11AD9FF8C000CB588 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 67B9C2E51AEBF43300107696;
+			remoteInfo = BaiduFmKit;
+		};
+		67B9C2F41AEBF43300107696 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 67F0AEB11AD9FF8C000CB588 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 67F0AEB81AD9FF8C000CB588;
 			remoteInfo = BaiduFM;
+		};
+		67B9C2FB1AEBF43300107696 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 67F0AEB11AD9FF8C000CB588 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 67B9C2E51AEBF43300107696;
+			remoteInfo = BaiduFmKit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -89,6 +106,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				67B9C2FE1AEBF43300107696 /* BaiduFmKit.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +148,10 @@
 		67B3F19A1AE1DC510061068C /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		67B3F19C1AE1E0570061068C /* BaseDb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDb.swift; sourceTree = "<group>"; };
 		67B3F19E1AE1EAC10061068C /* SongList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongList.swift; sourceTree = "<group>"; };
+		67B9C2E61AEBF43300107696 /* BaiduFmKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BaiduFmKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		67B9C2E91AEBF43300107696 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		67B9C2EA1AEBF43300107696 /* BaiduFmKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaiduFmKit.h; sourceTree = "<group>"; };
+		67B9C2F01AEBF43300107696 /* BaiduFmKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BaiduFmKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		67F0AEB91AD9FF8C000CB588 /* BaiduFM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BaiduFM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		67F0AEBD1AD9FF8C000CB588 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67F0AEBE1AD9FF8C000CB588 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -137,9 +159,6 @@
 		67F0AEC31AD9FF8C000CB588 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		67F0AEC51AD9FF8C000CB588 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		67F0AEC81AD9FF8C000CB588 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		67F0AECE1AD9FF8C000CB588 /* BaiduFMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BaiduFMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		67F0AED31AD9FF8C000CB588 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		67F0AED41AD9FF8C000CB588 /* BaiduFMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduFMTests.swift; sourceTree = "<group>"; };
 		67F0AEDF1AD9FFE7000CB588 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		67F0AEE11ADA03A8000CB588 /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		67F0AEE61ADA0784000CB588 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
@@ -160,21 +179,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		67B9C2E21AEBF43300107696 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67B9C2ED1AEBF43300107696 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67B9C2F11AEBF43300107696 /* BaiduFmKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		67F0AEB61AD9FF8C000CB588 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				67B3F1961AE1DA590061068C /* libsqlite3.dylib in Frameworks */,
 				6783E0341AE0D6E400D9D5FC /* AVFoundation.framework in Frameworks */,
+				67B9C2FD1AEBF43300107696 /* BaiduFmKit.framework in Frameworks */,
 				67F0AEF01ADA6EFE000CB588 /* MediaPlayer.framework in Frameworks */,
 				F964CFD7279512DD676A4FEE /* Pods_BaiduFM.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		67F0AECB1AD9FF8C000CB588 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,13 +303,30 @@
 			name = DataBase;
 			sourceTree = "<group>";
 		};
+		67B9C2E71AEBF43300107696 /* BaiduFmKit */ = {
+			isa = PBXGroup;
+			children = (
+				67B9C2EA1AEBF43300107696 /* BaiduFmKit.h */,
+				67B9C2E81AEBF43300107696 /* Supporting Files */,
+			);
+			path = BaiduFmKit;
+			sourceTree = "<group>";
+		};
+		67B9C2E81AEBF43300107696 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				67B9C2E91AEBF43300107696 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		67F0AEB01AD9FF8C000CB588 = {
 			isa = PBXGroup;
 			children = (
 				67F0AEBB1AD9FF8C000CB588 /* BaiduFM */,
-				67F0AED11AD9FF8C000CB588 /* BaiduFMTests */,
 				67806C7A1AEA8C70002D94D1 /* BaiduFMWatchKit Extension */,
 				67806C8C1AEA8C70002D94D1 /* BaiduFMWatchKit App */,
+				67B9C2E71AEBF43300107696 /* BaiduFmKit */,
 				67F0AEBA1AD9FF8C000CB588 /* Products */,
 				A44732D7A8100059FF6B3791 /* Pods */,
 				D16A7CFBB847F60AA65C6F17 /* Frameworks */,
@@ -292,9 +337,10 @@
 			isa = PBXGroup;
 			children = (
 				67F0AEB91AD9FF8C000CB588 /* BaiduFM.app */,
-				67F0AECE1AD9FF8C000CB588 /* BaiduFMTests.xctest */,
 				67806C791AEA8C70002D94D1 /* 百度FM WatchKit Extension.appex */,
 				67806C881AEA8C70002D94D1 /* 百度FM WatchKit App.app */,
+				67B9C2E61AEBF43300107696 /* BaiduFmKit.framework */,
+				67B9C2F01AEBF43300107696 /* BaiduFmKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -322,23 +368,6 @@
 			isa = PBXGroup;
 			children = (
 				67F0AEBD1AD9FF8C000CB588 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		67F0AED11AD9FF8C000CB588 /* BaiduFMTests */ = {
-			isa = PBXGroup;
-			children = (
-				67F0AED41AD9FF8C000CB588 /* BaiduFMTests.swift */,
-				67F0AED21AD9FF8C000CB588 /* Supporting Files */,
-			);
-			path = BaiduFMTests;
-			sourceTree = "<group>";
-		};
-		67F0AED21AD9FF8C000CB588 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				67F0AED31AD9FF8C000CB588 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -383,6 +412,17 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		67B9C2E31AEBF43300107696 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67B9C2EB1AEBF43300107696 /* BaiduFmKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
 		67806C781AEA8C70002D94D1 /* 百度FM WatchKit Extension */ = {
 			isa = PBXNativeTarget;
@@ -417,6 +457,43 @@
 			productReference = 67806C881AEA8C70002D94D1 /* 百度FM WatchKit App.app */;
 			productType = "com.apple.product-type.application.watchapp";
 		};
+		67B9C2E51AEBF43300107696 /* BaiduFmKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67B9C2FF1AEBF43400107696 /* Build configuration list for PBXNativeTarget "BaiduFmKit" */;
+			buildPhases = (
+				67B9C2E11AEBF43300107696 /* Sources */,
+				67B9C2E21AEBF43300107696 /* Frameworks */,
+				67B9C2E31AEBF43300107696 /* Headers */,
+				67B9C2E41AEBF43300107696 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BaiduFmKit;
+			productName = BaiduFmKit;
+			productReference = 67B9C2E61AEBF43300107696 /* BaiduFmKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		67B9C2EF1AEBF43300107696 /* BaiduFmKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67B9C3021AEBF43400107696 /* Build configuration list for PBXNativeTarget "BaiduFmKitTests" */;
+			buildPhases = (
+				67B9C2EC1AEBF43300107696 /* Sources */,
+				67B9C2ED1AEBF43300107696 /* Frameworks */,
+				67B9C2EE1AEBF43300107696 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				67B9C2F31AEBF43300107696 /* PBXTargetDependency */,
+				67B9C2F51AEBF43300107696 /* PBXTargetDependency */,
+			);
+			name = BaiduFmKitTests;
+			productName = BaiduFmKitTests;
+			productReference = 67B9C2F01AEBF43300107696 /* BaiduFmKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		67F0AEB81AD9FF8C000CB588 /* BaiduFM */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 67F0AED81AD9FF8C000CB588 /* Build configuration list for PBXNativeTarget "BaiduFM" */;
@@ -434,29 +511,12 @@
 			);
 			dependencies = (
 				67806C951AEA8C70002D94D1 /* PBXTargetDependency */,
+				67B9C2FC1AEBF43300107696 /* PBXTargetDependency */,
 			);
 			name = BaiduFM;
 			productName = BaiduFM;
 			productReference = 67F0AEB91AD9FF8C000CB588 /* BaiduFM.app */;
 			productType = "com.apple.product-type.application";
-		};
-		67F0AECD1AD9FF8C000CB588 /* BaiduFMTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 67F0AEDB1AD9FF8C000CB588 /* Build configuration list for PBXNativeTarget "BaiduFMTests" */;
-			buildPhases = (
-				67F0AECA1AD9FF8C000CB588 /* Sources */,
-				67F0AECB1AD9FF8C000CB588 /* Frameworks */,
-				67F0AECC1AD9FF8C000CB588 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				67F0AED01AD9FF8C000CB588 /* PBXTargetDependency */,
-			);
-			name = BaiduFMTests;
-			productName = BaiduFMTests;
-			productReference = 67F0AECE1AD9FF8C000CB588 /* BaiduFMTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -473,12 +533,15 @@
 					67806C871AEA8C70002D94D1 = {
 						CreatedOnToolsVersion = 6.3.1;
 					};
+					67B9C2E51AEBF43300107696 = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
+					67B9C2EF1AEBF43300107696 = {
+						CreatedOnToolsVersion = 6.3.1;
+						TestTargetID = 67F0AEB81AD9FF8C000CB588;
+					};
 					67F0AEB81AD9FF8C000CB588 = {
 						CreatedOnToolsVersion = 6.3;
-					};
-					67F0AECD1AD9FF8C000CB588 = {
-						CreatedOnToolsVersion = 6.3;
-						TestTargetID = 67F0AEB81AD9FF8C000CB588;
 					};
 				};
 			};
@@ -496,9 +559,10 @@
 			projectRoot = "";
 			targets = (
 				67F0AEB81AD9FF8C000CB588 /* BaiduFM */,
-				67F0AECD1AD9FF8C000CB588 /* BaiduFMTests */,
 				67806C781AEA8C70002D94D1 /* 百度FM WatchKit Extension */,
 				67806C871AEA8C70002D94D1 /* 百度FM WatchKit App */,
+				67B9C2E51AEBF43300107696 /* BaiduFmKit */,
+				67B9C2EF1AEBF43300107696 /* BaiduFmKitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -522,6 +586,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		67B9C2E41AEBF43300107696 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67B9C2EE1AEBF43300107696 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		67F0AEB71AD9FF8C000CB588 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -529,13 +607,6 @@
 				67F0AEC41AD9FF8C000CB588 /* Main.storyboard in Resources */,
 				67F0AEC91AD9FF8C000CB588 /* LaunchScreen.xib in Resources */,
 				67F0AEC61AD9FF8C000CB588 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		67F0AECC1AD9FF8C000CB588 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -600,6 +671,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		67B9C2E11AEBF43300107696 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67B9C2EC1AEBF43300107696 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		67F0AEB51AD9FF8C000CB588 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -629,14 +714,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		67F0AECA1AD9FF8C000CB588 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				67F0AED51AD9FF8C000CB588 /* BaiduFMTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -650,10 +727,20 @@
 			target = 67806C781AEA8C70002D94D1 /* 百度FM WatchKit Extension */;
 			targetProxy = 67806C941AEA8C70002D94D1 /* PBXContainerItemProxy */;
 		};
-		67F0AED01AD9FF8C000CB588 /* PBXTargetDependency */ = {
+		67B9C2F31AEBF43300107696 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 67B9C2E51AEBF43300107696 /* BaiduFmKit */;
+			targetProxy = 67B9C2F21AEBF43300107696 /* PBXContainerItemProxy */;
+		};
+		67B9C2F51AEBF43300107696 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 67F0AEB81AD9FF8C000CB588 /* BaiduFM */;
-			targetProxy = 67F0AECF1AD9FF8C000CB588 /* PBXContainerItemProxy */;
+			targetProxy = 67B9C2F41AEBF43300107696 /* PBXContainerItemProxy */;
+		};
+		67B9C2FC1AEBF43300107696 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 67B9C2E51AEBF43300107696 /* BaiduFmKit */;
+			targetProxy = 67B9C2FB1AEBF43300107696 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -738,6 +825,78 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Release;
+		};
+		67B9C3001AEBF43400107696 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = BaiduFmKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		67B9C3011AEBF43400107696 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = BaiduFmKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		67B9C3031AEBF43400107696 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = BaiduFmKitTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BaiduFM.app/BaiduFM";
+			};
+			name = Debug;
+		};
+		67B9C3041AEBF43400107696 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = BaiduFmKitTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BaiduFM.app/BaiduFM";
 			};
 			name = Release;
 		};
@@ -865,40 +1024,6 @@
 			};
 			name = Release;
 		};
-		67F0AEDC1AD9FF8C000CB588 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = BaiduFMTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BaiduFM.app/BaiduFM";
-			};
-			name = Debug;
-		};
-		67F0AEDD1AD9FF8C000CB588 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = BaiduFMTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BaiduFM.app/BaiduFM";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -920,6 +1045,22 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		67B9C2FF1AEBF43400107696 /* Build configuration list for PBXNativeTarget "BaiduFmKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67B9C3001AEBF43400107696 /* Debug */,
+				67B9C3011AEBF43400107696 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		67B9C3021AEBF43400107696 /* Build configuration list for PBXNativeTarget "BaiduFmKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67B9C3031AEBF43400107696 /* Debug */,
+				67B9C3041AEBF43400107696 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		67F0AEB41AD9FF8C000CB588 /* Build configuration list for PBXProject "BaiduFM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -934,15 +1075,6 @@
 			buildConfigurations = (
 				67F0AED91AD9FF8C000CB588 /* Debug */,
 				67F0AEDA1AD9FF8C000CB588 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		67F0AEDB1AD9FF8C000CB588 /* Build configuration list for PBXNativeTarget "BaiduFMTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				67F0AEDC1AD9FF8C000CB588 /* Debug */,
-				67F0AEDD1AD9FF8C000CB588 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

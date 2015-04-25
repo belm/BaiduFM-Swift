@@ -11,8 +11,10 @@
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="百度FM_WatchKit_App" customModuleProvider="target">
                     <items>
                         <imageView width="135" height="62" alignment="center" id="Gvx-Tp-OkY"/>
-                        <label width="71" height="38" alignment="center" text="Label" textAlignment="center" id="6ma-ke-poD"/>
                     </items>
+                    <connections>
+                        <outlet property="artistImage" destination="Gvx-Tp-OkY" id="X7N-k0-vEh"/>
+                    </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="235" y="347"/>

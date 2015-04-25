@@ -12,8 +12,12 @@ import Foundation
 
 class InterfaceController: WKInterfaceController {
 
+    @IBOutlet weak var artistImage: WKInterfaceImage!
+    
+    
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
+        
         
         // Configure interface objects here.
     }

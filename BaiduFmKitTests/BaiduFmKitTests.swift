@@ -1,6 +1,6 @@
 //
-//  BaiduFmTests.swift
-//  BaiduFmTests
+//  BaiduFmKitTests.swift
+//  BaiduFmKitTests
 //
 //  Created by lumeng on 15/4/26.
 //  Copyright (c) 2015年 lumeng. All rights reserved.
@@ -9,7 +9,7 @@
 import UIKit
 import XCTest
 
-class BaiduFmTests: XCTestCase {
+class BaiduFmKitTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
