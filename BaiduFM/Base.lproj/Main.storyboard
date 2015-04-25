@@ -117,7 +117,7 @@
                                     <constraint firstAttribute="width" constant="35" id="4FI-Pc-EKp"/>
                                     <constraint firstAttribute="height" constant="35" id="OvV-c7-9Ou"/>
                                 </constraints>
-                                <state key="normal" title="Button" image="mymusic_icon_download_normal">
+                                <state key="normal" title="Button" image="Download">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -130,7 +130,7 @@
                                     <constraint firstAttribute="height" constant="35" id="0m4-R5-qmi"/>
                                     <constraint firstAttribute="width" constant="35" id="leA-pY-uxO"/>
                                 </constraints>
-                                <state key="normal" title="Button" image="actionIconLikeSelected">
+                                <state key="normal" title="Button" image="Unlike">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -225,7 +225,9 @@
                         <outlet property="albumLabel" destination="TgU-op-uaU" id="Ut2-h9-jV1"/>
                         <outlet property="artistLabel" destination="LUT-8n-Cc1" id="rVX-CH-3Gj"/>
                         <outlet property="bgImageView" destination="8Co-1s-it1" id="zxg-dB-UGt"/>
+                        <outlet property="downloadButton" destination="sek-X9-G8b" id="Tmd-yt-QgY"/>
                         <outlet property="imgView" destination="10f-TH-a2W" id="K3C-M6-2jb"/>
+                        <outlet property="likeButton" destination="2gq-Qa-iNN" id="Sp8-gG-5ax"/>
                         <outlet property="nameLabel" destination="d5T-oP-9VV" id="5dO-8m-gIA"/>
                         <outlet property="nextButton" destination="2pu-Bg-AiJ" id="iiz-hC-WBl"/>
                         <outlet property="playButton" destination="G9O-eE-5Qo" id="tOX-0d-Mka"/>
@@ -566,8 +568,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="actionIconLikeSelected" width="60" height="60"/>
-        <image name="mymusic_icon_download_normal" width="40" height="40"/>
+        <image name="Download" width="60" height="60"/>
+        <image name="Unlike" width="60" height="60"/>
         <image name="player_btn_next_normal" width="64" height="64"/>
         <image name="player_btn_pause_normal" width="64" height="64"/>
         <image name="player_btn_pre_normal" width="64" height="64"/>

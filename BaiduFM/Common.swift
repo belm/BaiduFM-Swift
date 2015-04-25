@@ -102,5 +102,16 @@ class Common {
         //更新db
         DataCenter.shareDataCenter.dbSongList.cleanDownloadList()
     }
+    
+    class func deleteSong(songId:String, format:String)->Bool{
+        //删除本地歌曲
+        var musicPath = self.musicLocalPath(songId, format: format)
+        var ret1 = NSFileManager.defaultManager().removeItemAtPath(musicPath, error: nil)
+        
+        //更新db
+        var ret2 = DataCenter.shareDataCenter.dbSongList.updateDownloadStatus(songId, status: 0)
+        
+        return ret1 && ret2
+    }
 
 }

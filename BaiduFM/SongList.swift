@@ -20,11 +20,13 @@ class SongList:BaseDb {
         return nil
     }
     
-    func get(sid:String)->[Song]?{
+    func get(sid:String)->Song?{
         if self.open(){
             var sql = "SELECT * FROM tbl_song_list WHERE sid=?"
             if let rs = self.db.executeQuery(sql, withArgumentsInArray: [sid]){
-                return self.fetchResult(rs)
+                var ret = self.fetchResult(rs)
+                if ret.count == 0 {return nil}
+                return ret[0]
             }
         }
         return nil
@@ -97,9 +99,7 @@ class SongList:BaseDb {
     func insert(info:SongInfo, link:SongLink)->Bool{
         if self.open(){
             
-            var song = self.get(info.id)!
-            
-            if song.count >= 1 {
+            if let song = self.get(info.id) {
                 println("\(info.id)已经添加")
                 return false
             }
@@ -129,10 +129,10 @@ class SongList:BaseDb {
         return false
     }
     
-    func updateDownloadStatus(sid:String)->Bool{
+    func updateDownloadStatus(sid:String, status:Int)->Bool{
         if self.open(){
-            var sql = "UPDATE tbl_song_list set is_dl=1 WHERE sid=?"
-            var ret = self.db.executeUpdate(sql, withArgumentsInArray: [sid])
+            var sql = "UPDATE tbl_song_list set is_dl=? WHERE sid=?"
+            var ret = self.db.executeUpdate(sql, withArgumentsInArray: [status,sid])
             self.close()
             return ret
         }

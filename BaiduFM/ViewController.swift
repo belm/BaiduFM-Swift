@@ -29,10 +29,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var prevButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet weak var downloadButton: UIButton!
+    @IBOutlet weak var likeButton: UIButton!
     
     
     var timer:NSTimer? = nil
     var currentChannel = ""
+    var dbSong:Song? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -185,8 +188,7 @@ class ViewController: UIViewController {
             var showImg = Common.getIndexPageImage(info!)
             
             self.show(showImg, name: info!.name, artistName: info!.artistName, albumName: info!.albumName, songLink: link!.songLink, time: link!.time, lrcLink: link!.lrcLink, songId:link!.id, format:link!.format)
-        
-            self.addRecentSong()
+            
         }
     }
     
@@ -251,6 +253,25 @@ class ViewController: UIViewController {
             }
             
         })
+        
+        self.addRecentSong()
+        
+        //更新下载状态和喜欢状态
+        if let song = DataCenter.shareDataCenter.dbSongList.get(songId) {
+            self.dbSong = song
+            
+            if song.is_dl == 1 {
+                self.downloadButton.setImage(UIImage(named: "Downloaded"), forState: UIControlState.Normal)
+            }else{
+                self.downloadButton.setImage(UIImage(named: "Download"), forState: UIControlState.Normal)
+            }
+            
+            if song.is_like == 1 {
+                self.likeButton.setImage(UIImage(named: "Like"), forState: UIControlState.Normal)
+            }else{
+                self.likeButton.setImage(UIImage(named: "Unlike"), forState: UIControlState.Normal)
+            }
+        }
     }
     
     //添加最近播放
@@ -361,41 +382,68 @@ class ViewController: UIViewController {
     
     @IBAction func downloadSong(sender: UIButton) {
         
-        var info = DataCenter.shareDataCenter.curPlaySongLink
-        
-        var musicPath = Common.musicLocalPath(info!.id, format: info!.format)
-        
-        if Common.fileIsExist(musicPath){
-            println("文件已经存在")
-            return
-        }
-        
-        if let song = info {
-            HttpRequest.downloadFile(song.songLink, musicPath: musicPath, filePath: { () -> Void in
-                println("下载完成\(musicPath)")
-                
-                if Common.fileIsExist(musicPath){
-                    if DataCenter.shareDataCenter.dbSongList.updateDownloadStatus(song.id){
-                        println("\(song.id)更新db成功")
-                    }else{
-                        println("\(song.id)更新db失败")
-                    }
-                }else{
-                    println("\(musicPath)文件不存在")
+        if let dbsong  = self.dbSong {
+            
+            if dbsong.is_dl == 1 {
+                //删除下载
+                if Common.deleteSong(dbsong.sid, format: dbsong.format){
+                    self.dbSong!.is_dl = 0
+                    self.downloadButton.setImage(UIImage(named: "Download"), forState: UIControlState.Normal)
+                    println("删除下载\(dbsong.sid)\(dbsong.name)")
                 }
-            })
+            }else{
+                //下载
+                var musicPath = Common.musicLocalPath(dbsong.sid, format: dbsong.format)
+                if Common.fileIsExist(musicPath){
+                    println("文件已经存在")
+                    return
+                }
+                
+                HttpRequest.downloadFile(dbsong.song_url, musicPath: musicPath, filePath: { () -> Void in
+                    println("下载完成\(musicPath)")
+                    
+                    if Common.fileIsExist(musicPath){
+                        if DataCenter.shareDataCenter.dbSongList.updateDownloadStatus(dbsong.sid, status:1){
+                            println("\(dbsong.sid)更新db成功")
+                            Async.main{
+                                self.dbSong!.is_dl = 1
+                                self.downloadButton.setImage(UIImage(named: "Downloaded"), forState: UIControlState.Normal)
+                            }
+                        }else{
+                            println("\(dbsong.sid)更新db失败")
+                        }
+                    }else{
+                        println("\(musicPath)文件不存在")
+                    }
+                })
+            }
+            
         }
+    
     }
     
     @IBAction func likeSong(sender: UIButton) {
         
-        var info = DataCenter.shareDataCenter.curPlaySongInfo
-        
-        if let song = info {
-            if DataCenter.shareDataCenter.dbSongList.updateLikeStatus(song.id, status: 1){
-                println("\(song.id)收藏成功")
+        if let dbsong  = self.dbSong {
+            if dbsong.is_like == 1 {
+                //取消收藏
+                if DataCenter.shareDataCenter.dbSongList.updateLikeStatus(dbsong.sid, status: 0){
+                    println("\(dbsong.sid)\(dbsong.name)取消收藏成功")
+                    self.dbSong!.is_like = 0
+                    self.likeButton.setImage(UIImage(named: "Unlike"), forState: UIControlState.Normal)
+                }else{
+                    println("\(dbsong.sid)取消收藏失败")
+                }
+                
             }else{
-                println("\(song.id)收藏失败")
+                //收藏
+                if DataCenter.shareDataCenter.dbSongList.updateLikeStatus(dbsong.sid, status: 1){
+                    println("\(dbsong.sid)\(dbsong.name)收藏成功")
+                    self.dbSong!.is_like = 1
+                    self.likeButton.setImage(UIImage(named: "Like"), forState: UIControlState.Normal)
+                }else{
+                    println("\(dbsong.sid)收藏失败")
+                }
             }
         }
     }
