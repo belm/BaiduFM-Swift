@@ -62,6 +62,8 @@
 
 -[文字效果LTMorphingLabel](https://github.com/lexrus/LTMorphingLabel)
 
+-[图片缓存Kingfisher](https://github.com/onevcat/Kingfisher)
+
 ##使用的swift知识点
 -网络请求
 

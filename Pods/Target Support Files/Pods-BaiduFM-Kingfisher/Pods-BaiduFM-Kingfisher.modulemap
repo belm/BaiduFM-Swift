@@ -1,0 +1,6 @@
+framework module Kingfisher {
+  umbrella header "Pods-BaiduFM-Kingfisher-umbrella.h"
+
+  export *
+  module * { export * }
+}
