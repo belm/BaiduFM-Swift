@@ -129,16 +129,6 @@ class SongList:BaseDb {
         return false
     }
     
-    func cleanDownloadList()->Bool{
-        if self.open(){
-            var sql = "update tbl_song_list set is_dl = 0"
-            var ret = self.db.executeUpdate(sql, withArgumentsInArray: nil)
-            self.close()
-            return ret
-        }
-        return false
-    }
-    
     func updateDownloadStatus(sid:String)->Bool{
         if self.open(){
             var sql = "UPDATE tbl_song_list set is_dl=1 WHERE sid=?"
@@ -161,9 +151,38 @@ class SongList:BaseDb {
         }
         return false
     }
+
+// MARK: - Clear
+    func clearLikeList()->Bool{
+        if self.open(){
+            var sql = "update tbl_song_list set is_like = 0"
+            var ret = self.db.executeUpdate(sql, withArgumentsInArray: nil)
+            self.close()
+            return ret
+        }
+        return false
+    }
     
-    //清理最近播放列表，只保留最近20首歌曲
-    func clearRecentPlayList(){
+    func cleanDownloadList()->Bool{
+        if self.open(){
+            var sql = "update tbl_song_list set is_dl = 0"
+            var ret = self.db.executeUpdate(sql, withArgumentsInArray: nil)
+            self.close()
+            return ret
+        }
+        return false
+    }
     
+    func cleanRecentList()->Bool{
+        
+        if self.open(){
+            var sql = "update tbl_song_list set is_recent=0 where is_dl = 1 or is_like=1"
+            var ret1 = self.db.executeUpdate(sql, withArgumentsInArray: nil)
+            sql = "delete from tbl_song_list where is_recent = 1"
+            var ret2 = self.db.executeUpdate(sql, withArgumentsInArray: nil)
+            self.close()
+            return ret1 && ret2
+        }
+        return false
     }
 }

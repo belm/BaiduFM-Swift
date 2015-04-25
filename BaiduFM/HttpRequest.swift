@@ -170,8 +170,11 @@ class HttpRequest {
     }
     
     class func downloadFile(songURL:String, musicPath:String, filePath:()->Void){
+        
+        var canPlaySongURL = Common.getCanPlaySongUrl(songURL)
+        
         println("开始下载\(songURL)")
-        Alamofire.download(Method.GET, songURL, { (temporaryURL, response) in
+        Alamofire.download(Method.GET, canPlaySongURL, { (temporaryURL, response) in
             let url = NSURL(fileURLWithPath: musicPath)!
             return url
         }).response { (request, response, _, error) -> Void in

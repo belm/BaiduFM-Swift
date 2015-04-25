@@ -426,7 +426,13 @@
                             <outlet property="delegate" destination="izT-zR-8R6" id="CGS-dY-MSu"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="收藏列表" id="W7d-DW-2vw"/>
+                    <navigationItem key="navigationItem" title="收藏列表" id="W7d-DW-2vw">
+                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="l2V-se-prD">
+                            <connections>
+                                <action selector="delAllSong:" destination="izT-zR-8R6" id="QqX-f5-O4G"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x6c-ni-hGF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -467,7 +473,13 @@
                             <outlet property="delegate" destination="cq6-po-zvS" id="jbT-V3-9OJ"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="最近播放" id="rZL-84-edu"/>
+                    <navigationItem key="navigationItem" title="最近播放" id="rZL-84-edu">
+                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="G9G-bj-Xmp">
+                            <connections>
+                                <action selector="deleteAllSong:" destination="cq6-po-zvS" id="jVe-83-Gnl"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Psv-ad-bat" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -190,7 +190,16 @@ class ViewController: UIViewController {
         }
     }
     
+    func resetUI(){
+        self.progressView.progress = 0
+        self.songTimePlayLabel.text = "00:00"
+        self.songTimeLengthLabel.text = "00:00"
+        self.txtView.text = ""
+    }
+    
     func show(showImg:String,name:String,artistName:String,albumName:String,songLink:String,time:Int, lrcLink:String,songId:String,format:String){
+        
+        self.resetUI()
         
         self.navigationItem.title = DataCenter.shareDataCenter.currentChannelName
         

@@ -101,6 +101,14 @@ class LikeTableViewController: UITableViewController {
         })
     }
 
+    @IBAction func delAllSong(sender: UIBarButtonItem) {
+        
+        DataCenter.shareDataCenter.dbSongList.clearLikeList()
+        self.loadData()
+    }
+    
+    
+    
     /*
     // Override to support rearranging the table view.
     override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
