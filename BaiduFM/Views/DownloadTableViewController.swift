@@ -86,6 +86,8 @@ class DownloadTableViewController: UITableViewController {
     @IBAction func delAllSong(sender: UIBarButtonItem) {
         
         Common.cleanAllDownloadSong()
+        //更新db
+        DataCenter.shareDataCenter.dbSongList.cleanDownloadList()
         self.loadData()
     }
     

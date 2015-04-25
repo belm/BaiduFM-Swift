@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BaiduFMKit
 
 class SongList:BaseDb {
     

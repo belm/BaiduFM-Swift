@@ -387,6 +387,9 @@ class ViewController: UIViewController {
             if dbsong.is_dl == 1 {
                 //删除下载
                 if Common.deleteSong(dbsong.sid, format: dbsong.format){
+                    //更新db
+                    var ret2 = DataCenter.shareDataCenter.dbSongList.updateDownloadStatus(dbsong.sid, status: 0)
+                    
                     self.dbSong!.is_dl = 0
                     self.downloadButton.setImage(UIImage(named: "Download"), forState: UIControlState.Normal)
                     println("删除下载\(dbsong.sid)\(dbsong.name)")
