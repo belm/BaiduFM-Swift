@@ -33,12 +33,14 @@ class DataCenter {
     var currentChannel: String = "public_tuijian_zhongguohaoshengyin" {
         didSet{
             NSUserDefaults.standardUserDefaults().setValue(self.currentChannel, forKey: "LAST_PLAY_CHANNEL_ID")
+            NSUserDefaults.standardUserDefaults().synchronize()
         }
     }
     
     var currentChannelName: String = "中国好声音" {
         didSet{
             NSUserDefaults.standardUserDefaults().setValue(self.currentChannelName, forKey: "LAST_PLAY_CHANNEL_NAME")
+            NSUserDefaults.standardUserDefaults().synchronize()
         }
     }
     
