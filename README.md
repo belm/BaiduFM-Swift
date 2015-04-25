@@ -13,6 +13,12 @@
 
 ##功能
 
+-(删除)下载歌曲到本地
+
+-(取消)收藏喜欢的音乐
+
+-(清空)最近播放的音乐
+
 -可以下拉刷新,上拉加载更多歌曲列表
 
 -歌词自动滚动
@@ -37,13 +43,13 @@
 
 
 ##项目截图
-- 锁屏显示、播放控制![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_00.jpg?raw=true)
+- 锁屏显示、播放控制![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_00.png?raw=true)
 
-- 项目首页![项目截图1](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_01.jpg?raw=true)
+- 项目首页![项目截图1](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_01.png?raw=true)
 
-- 歌曲分类![项目截图2](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_02.jpg?raw=true)
+- 歌曲分类![项目截图2](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_02.png?raw=true)
 
-- 歌曲列表![项目截图3](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_03.jpg?raw=true)
+- 歌曲列表![项目截图3](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_03.png?raw=true)
 
 ##项目使用注意事项
 -项目里使用[COCOAPODS](https://github.com/cocoapods/cocoapods)管理第三方库，运行前请执行pod install安装依赖库
@@ -84,13 +90,6 @@
 -NSNotificationCenter传值
 
 ##待完成功能
--下载歌曲到本地(完善中)
-
--收藏喜欢的音乐(已经完成)
-
--最近播放的音乐(已经完成)
-
--背景播放支持(已经完成)
 
 -播放音乐改用AVAudioPlayer
 
