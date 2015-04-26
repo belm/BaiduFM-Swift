@@ -52,4 +52,5 @@ class DataManager {
         }
     }
     var curSongInfo:SongInfo? = nil
+    var curSongLink:SongLink? = nil
 }

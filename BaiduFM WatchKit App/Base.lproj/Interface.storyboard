@@ -12,7 +12,13 @@
                     <items>
                         <group width="1" alignment="left" radius="10" id="oAb-vO-qhX">
                             <items>
-                                <imageView width="80" height="80" alignment="center" id="oeP-jr-fOm"/>
+                                <label width="30" alignment="left" verticalAlignment="bottom" text="00:00" textAlignment="center" id="DtY-fy-TeV">
+                                    <fontDescription key="font" type="system" pointSize="10"/>
+                                </label>
+                                <imageView width="70" height="70" alignment="center" id="oeP-jr-fOm"/>
+                                <label width="30" alignment="right" verticalAlignment="bottom" text="00:00" textAlignment="center" id="6Rx-rs-VUu">
+                                    <fontDescription key="font" type="system" pointSize="10"/>
+                                </label>
                             </items>
                         </group>
                         <label width="1" alignment="center" text="歌曲名" textAlignment="center" id="OfE-se-gwj">
@@ -58,8 +64,10 @@
                         <outlet property="nextButton" destination="R7H-ij-mM9" id="WqJ-dg-dyp"/>
                         <outlet property="playButton" destination="048-83-OU3" id="1zR-zV-ebN"/>
                         <outlet property="prevButton" destination="pZM-ds-yXR" id="fOK-mh-vjI"/>
+                        <outlet property="progressLabel" destination="DtY-fy-TeV" id="7FW-gK-EJ7"/>
                         <outlet property="songImage" destination="oeP-jr-fOm" id="hbZ-QT-IuZ"/>
                         <outlet property="songNameLabel" destination="OfE-se-gwj" id="QDb-1f-9BI"/>
+                        <outlet property="songTimeLabel" destination="6Rx-rs-VUu" id="8P6-5U-uDd"/>
                     </connections>
                 </controller>
             </objects>
