@@ -1,6 +1,0 @@
-framework module Pods_BaiduFMKit {
-  umbrella header "Pods-BaiduFMKit-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -12,11 +12,6 @@ pod 'LTMorphingLabel', '~> 0.0.6'
 pod 'Kingfisher', '~> 1.2'
 end
 
-target 'BaiduFMKit' do
-pod 'Alamofire', '~> 1.2'
-pod "SwiftyJSON", '>= 2.2'
-end
-
 target 'BaiduFM WatchKit Extension' do
 pod 'Alamofire', '~> 1.2'
 pod "SwiftyJSON", '>= 2.2'

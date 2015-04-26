@@ -59,90 +59,60 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-BaiduFMKit-Alamofire.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods-BaiduFMKit-SwiftyJSON.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods-BaiduFMKit.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0028F55721B9DEAE6621E056</key>
+		<key>0DCB9BD803A582810573E30B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0E4ED141140952E8E26F1404</key>
+		<key>107E3DD9E33D803A50412771</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>15849C779192D442567D7A73</key>
+		<key>35303CA7017E849080EE3D2E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4A740E5D051AE499A6C41719</key>
+		<key>4CDEA3C036E40B0090A03FC1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8214B82540640CFED05195CD</key>
+		<key>63E06F2F202E9A7D481F33F4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8830F8A156E61B3BBB6A90D8</key>
+		<key>68B90177FB7342820DF06969</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A6C88B81330E60BBA1C8BEC1</key>
+		<key>6CCE00268D0D032F31E8E704</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B8FE9E6EA681435EAD70D7E8</key>
+		<key>AB4882B18C5391C3664CC96E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C8A095A24443AB907B615833</key>
+		<key>B5A091ECE8451E4C194DB216</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CDDBCFB367162CE655D1D973</key>
+		<key>D739132C6B3966706F66472E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CFFD4AF87D3C697CBD64AAE3</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>D2C7069ED956D572123A43A8</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>E64B2C83F1543B4D6573C9F3</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>ED1205D18AC544B78179CA59</key>
+		<key>E691CE7B86558EAE35F524A2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
