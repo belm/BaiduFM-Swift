@@ -27,8 +27,15 @@ class DataManager {
     var mp:MPMoviePlayerController = MPMoviePlayerController()
     var curPlayStatus = 0 //0初始 1播放 2暂时 3停止
     
-    var chid = "public_tuijian_rege"
-    var songInfoList:[SongInfo] = []
+    var chid = "public_tuijian_rege"{
+        didSet{
+            NSUserDefaults.standardUserDefaults().setValue(self.chid, forKey: "LAST_PLAY_CHANNEL_ID")
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+    }
+    var chList:[Channel] = []  //类型列表
+    var allSongIdList:[String] = [] //当前类别所有歌曲ID，包括没加载 info信息的
+    var songInfoList:[SongInfo] = []//当前类别加载info信息的歌曲列表
     
     var curIndex = 0 {
         didSet{

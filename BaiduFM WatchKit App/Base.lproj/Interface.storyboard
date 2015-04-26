@@ -38,15 +38,71 @@
                             </items>
                         </group>
                     </items>
+                    <menu key="menu" id="8o9-kA-VIh">
+                        <items>
+                            <menuItem title="歌曲列表" image="music_list" id="XxO-hw-kYB">
+                                <connections>
+                                    <action selector="songListAction" destination="AgC-eL-Hgc" id="QaM-Pt-jWe"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="分类列表" image="channel_list" id="XVE-rk-h8G">
+                                <connections>
+                                    <action selector="channelListAction" destination="AgC-eL-Hgc" id="dyZ-8V-ovU"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="取消" icon="resume" id="wFn-7O-mOV"/>
+                        </items>
+                    </menu>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
+                        <outlet property="nextButton" destination="R7H-ij-mM9" id="WqJ-dg-dyp"/>
                         <outlet property="playButton" destination="048-83-OU3" id="1zR-zV-ebN"/>
+                        <outlet property="prevButton" destination="pZM-ds-yXR" id="fOK-mh-vjI"/>
                         <outlet property="songImage" destination="oeP-jr-fOm" id="hbZ-QT-IuZ"/>
                         <outlet property="songNameLabel" destination="OfE-se-gwj" id="QDb-1f-9BI"/>
                     </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="235" y="346"/>
+        </scene>
+        <!--SongListInterfaceController-->
+        <scene sceneID="3dw-uY-V6V">
+            <objects>
+                <controller identifier="SongListInterfaceController" id="obr-fl-aiE" customClass="SongListInterfaceController" customModule="BaiduFM_WatchKit_Extension">
+                    <items>
+                        <table alignment="left" id="YtH-8W-c4J">
+                            <items>
+                                <tableRow identifier="tableRow" id="88b-l0-2uS" customClass="MusicTableRow" customModule="BaiduFM_WatchKit_Extension">
+                                    <group key="rootItem" width="1" alignment="left" id="krr-ti-SCK">
+                                        <items>
+                                            <imageView width="40" height="40" alignment="left" verticalAlignment="center" id="7jU-GF-xfd"/>
+                                            <group width="0.50000000000000011" height="37" alignment="left" layout="vertical" id="FVu-lv-eMf">
+                                                <items>
+                                                    <label width="1" height="0.40000000000000013" alignment="center" text="Label" textAlignment="center" id="NDB-MW-a4U">
+                                                        <fontDescription key="font" type="system" pointSize="11"/>
+                                                    </label>
+                                                    <label width="1" height="0.40000000000000013" alignment="center" verticalAlignment="bottom" text="Label" textAlignment="center" id="jTu-rI-L8z">
+                                                        <fontDescription key="font" type="system" pointSize="11"/>
+                                                    </label>
+                                                </items>
+                                            </group>
+                                        </items>
+                                    </group>
+                                    <connections>
+                                        <outlet property="artistLabel" destination="jTu-rI-L8z" id="Czf-BA-19N"/>
+                                        <outlet property="image" destination="7jU-GF-xfd" id="UQz-rt-h28"/>
+                                        <outlet property="nameLabel" destination="NDB-MW-a4U" id="3cK-UJ-Rcg"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <outlet property="table" destination="YtH-8W-c4J" id="fTn-yy-Hxn"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="469" y="237"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">
@@ -60,6 +116,33 @@
                 </glanceController>
             </objects>
             <point key="canvasLocation" x="235" y="672"/>
+        </scene>
+        <!--ChannelListInterfaceController-->
+        <scene sceneID="2QO-E0-VH6">
+            <objects>
+                <controller identifier="ChannelListInterfaceController" id="LUi-Vk-3M4" customClass="ChannelListInterfaceController" customModule="BaiduFM_WatchKit_Extension">
+                    <items>
+                        <table alignment="left" id="Byk-kc-X59">
+                            <items>
+                                <tableRow identifier="tableRow" id="zSW-br-7cJ" customClass="ChannelTableRow" customModule="BaiduFM_WatchKit_Extension">
+                                    <group key="rootItem" width="1" alignment="left" id="egd-6x-M1k">
+                                        <items>
+                                            <label width="1" alignment="center" verticalAlignment="center" text="Label" textAlignment="center" id="VWR-X5-nis"/>
+                                        </items>
+                                    </group>
+                                    <connections>
+                                        <outlet property="nameLabel" destination="VWR-X5-nis" id="mDE-Xc-UgR"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <outlet property="table" destination="Byk-kc-X59" id="rDA-bh-yl4"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="442" y="483"/>
         </scene>
         <!--Static Notification Interface Controller-->
         <scene sceneID="AEw-b0-oYE">

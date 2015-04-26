@@ -20,6 +20,10 @@
 		6749F3931AEC7F6700A892ED /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6749F38B1AEC7F6700A892ED /* Utils.swift */; };
 		6749F3941AEC7FA500A892ED /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6749F3831AEC7F5700A892ED /* Song.swift */; };
 		6749F3951AEC7FA500A892ED /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6749F3841AEC7F5700A892ED /* Channel.swift */; };
+		6749F3971AEC85DE00A892ED /* SongListInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6749F3961AEC85DE00A892ED /* SongListInterfaceController.swift */; };
+		6749F3991AEC85F500A892ED /* ChannelListInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6749F3981AEC85F500A892ED /* ChannelListInterfaceController.swift */; };
+		6749F39B1AEC892000A892ED /* MusicTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6749F39A1AEC892000A892ED /* MusicTableRow.swift */; };
+		6749F39D1AECBEE800A892ED /* ChannelTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6749F39C1AECBEE800A892ED /* ChannelTableRow.swift */; };
 		6780CE951AEC66C1000BAA67 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6780CE941AEC66C1000BAA67 /* InterfaceController.swift */; };
 		6780CE971AEC66C1000BAA67 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6780CE961AEC66C1000BAA67 /* NotificationController.swift */; };
 		6780CE991AEC66C1000BAA67 /* GlanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6780CE981AEC66C1000BAA67 /* GlanceController.swift */; };
@@ -117,6 +121,10 @@
 		6749F3891AEC7F6700A892ED /* Const.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
 		6749F38A1AEC7F6700A892ED /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
 		6749F38B1AEC7F6700A892ED /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		6749F3961AEC85DE00A892ED /* SongListInterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongListInterfaceController.swift; sourceTree = "<group>"; };
+		6749F3981AEC85F500A892ED /* ChannelListInterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelListInterfaceController.swift; sourceTree = "<group>"; };
+		6749F39A1AEC892000A892ED /* MusicTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicTableRow.swift; sourceTree = "<group>"; };
+		6749F39C1AECBEE800A892ED /* ChannelTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelTableRow.swift; sourceTree = "<group>"; };
 		6780CE8F1AEC66C1000BAA67 /* BaiduFM WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BaiduFM WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6780CE921AEC66C1000BAA67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6780CE931AEC66C1000BAA67 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
@@ -213,6 +221,10 @@
 			isa = PBXGroup;
 			children = (
 				672EA33F1AEC6E2800E6F9AE /* DataManager.swift */,
+				6749F3961AEC85DE00A892ED /* SongListInterfaceController.swift */,
+				6749F39C1AECBEE800A892ED /* ChannelTableRow.swift */,
+				6749F39A1AEC892000A892ED /* MusicTableRow.swift */,
+				6749F3981AEC85F500A892ED /* ChannelListInterfaceController.swift */,
 				6780CE941AEC66C1000BAA67 /* InterfaceController.swift */,
 				6780CE961AEC66C1000BAA67 /* NotificationController.swift */,
 				6780CE981AEC66C1000BAA67 /* GlanceController.swift */,
@@ -651,9 +663,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				6749F3941AEC7FA500A892ED /* Song.swift in Sources */,
+				6749F39B1AEC892000A892ED /* MusicTableRow.swift in Sources */,
+				6749F3991AEC85F500A892ED /* ChannelListInterfaceController.swift in Sources */,
+				6749F39D1AECBEE800A892ED /* ChannelTableRow.swift in Sources */,
 				6749F3951AEC7FA500A892ED /* Channel.swift in Sources */,
 				672EA3401AEC6E2800E6F9AE /* DataManager.swift in Sources */,
 				6780CE971AEC66C1000BAA67 /* NotificationController.swift in Sources */,
+				6749F3971AEC85DE00A892ED /* SongListInterfaceController.swift in Sources */,
 				6780CE951AEC66C1000BAA67 /* InterfaceController.swift in Sources */,
 				6749F38D1AEC7F6700A892ED /* Common.swift in Sources */,
 				6780CE991AEC66C1000BAA67 /* GlanceController.swift in Sources */,

@@ -14,12 +14,18 @@ class InterfaceController: WKInterfaceController {
     
     @IBOutlet weak var songImage: WKInterfaceImage!
     @IBOutlet weak var songNameLabel: WKInterfaceLabel!
-
     @IBOutlet weak var playButton: WKInterfaceButton!
+    @IBOutlet weak var prevButton: WKInterfaceButton!
+    @IBOutlet weak var nextButton: WKInterfaceButton!
+    var curPlaySongId:String? = nil
     
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
         
+        if let chid = NSUserDefaults.standardUserDefaults().stringForKey("LAST_PLAY_CHANNEL_ID"){
+            DataManager.shareDataManager.chid = chid
+        }
+    
         if DataManager.shareDataManager.songInfoList.count == 0 {
             getSongInfoList()
         }else{
@@ -35,8 +41,10 @@ class InterfaceController: WKInterfaceController {
         //获取歌曲列表
         HttpRequest.getSongList(DataManager.shareDataManager.chid, callback: {(list:[String]?) -> Void in
             if let songIdList = list {
+                DataManager.shareDataManager.allSongIdList = songIdList
                 //获取歌曲info信息
-                HttpRequest.getSongInfoList(songIdList, callback:{ (infolist:[SongInfo]?) -> Void in
+                var songlist20 = [] + songIdList[0..<20]
+                HttpRequest.getSongInfoList(songlist20, callback:{ (infolist:[SongInfo]?) -> Void in
                     if let sInfoList = infolist {
                         DataManager.shareDataManager.songInfoList = sInfoList
                         DataManager.shareDataManager.curIndex = 0
@@ -50,10 +58,31 @@ class InterfaceController: WKInterfaceController {
     }
     
     func playSong(info:SongInfo){
+        
+        self.curPlaySongId = info.id
+        
         //UI
         Async.main{
             self.songImage.setImageData(NSData(contentsOfURL: NSURL(string: info.songPicRadio)!)!)
             self.songNameLabel.setText(info.name + "-" + info.artistName)
+            
+            if DataManager.shareDataManager.curIndex == 0 {
+                self.prevButton.setEnabled(false)
+            }else{
+                self.prevButton.setEnabled(true)
+            }
+            
+            if DataManager.shareDataManager.curIndex >= DataManager.shareDataManager.songInfoList.count-1{
+                self.nextButton.setEnabled(false)
+            }else{
+                self.nextButton.setEnabled(true)
+            }
+        }
+        
+        println("curIndex:\(DataManager.shareDataManager.curIndex),all:\(DataManager.shareDataManager.songInfoList.count)")
+        println(Double(DataManager.shareDataManager.curIndex) / Double(DataManager.shareDataManager.songInfoList.count))
+        if Double(DataManager.shareDataManager.curIndex) / Double(DataManager.shareDataManager.songInfoList.count) >= 0.75{
+            self.loadMoreData()
         }
         
         //请求歌曲地址信息
@@ -85,26 +114,85 @@ class InterfaceController: WKInterfaceController {
     
     @IBAction func prevButtonAction() {
         
-        DataManager.shareDataManager.curIndex--
-        
-        if let song = DataManager.shareDataManager.curSongInfo{
-            self.playSong(song)
-        }
+        self.prev()
     }
     
     @IBAction func nextButtonAction() {
         
-        DataManager.shareDataManager.curIndex++
+        self.next()
+    }
+    
+    
+    func prev(){
         
+        DataManager.shareDataManager.curIndex--
         if let song = DataManager.shareDataManager.curSongInfo{
             self.playSong(song)
         }
     }
     
+    func next(){
+        
+        DataManager.shareDataManager.curIndex++
+        if let song = DataManager.shareDataManager.curSongInfo{
+            self.playSong(song)
+        }
+    }
+    
+    @IBAction func songListAction() {
+        
+        self.pushControllerWithName("SongListInterfaceController", context: nil)
+    }
+    
+    @IBAction func channelListAction() {
+        self.pushControllerWithName("ChannelListInterfaceController", context: nil)
+    }
+    
+    func loadMoreData(){
+        
+        if DataManager.shareDataManager.songInfoList.count >= DataManager.shareDataManager.allSongIdList.count{
+            println("no more data:\(DataManager.shareDataManager.songInfoList.count),\(DataManager.shareDataManager.allSongIdList.count)")
+            return
+        }
+        
+        var curMaxCount = (Int(DataManager.shareDataManager.curIndex / 20) + 2) * 20
+        println("curMaxCount:\(curMaxCount)")
+        if DataManager.shareDataManager.songInfoList.count >= curMaxCount {
+            return
+        }
+        
+        var startIndex = DataManager.shareDataManager.songInfoList.count
+        var endIndex = startIndex + 20
+        
+        if endIndex > DataManager.shareDataManager.allSongIdList.count-1 {
+            endIndex = DataManager.shareDataManager.allSongIdList.count-1
+        }
+        
+        var ids = [] + DataManager.shareDataManager.allSongIdList[startIndex..<endIndex]
+        
+        println("start load more data:\(startIndex),\(endIndex)")
+        HttpRequest.getSongInfoList(ids, callback:{ (infolist:[SongInfo]?) -> Void in
+            if let sInfoList = infolist {
+                DataManager.shareDataManager.songInfoList += sInfoList
+                println("load more data success,count=\(DataManager.shareDataManager.songInfoList.count)")
+            }
+        })
+
+    }
     
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
+        
+        println("willActivate")
+        
+        if let cur = curPlaySongId {
+            if let song = DataManager.shareDataManager.curSongInfo{
+                if cur != song.id {
+                    self.playSong(song)
+                }
+            }
+        }
     }
 
     override func didDeactivate() {
