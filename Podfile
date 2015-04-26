@@ -16,3 +16,9 @@ target 'BaiduFMKit' do
 pod 'Alamofire', '~> 1.2'
 pod "SwiftyJSON", '>= 2.2'
 end
+
+target 'BaiduFM WatchKit Extension' do
+pod 'Alamofire', '~> 1.2'
+pod "SwiftyJSON", '>= 2.2'
+pod 'Async', :git => 'https://github.com/duemunk/Async.git'
+end

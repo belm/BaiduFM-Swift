@@ -149,6 +149,56 @@ class HttpRequest {
         }
     }
     
+    class func getSongLink(songid:String, callback:SongLink?->Void ) {
+    
+        let params = ["songIds":songid]
+        
+        Alamofire.request(.POST, http_song_link, parameters: params).responseJSON{ (_, _, json, error) -> Void in
+            if error == nil && json != nil {
+                var data = JSON(json!)
+                var lists = data["data"]["songList"]
+                
+                var ret:[SongLink] = []
+                
+                for (index:String, list:JSON) in lists {
+                    
+                    let id = list["songId"].stringValue
+                    let name = list["songName"].stringValue
+                    let lrcLink = list["lrcLink"].stringValue
+                    let linkCode = list["linkCode"].int
+                    let link = list["songLink"].stringValue
+                    let format = list["format"].stringValue
+                    let time = list["time"].int
+                    let size = list["size"].int
+                    let rate = list["rate"].int
+                    
+                    var t = 0, s = 0, r = 0
+                    if time != nil {
+                        t = time!
+                    }
+                    
+                    if size != nil {
+                        s = size!
+                    }
+                    
+                    if rate != nil {
+                        r = rate!
+                    }
+                    
+                    var songLink = SongLink(id: id, name: name, lrcLink: lrcLink, linkCode: linkCode!, songLink: link, format: format, time: t, size: s, rate: r)
+                    ret.append(songLink)
+                }
+                if ret.count == 1 {
+                    callback(ret[0])
+                }else{
+                    callback(nil)
+                }
+            }else{
+                callback(nil)
+            }
+        }
+    }
+    
     class func getLrc(lrcUrl:String, callback:String?->Void) ->Void{
         
         let url = http_song_lrc + lrcUrl

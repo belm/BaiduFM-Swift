@@ -4,6 +4,26 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Pods-BaiduFM WatchKit Extension-Alamofire.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-BaiduFM WatchKit Extension-Async.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-BaiduFM WatchKit Extension-SwiftyJSON.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-BaiduFM WatchKit Extension.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-BaiduFM-Alamofire.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -57,52 +77,72 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1598D28CA88DAF1DFEEA1B7E</key>
+		<key>0028F55721B9DEAE6621E056</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1DC29DACD18034DDF4DAD9CB</key>
+		<key>0E4ED141140952E8E26F1404</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3037D88F9E4183E973D12603</key>
+		<key>15849C779192D442567D7A73</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>44D3AAED6DB3FD3DA02333E4</key>
+		<key>4A740E5D051AE499A6C41719</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4D2A8516D2FEC0C1B8051791</key>
+		<key>8214B82540640CFED05195CD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6088F535D291554F6C5369BB</key>
+		<key>8830F8A156E61B3BBB6A90D8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B916E257B15F8B779C0D5FCF</key>
+		<key>A6C88B81330E60BBA1C8BEC1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C31133E5B96E10DFCBE3C084</key>
+		<key>B8FE9E6EA681435EAD70D7E8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E9CCDF51666C66B25F1F0250</key>
+		<key>C8A095A24443AB907B615833</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EBC975B07CF07930399CC95B</key>
+		<key>CDDBCFB367162CE655D1D973</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CFFD4AF87D3C697CBD64AAE3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D2C7069ED956D572123A43A8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E64B2C83F1543B4D6573C9F3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>ED1205D18AC544B78179CA59</key>
 		<dict>
 			<key>primary</key>
 			<true/>
