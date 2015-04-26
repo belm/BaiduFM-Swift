@@ -53,4 +53,6 @@ class DataManager {
     }
     var curSongInfo:SongInfo? = nil
     var curSongLink:SongLink? = nil
+    
+    var curLrcInfo:[(lrc:String,time:Int)] = []
 }

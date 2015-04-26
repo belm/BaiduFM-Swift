@@ -241,6 +241,8 @@ class ViewController: UIViewController {
         self.songTimeLengthLabel?.text = Common.getMinuteDisplay(time)
         //\\[\\d{2}:\\d{2}\\.\\d{2}\\]
         HttpRequest.getLrc(lrcLink, callback: { lrc -> Void in
+            
+            println(lrc!)
             var lrcAfter:String? = Common.replaceString("\\[[\\w|\\.|\\:|\\-]*\\]", replace: lrc!, place: "")
             if let lrcDis = lrcAfter {
                 

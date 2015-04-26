@@ -21,7 +21,9 @@ class InterfaceController: WKInterfaceController {
     
     @IBOutlet weak var progressLabel: WKInterfaceLabel!
     @IBOutlet weak var songTimeLabel: WKInterfaceLabel!
+    @IBOutlet weak var lrcLabel: WKInterfaceLabel!
     
+    @IBOutlet weak var nextLrcLabel: WKInterfaceLabel!
     var timer:NSTimer? = nil
     
     override func awakeWithContext(context: AnyObject?) {
@@ -39,7 +41,7 @@ class InterfaceController: WKInterfaceController {
             }
         }
         
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("progresstimer:"), userInfo: nil, repeats: true)
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: Selector("progresstimer:"), userInfo: nil, repeats: true)
         
         // Configure interface objects here.
     }
@@ -73,6 +75,8 @@ class InterfaceController: WKInterfaceController {
             
             self.progressLabel.setText("00:00")
             self.songTimeLabel.setText("00:00")
+            self.lrcLabel.setText("")
+            self.nextLrcLabel.setText("")
             
             self.songImage.setImageData(NSData(contentsOfURL: NSURL(string: info.songPicRadio)!)!)
             self.songNameLabel.setText(info.name + "-" + info.artistName)
@@ -112,6 +116,13 @@ class InterfaceController: WKInterfaceController {
                 Async.main{
                     self.songTimeLabel.setText(Common.getMinuteDisplay(songLink.time))
                 }
+                
+                HttpRequest.getLrc(songLink.lrcLink, callback: { lrc -> Void in
+                    if let songLrc = lrc {
+                        DataManager.shareDataManager.curLrcInfo = Common.praseSongLrc(songLrc)
+                        //println(songLrc)
+                    }
+                })
             }
         })
     }
@@ -209,6 +220,10 @@ class InterfaceController: WKInterfaceController {
             if link.time == curTime{
                 self.next()
             }
+            
+            var (curLrc,nextLrc) = Common.currentLrcByTime(curTime, lrcArray: DataManager.shareDataManager.curLrcInfo)
+            self.lrcLabel.setText(curLrc)
+            self.nextLrcLabel.setText(nextLrc)
         }
     }
     

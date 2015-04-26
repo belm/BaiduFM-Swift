@@ -1,8 +1,7 @@
 //: Playground - noun: a place where people can play
 
 import UIKit
-
-var str = "Hello, playground"
+var str:String = "Hello, playground"
 
 //xcode6.3 & swift1.2
 
