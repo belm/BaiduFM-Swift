@@ -13,43 +13,54 @@
 
 ##功能
 
--(删除)下载歌曲到本地
+- 增加Apple Watch支持 
 
--(取消)收藏喜欢的音乐
+- (删除)下载歌曲到本地
 
--(清空)最近播放的音乐
+- (取消)收藏喜欢的音乐
 
--可以下拉刷新,上拉加载更多歌曲列表
+- (清空)最近播放的音乐
 
--歌词自动滚动
+- 可以下拉刷新,上拉加载更多歌曲列表
 
--实时显示歌曲播放进度
+- 歌词自动滚动
 
--暂停继续播放
+- 实时显示歌曲播放进度
 
--上一曲下一曲
+- 暂停继续播放
 
--歌曲类型列表
+- 上一曲下一曲
 
--分类歌曲列表
+- 歌曲类型列表
 
--支持后台播放
+- 分类歌曲列表
 
--锁屏显示歌曲专辑信息
+- 支持后台播放
 
--锁屏控制音乐下一曲/上一曲、暂停播放
+- 锁屏显示歌曲专辑信息
 
--新增收藏列表，最近播放列表，下载歌曲列表
+- 锁屏控制音乐下一曲/上一曲、暂停播放
+
+- 新增收藏列表，最近播放列表，下载歌曲列表
 
 
 ##项目截图
-- 锁屏显示、播放控制![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_00.png?raw=true)
 
-- 项目首页![项目截图1](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_01.png?raw=true)
+- Apple Watch首页![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_00.png?raw=true)
 
-- 歌曲分类![项目截图2](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_02.png?raw=true)
+- Apple Watch首页菜单页面![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_01.png?raw=true)
 
-- 歌曲列表![项目截图3](https://github.com/belm/BaiduFM-Swift/blob/master/BaiduFM-Swift_03.png?raw=true)
+- Apple Watch歌曲列表![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_02.png?raw=true)
+
+- Apple Watch类型列表![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_03.png?raw=true)
+
+- Iphone锁屏显示、播放控制![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_00.png?raw=true)
+
+- Iphone项目首页![项目截图1](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_01.png?raw=true)
+
+- Iphone歌曲分类![项目截图2](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_02.png?raw=true)
+
+- Iphone歌曲列表![项目截图3](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_03.png?raw=true)
 
 ##项目使用注意事项
 -项目里使用[COCOAPODS](https://github.com/cocoapods/cocoapods)管理第三方库，运行前请执行pod install安装依赖库
