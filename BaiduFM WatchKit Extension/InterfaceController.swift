@@ -19,6 +19,11 @@ class InterfaceController: WKInterfaceController {
     @IBOutlet weak var nextButton: WKInterfaceButton!
     var curPlaySongId:String? = nil
     
+    @IBOutlet weak var progressLabel: WKInterfaceLabel!
+    @IBOutlet weak var songTimeLabel: WKInterfaceLabel!
+    
+    var timer:NSTimer? = nil
+    
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
         
@@ -33,6 +38,8 @@ class InterfaceController: WKInterfaceController {
                 self.playSong(song)
             }
         }
+        
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("progresstimer:"), userInfo: nil, repeats: true)
         
         // Configure interface objects here.
     }
@@ -63,6 +70,10 @@ class InterfaceController: WKInterfaceController {
         
         //UI
         Async.main{
+            
+            self.progressLabel.setText("00:00")
+            self.songTimeLabel.setText("00:00")
+            
             self.songImage.setImageData(NSData(contentsOfURL: NSURL(string: info.songPicRadio)!)!)
             self.songNameLabel.setText(info.name + "-" + info.artistName)
             
@@ -88,6 +99,7 @@ class InterfaceController: WKInterfaceController {
         //请求歌曲地址信息
         HttpRequest.getSongLink(info.id, callback: {(link:SongLink?) -> Void in
             if let songLink = link {
+                DataManager.shareDataManager.curSongLink = songLink
                 //播放歌曲
                 DataManager.shareDataManager.mp.stop()
                 var songUrl = Common.getCanPlaySongUrl(songLink.songLink)
@@ -95,6 +107,11 @@ class InterfaceController: WKInterfaceController {
                 DataManager.shareDataManager.mp.prepareToPlay()
                 DataManager.shareDataManager.mp.play()
                 DataManager.shareDataManager.curPlayStatus = 1
+                
+                //显示歌曲时间
+                Async.main{
+                    self.songTimeLabel.setText(Common.getMinuteDisplay(songLink.time))
+                }
             }
         })
     }
@@ -178,6 +195,21 @@ class InterfaceController: WKInterfaceController {
             }
         })
 
+    }
+    
+    func progresstimer(time:NSTimer){
+    
+        if let link = DataManager.shareDataManager.curSongLink {
+            var currentPlaybackTime = DataManager.shareDataManager.mp.currentPlaybackTime
+            if currentPlaybackTime.isNaN {return}
+            
+            var curTime = Int(currentPlaybackTime)
+            self.progressLabel.setText(Common.getMinuteDisplay(curTime))
+            
+            if link.time == curTime{
+                self.next()
+            }
+        }
     }
     
     override func willActivate() {
