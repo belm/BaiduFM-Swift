@@ -73,13 +73,6 @@
 			remoteGlobalIDString = 6780CE8E1AEC66C1000BAA67;
 			remoteInfo = "BaiduFM WatchKit Extension";
 		};
-		6797968E1AEC542800FF780F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 67F0AEB11AD9FF8C000CB588 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 67F0AEB81AD9FF8C000CB588;
-			remoteInfo = BaiduFM;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -137,7 +130,6 @@
 		6780CEA61AEC66C1000BAA67 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		6780CEA81AEC66C1000BAA67 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6783E0321AE0D6D800D9D5FC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		6797968A1AEC542800FF780F /* BaiduFMKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BaiduFMKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		679796AE1AEC574800FF780F /* DataCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCenter.swift; sourceTree = "<group>"; };
 		67B3F1811AE1DA2C0061068C /* BaiduFM-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BaiduFM-Bridging-Header.h"; sourceTree = "<group>"; };
 		67B3F1851AE1DA3F0061068C /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
@@ -182,13 +174,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D211978591E2EE5C3ED38A68 /* Pods_BaiduFM_WatchKit_Extension.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		679796871AEC542800FF780F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,7 +314,6 @@
 			isa = PBXGroup;
 			children = (
 				67F0AEB91AD9FF8C000CB588 /* BaiduFM.app */,
-				6797968A1AEC542800FF780F /* BaiduFMKitTests.xctest */,
 				6780CE8F1AEC66C1000BAA67 /* BaiduFM WatchKit Extension.appex */,
 				6780CE9E1AEC66C1000BAA67 /* BaiduFM WatchKit App.app */,
 			);
@@ -440,24 +424,6 @@
 			productReference = 6780CE9E1AEC66C1000BAA67 /* BaiduFM WatchKit App.app */;
 			productType = "com.apple.product-type.application.watchapp";
 		};
-		679796891AEC542800FF780F /* BaiduFMKitTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6797969C1AEC542800FF780F /* Build configuration list for PBXNativeTarget "BaiduFMKitTests" */;
-			buildPhases = (
-				679796861AEC542800FF780F /* Sources */,
-				679796871AEC542800FF780F /* Frameworks */,
-				679796881AEC542800FF780F /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				6797968F1AEC542800FF780F /* PBXTargetDependency */,
-			);
-			name = BaiduFMKitTests;
-			productName = BaiduFMKitTests;
-			productReference = 6797968A1AEC542800FF780F /* BaiduFMKitTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		67F0AEB81AD9FF8C000CB588 /* BaiduFM */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 67F0AED81AD9FF8C000CB588 /* Build configuration list for PBXNativeTarget "BaiduFM" */;
@@ -496,10 +462,6 @@
 					6780CE9D1AEC66C1000BAA67 = {
 						CreatedOnToolsVersion = 6.3.1;
 					};
-					679796891AEC542800FF780F = {
-						CreatedOnToolsVersion = 6.3.1;
-						TestTargetID = 67F0AEB81AD9FF8C000CB588;
-					};
 					67F0AEB81AD9FF8C000CB588 = {
 						CreatedOnToolsVersion = 6.3;
 					};
@@ -519,7 +481,6 @@
 			projectRoot = "";
 			targets = (
 				67F0AEB81AD9FF8C000CB588 /* BaiduFM */,
-				679796891AEC542800FF780F /* BaiduFMKitTests */,
 				6780CE8E1AEC66C1000BAA67 /* BaiduFM WatchKit Extension */,
 				6780CE9D1AEC66C1000BAA67 /* BaiduFM WatchKit App */,
 			);
@@ -542,13 +503,6 @@
 			files = (
 				6780CEA71AEC66C1000BAA67 /* Interface.storyboard in Resources */,
 				6780CEA91AEC66C1000BAA67 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		679796881AEC542800FF780F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -679,13 +633,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		679796861AEC542800FF780F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		67F0AEB51AD9FF8C000CB588 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -727,11 +674,6 @@
 			isa = PBXTargetDependency;
 			target = 6780CE8E1AEC66C1000BAA67 /* BaiduFM WatchKit Extension */;
 			targetProxy = 6780CEAA1AEC66C1000BAA67 /* PBXContainerItemProxy */;
-		};
-		6797968F1AEC542800FF780F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 67F0AEB81AD9FF8C000CB588 /* BaiduFM */;
-			targetProxy = 6797968E1AEC542800FF780F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -820,38 +762,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		6797969D1AEC542800FF780F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = BaiduFMKitTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BaiduFM.app/BaiduFM";
-			};
-			name = Debug;
-		};
-		6797969E1AEC542800FF780F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = BaiduFMKitTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BaiduFM.app/BaiduFM";
 			};
 			name = Release;
 		};
@@ -996,15 +906,6 @@
 			buildConfigurations = (
 				6780CEB11AEC66C1000BAA67 /* Debug */,
 				6780CEB21AEC66C1000BAA67 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		6797969C1AEC542800FF780F /* Build configuration list for PBXNativeTarget "BaiduFMKitTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				6797969D1AEC542800FF780F /* Debug */,
-				6797969E1AEC542800FF780F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
