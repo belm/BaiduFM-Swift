@@ -54,7 +54,6 @@
 		67F0AEC61AD9FF8C000CB588 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67F0AEC51AD9FF8C000CB588 /* Images.xcassets */; };
 		67F0AEC91AD9FF8C000CB588 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 67F0AEC71AD9FF8C000CB588 /* LaunchScreen.xib */; };
 		67F0AEF01ADA6EFE000CB588 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67F0AEEF1ADA6EFE000CB588 /* MediaPlayer.framework */; };
-		D211978591E2EE5C3ED38A68 /* Pods_BaiduFM_WatchKit_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56CCC4F40D1E87F16BF6E0FE /* Pods_BaiduFM_WatchKit_Extension.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F964CFD7279512DD676A4FEE /* Pods_BaiduFM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DFAF1C2E553F9D6B4D386F3 /* Pods_BaiduFM.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -99,13 +98,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		186E97E1E3A3F0478B62299D /* Pods___FM_WatchKit_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods___FM_WatchKit_Extension.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		20E673D2A9FF666BFEC068DC /* Pods-BaiduFM WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFM WatchKit Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFM WatchKit Extension/Pods-BaiduFM WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
 		2EF36FF5131CA2B46F28A86C /* Pods-BaiduFM WatchKit Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFM WatchKit Extension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFM WatchKit Extension/Pods-BaiduFM WatchKit Extension.debug.xcconfig"; sourceTree = "<group>"; };
 		3D93CC2857D85D497AE0052A /* Pods-BaiduFM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFM.release.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFM/Pods-BaiduFM.release.xcconfig"; sourceTree = "<group>"; };
-		4E6F3B590F33D85E23D43C5D /* Pods-百度FM WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-百度FM WatchKit Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-百度FM WatchKit Extension/Pods-百度FM WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
-		539C21E6C3568DC7CA06B506 /* Pods_BaiduFMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BaiduFMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		56CCC4F40D1E87F16BF6E0FE /* Pods_BaiduFM_WatchKit_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BaiduFM_WatchKit_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		672EA33F1AEC6E2800E6F9AE /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		673DB82C1ADCB614006D904B /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		6749F3831AEC7F5700A892ED /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
@@ -144,7 +139,6 @@
 		67B3F18E1AE1DA3F0061068C /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		67B3F18F1AE1DA3F0061068C /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		67B3F1951AE1DA590061068C /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		67B9C30D1AEBF4F500107696 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "Pods/../build/Debug-iphoneos/Pods-BaiduFM/Alamofire.framework"; sourceTree = "<group>"; };
 		67B9C32C1AEBF61E00107696 /* BaseDb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDb.swift; sourceTree = "<group>"; };
 		67B9C32D1AEBF61E00107696 /* SongList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongList.swift; sourceTree = "<group>"; };
 		67B9C33E1AEBF63100107696 /* ChannelTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelTableViewController.swift; sourceTree = "<group>"; };
@@ -162,10 +156,7 @@
 		67F0AEC81AD9FF8C000CB588 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		67F0AEEF1ADA6EFE000CB588 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		7676E308C864DAF9BA887037 /* Pods-BaiduFM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFM/Pods-BaiduFM.debug.xcconfig"; sourceTree = "<group>"; };
-		967C92162B535E856AF6EEE4 /* Pods-百度FM WatchKit Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-百度FM WatchKit Extension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-百度FM WatchKit Extension/Pods-百度FM WatchKit Extension.debug.xcconfig"; sourceTree = "<group>"; };
 		9DFAF1C2E553F9D6B4D386F3 /* Pods_BaiduFM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BaiduFM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		ACCAB1701F832FAF75951DB3 /* Pods-BaiduFMKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFMKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFMKit/Pods-BaiduFMKit.release.xcconfig"; sourceTree = "<group>"; };
-		C6F4DBDC48596B62A2979EB9 /* Pods-BaiduFMKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFMKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BaiduFMKit/Pods-BaiduFMKit.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,7 +164,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D211978591E2EE5C3ED38A68 /* Pods_BaiduFM_WatchKit_Extension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,10 +352,6 @@
 			children = (
 				7676E308C864DAF9BA887037 /* Pods-BaiduFM.debug.xcconfig */,
 				3D93CC2857D85D497AE0052A /* Pods-BaiduFM.release.xcconfig */,
-				C6F4DBDC48596B62A2979EB9 /* Pods-BaiduFMKit.debug.xcconfig */,
-				ACCAB1701F832FAF75951DB3 /* Pods-BaiduFMKit.release.xcconfig */,
-				967C92162B535E856AF6EEE4 /* Pods-百度FM WatchKit Extension.debug.xcconfig */,
-				4E6F3B590F33D85E23D43C5D /* Pods-百度FM WatchKit Extension.release.xcconfig */,
 				2EF36FF5131CA2B46F28A86C /* Pods-BaiduFM WatchKit Extension.debug.xcconfig */,
 				20E673D2A9FF666BFEC068DC /* Pods-BaiduFM WatchKit Extension.release.xcconfig */,
 			);
@@ -375,12 +361,8 @@
 		D16A7CFBB847F60AA65C6F17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				67B9C30D1AEBF4F500107696 /* Alamofire.framework */,
 				67B3F1951AE1DA590061068C /* libsqlite3.dylib */,
 				9DFAF1C2E553F9D6B4D386F3 /* Pods_BaiduFM.framework */,
-				539C21E6C3568DC7CA06B506 /* Pods_BaiduFMKit.framework */,
-				186E97E1E3A3F0478B62299D /* Pods___FM_WatchKit_Extension.framework */,
-				56CCC4F40D1E87F16BF6E0FE /* Pods_BaiduFM_WatchKit_Extension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
