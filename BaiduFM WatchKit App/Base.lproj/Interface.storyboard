@@ -10,12 +10,16 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="BaiduFM_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <group width="1" alignment="left" radius="10" id="oAb-vO-qhX">
+                        <group width="1" alignment="left" id="oAb-vO-qhX">
                             <items>
                                 <label width="30" alignment="left" verticalAlignment="bottom" text="00:00" textAlignment="center" id="DtY-fy-TeV">
                                     <fontDescription key="font" type="system" pointSize="10"/>
                                 </label>
-                                <imageView width="70" height="70" alignment="center" id="oeP-jr-fOm"/>
+                                <group width="70" height="70" alignment="center" layout="vertical" radius="35" id="4vE-wu-1DM">
+                                    <items>
+                                        <imageView width="70" height="70" alignment="center" id="oeP-jr-fOm"/>
+                                    </items>
+                                </group>
                                 <label width="30" alignment="right" verticalAlignment="bottom" text="00:00" textAlignment="center" id="6Rx-rs-VUu">
                                     <fontDescription key="font" type="system" pointSize="10"/>
                                 </label>
