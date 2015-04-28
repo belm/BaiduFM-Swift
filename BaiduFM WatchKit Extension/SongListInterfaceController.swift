@@ -17,29 +17,13 @@ class SongListInterfaceController: WKInterfaceController {
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
         
-        println(context)
-        //类别列表点击过来
-        if let chid = context as? String{
-            //获取歌曲列表
-            HttpRequest.getSongList(chid, callback: {(list:[String]?) -> Void in
-                if let songIdList = list {
-                    
-                    DataManager.shareDataManager.allSongIdList = songIdList
-                    //获取歌曲info信息
-                    println("\(chid),\(songIdList.count)首歌曲")
-                    //默认加载20首歌曲
-                    var songlist20 = [] + songIdList[0..<20]
-                    
-                    HttpRequest.getSongInfoList(songlist20, callback:{ (infolist:[SongInfo]?) -> Void in
-                        if let sInfoList = infolist {
-                            DataManager.shareDataManager.songInfoList = sInfoList
-                            DataManager.shareDataManager.curIndex = 0
-                            self.loadTable()
-                        }
-                    })
-                }
-            })
+        if context != nil {
+            //分类列表点击过来
+            DataManager.getTop20SongInfoList { () -> Void in
+                self.loadTable()
+            }
         }else{
+            //首页菜单点击过来
             self.loadTable()
         }
     }

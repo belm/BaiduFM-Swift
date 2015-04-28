@@ -162,7 +162,7 @@ class Common {
             //02:57
             var time = subStr(lrcTime, start: 1, length: 5)
             
-            println("time=\(time),txt=\(lrcTxt)")
+            //println("time=\(time),txt=\(lrcTxt)")
             
             if let t = timeStringToSecond(time){
                 ret += [(lrc:lrcTxt,time:t)]

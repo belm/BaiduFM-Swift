@@ -47,7 +47,7 @@ class ChannelListInterfaceController: WKInterfaceController {
         println("\(ch.id),\(ch.name)")
         DataManager.shareDataManager.chid = ch.id
         
-        self.pushControllerWithName("SongListInterfaceController", context: ch.id)
+        self.pushControllerWithName("SongListInterfaceController", context: self)
     }
 
     override func willActivate() {

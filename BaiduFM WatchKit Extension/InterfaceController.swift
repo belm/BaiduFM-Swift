@@ -34,7 +34,11 @@ class InterfaceController: WKInterfaceController {
         }
     
         if DataManager.shareDataManager.songInfoList.count == 0 {
-            getSongInfoList()
+            DataManager.getTop20SongInfoList({ () -> Void in
+                if let song = DataManager.shareDataManager.curSongInfo{
+                    self.playSong(song)
+                }
+            })
         }else{
             if let song = DataManager.shareDataManager.curSongInfo{
                 self.playSong(song)
@@ -44,26 +48,6 @@ class InterfaceController: WKInterfaceController {
         self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: Selector("progresstimer:"), userInfo: nil, repeats: true)
         
         // Configure interface objects here.
-    }
-    
-    func getSongInfoList(){
-        //获取歌曲列表
-        HttpRequest.getSongList(DataManager.shareDataManager.chid, callback: {(list:[String]?) -> Void in
-            if let songIdList = list {
-                DataManager.shareDataManager.allSongIdList = songIdList
-                //获取歌曲info信息
-                var songlist20 = [] + songIdList[0..<20]
-                HttpRequest.getSongInfoList(songlist20, callback:{ (infolist:[SongInfo]?) -> Void in
-                    if let sInfoList = infolist {
-                        DataManager.shareDataManager.songInfoList = sInfoList
-                        DataManager.shareDataManager.curIndex = 0
-                        if let song = DataManager.shareDataManager.curSongInfo{
-                            self.playSong(song)
-                        }
-                    }
-                })
-            }
-        })
     }
     
     func playSong(info:SongInfo){
@@ -230,8 +214,6 @@ class InterfaceController: WKInterfaceController {
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
-        
-        println("willActivate")
         
         if let cur = curPlaySongId {
             if let song = DataManager.shareDataManager.curSongInfo{

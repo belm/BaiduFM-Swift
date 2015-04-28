@@ -55,4 +55,23 @@ class DataManager {
     var curSongLink:SongLink? = nil
     
     var curLrcInfo:[(lrc:String,time:Int)] = []
+    
+    //当前分类最新20首歌曲
+    class func getTop20SongInfoList(finish:()->Void){
+        HttpRequest.getSongList(DataManager.shareDataManager.chid, callback: {(list:[String]?) -> Void in
+            if let songIdList = list {
+                DataManager.shareDataManager.allSongIdList = songIdList
+                //获取歌曲info信息
+                var songlist20 = [] + songIdList[0..<20]
+                HttpRequest.getSongInfoList(songlist20, callback:{ (infolist:[SongInfo]?) -> Void in
+                    if let sInfoList = infolist {
+                        println("getTop20SongInfoList")
+                        DataManager.shareDataManager.songInfoList = sInfoList
+                        DataManager.shareDataManager.curIndex = 0
+                        finish()
+                    }
+                })
+            }
+        })
+    }
 }
