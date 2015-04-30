@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0640"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AB4882B18C5391C3664CC96E"
+               BlueprintIdentifier = "C308057A1149ADE2BD0A824F"
                BuildableName = "Alamofire.framework"
                BlueprintName = "Pods-BaiduFM WatchKit Extension-Alamofire"
                ReferencedContainer = "container:Pods.xcodeproj">

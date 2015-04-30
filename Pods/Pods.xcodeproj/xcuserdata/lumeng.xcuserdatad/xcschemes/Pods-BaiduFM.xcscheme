@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0640"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "68B90177FB7342820DF06969"
+               BlueprintIdentifier = "D65A89297E6D3C6CE365B369"
                BuildableName = "Pods_BaiduFM.framework"
                BlueprintName = "Pods-BaiduFM"
                ReferencedContainer = "container:Pods.xcodeproj">

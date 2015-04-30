@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0640"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "35303CA7017E849080EE3D2E"
+               BlueprintIdentifier = "414A4D2B9FEED30E1027EC2C"
                BuildableName = "Pods_BaiduFM_WatchKit_Extension.framework"
                BlueprintName = "Pods-BaiduFM WatchKit Extension"
                ReferencedContainer = "container:Pods.xcodeproj">

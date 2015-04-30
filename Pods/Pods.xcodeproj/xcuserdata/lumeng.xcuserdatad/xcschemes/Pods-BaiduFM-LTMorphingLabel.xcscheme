@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0640"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4CDEA3C036E40B0090A03FC1"
+               BlueprintIdentifier = "6B6268F43A102D093EF3FFE6"
                BuildableName = "LTMorphingLabel.framework"
                BlueprintName = "Pods-BaiduFM-LTMorphingLabel"
                ReferencedContainer = "container:Pods.xcodeproj">

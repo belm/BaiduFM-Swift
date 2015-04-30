@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0640"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0DCB9BD803A582810573E30B"
+               BlueprintIdentifier = "EF664CE14C763D58A755878F"
                BuildableName = "SwiftyJSON.framework"
                BlueprintName = "Pods-BaiduFM WatchKit Extension-SwiftyJSON"
                ReferencedContainer = "container:Pods.xcodeproj">

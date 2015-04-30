@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0640"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63E06F2F202E9A7D481F33F4"
+               BlueprintIdentifier = "D1AA2BA06E12B6B72B468641"
                BuildableName = "Kingfisher.framework"
                BlueprintName = "Pods-BaiduFM-Kingfisher"
                ReferencedContainer = "container:Pods.xcodeproj">

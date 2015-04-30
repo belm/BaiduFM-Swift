@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0640"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E691CE7B86558EAE35F524A2"
+               BlueprintIdentifier = "C3BCCD742FC8C439F49632C2"
                BuildableName = "Async.framework"
                BlueprintName = "Pods-BaiduFM-Async"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0640"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D739132C6B3966706F66472E"
+               BlueprintIdentifier = "CEF2106918C782164F1DCD72"
                BuildableName = "MJRefresh.framework"
                BlueprintName = "Pods-BaiduFM-MJRefresh"
                ReferencedContainer = "container:Pods.xcodeproj">

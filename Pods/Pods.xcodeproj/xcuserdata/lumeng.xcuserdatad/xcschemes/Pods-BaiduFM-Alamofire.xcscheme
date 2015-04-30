@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0640"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "107E3DD9E33D803A50412771"
+               BlueprintIdentifier = "1F5D325E2572E2C3E1C45652"
                BuildableName = "Alamofire.framework"
                BlueprintName = "Pods-BaiduFM-Alamofire"
                ReferencedContainer = "container:Pods.xcodeproj">
