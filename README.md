@@ -110,4 +110,5 @@
 
 ##联系我
 - [QQ邮箱](mailto:belm@vip.qq.com)
+- [微博](http://weibo.com/belmeng)
 
