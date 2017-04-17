@@ -8,10 +8,10 @@
 
 百度FM, swift语言实现，基于最新xcode6.3+swift1.2,初步只是为了实现功能，代码比较粗燥，后面有时间会整理。
 
-##API接口申明
+## API接口申明
 -本APP接口使用百度FM非公开API,音乐版权归百度所有
 
-##功能
+## 功能
 
 - 增加Apple Watch支持(歌词同步显示)
 
@@ -44,7 +44,7 @@
 - 新增收藏列表，最近播放列表，下载歌曲列表
 
 
-##项目截图
+## 项目截图
 
 - Apple Watch首页![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_00.png?raw=true)
 
@@ -62,10 +62,10 @@
 
 - iPhone歌曲列表![项目截图3](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_03.png?raw=true)
 
-##项目使用注意事项
+## 项目使用注意事项
 -项目里使用[COCOAPODS](https://github.com/cocoapods/cocoapods)管理第三方库，运行前请执行pod install安装依赖库
 
-##项目使用的第三方库
+## 项目使用的第三方库
 
 -[网络库Alamofire](https://github.com/Alamofire/Alamofire)
 
@@ -81,7 +81,7 @@
 
 -[图片缓存Kingfisher](https://github.com/onevcat/Kingfisher)
 
-##使用的swift知识点
+## 使用的swift知识点
 -网络请求
 
 -JSON解析
@@ -100,7 +100,7 @@
 
 -NSNotificationCenter传值
 
-##待完成功能
+## 待完成功能
 
 -播放音乐改用AVAudioPlayer
 
@@ -108,7 +108,7 @@
 
 -支持Apple Watch
 
-##联系我
+## 联系我
 - [QQ邮箱](mailto:belm@vip.qq.com)
 - [微博](http://weibo.com/belmeng)
 
