@@ -1,4 +1,4 @@
-#SwiftyJSON [中文介绍](http://tangplin.github.io/swiftyjson/)
+# SwiftyJSON [中文介绍](http://tangplin.github.io/swiftyjson/)
 
 SwiftyJSON makes it easy to deal with JSON data in Swift.
 
@@ -17,7 +17,7 @@ SwiftyJSON makes it easy to deal with JSON data in Swift.
 	- [Literal convertibles](#literal-convertibles)
 1. [Work with Alamofire](#work-with-alamofire)
 
-##Why is the typical JSON handling in Swift NOT good?
+## Why is the typical JSON handling in Swift NOT good?
 Swift is very strict about types. But although explicit typing is good for saving us from mistakes, it becomes painful when dealing with JSON and other areas that are, by nature, implicit about types.
 
 Take the Twitter API for example.  Say we want to retrieve a user's "name" value of some tweet in Swift (according to Twitter's API https://dev.twitter.com/docs/api/1.1/get/statuses/home_timeline).
@@ -84,15 +84,15 @@ if let userName = json[999999]["wrong_key"]["wrong_name"].string{
 - iOS 7.0+ / Mac OS X 10.9+
 - Xcode 6.1
 
-##Integration
+## Integration
 
-####Carthage
+#### Carthage
 You can use [Carthage](https://github.com/Carthage/Carthage) to install `SwiftyJSON` by adding it to your `Cartfile`:
 ```
 github "SwiftyJSON/SwiftyJSON" >= 2.2
 ```
 
-####CocoaPods
+#### CocoaPods
 You can use [Cocoapods](http://cocoapods.org/) to install `SwiftyJSON`by adding it to your `Podfile`:
 ```ruby
 pod "SwiftyJSON", ">= 2.2"
@@ -101,7 +101,7 @@ Note that it needs you to install CocoaPods 36 version, and requires your iOS de
 ```bash
 [sudo] gem install cocoapods -v '>=0.36'
 ```
-####Manually
+#### Manually
 
 To use this library in your project manually you may:  
 
@@ -110,7 +110,7 @@ To use this library in your project manually you may:
 
 ## Usage
 
-####Initialization
+#### Initialization
 ```swift
 let json = JSON(data: dataFromNetworking)
 ```
@@ -118,7 +118,7 @@ let json = JSON(data: dataFromNetworking)
 let json = JSON(jsonObject)
 ```
 
-####Subscript
+#### Subscript
 ```swift
 //With a int from JSON supposed to an Array
 let name = json[0].double
@@ -144,7 +144,7 @@ let name = json[1]["list"][2]["name"].string
 //With a Hard Way
 let name = json[[1,"list",2,"name"]].string
 ```
-####Loop
+#### Loop
 ```swift
 //If json is .Dictionary
 for (key: String, subJson: JSON) in json {
@@ -159,7 +159,7 @@ for (index: String, subJson: JSON) in json {
     //Do something you want
 }
 ```
-####Error
+#### Error
 Use subscript to get/set value in Array or Dicitonary
 
 *  If json is an array, the app may crash with "index out-of-bounds."
@@ -201,7 +201,7 @@ if let name = json["name"].string {
 }
 ```
 
-####Optional getter
+#### Optional getter
 ```swift
 //NSNumber
 if let id = json["user"]["favourites_count"].number {
@@ -239,7 +239,7 @@ if let id = json["user"]["id"].int {
 }
 ...
 ```
-####Non-optional getter
+#### Non-optional getter
 Non-optional getter is named `xxxValue`
 ```swift
 //If not a Number or nil, return 0
@@ -258,7 +258,7 @@ let list: Array<JSON> = json["list"].arrayValue
 let user: Dictionary<String, JSON> = json["user"].dictionaryValue
 ```
 
-####Setter
+#### Setter
 ```swift
 json["name"] = JSON("new-name")
 json[0] = JSON(1)
@@ -271,7 +271,7 @@ json.arrayObject = [1,2,3,4]
 json.dictionary = ["name":"Jack", "age":25]
 ```
 
-####Raw object
+#### Raw object
 ```swift
 let jsonObject: AnyObject = json.object
 ```
@@ -290,7 +290,7 @@ if let string = json.rawString() {
     //Do something you want
 }
 ```
-####Literal convertibles
+#### Literal convertibles
 More info about the literal convertibles: [Swift Literal Convertibles](http://nshipster.com/swift-literal-convertible/)
 ```swift
 //StringLiteralConvertible
@@ -343,7 +343,7 @@ json["list",3,"what"] = "that"
 let path = ["list",3,"what"]
 json[path] = "that"
 ```
-##Work with Alamofire
+## Work with Alamofire
 
 SwiftyJSON nicely wraps the result of the Alamofire JSON response handler:
 ```swift
