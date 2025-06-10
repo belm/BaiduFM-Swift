@@ -1,6 +1,7 @@
 //: Playground - noun: a place where people can play
 
 import UIKit
+import XCPlayground
 var str:String = "Hello, playground"
 
 //xcode6.3 & swift1.2
@@ -19,7 +20,7 @@ var tmp:Int? = 20
 
 if let weather = wea where "rain".isEmpty, let shanghai = sh, let temp=tmp{
     //update ui
-    println("update UI")
+    print("update UI")
 }
 
 //2. 类型转化as用法的变化 NSObject=>UIView=>UITableView
@@ -58,6 +59,22 @@ struct Point{
     var y:Int
 }
 //lazy var players:Point = Point(x: 10, y: 5)
+
+XCPSetExecutionShouldContinueIndefinitely(continueIndefinitely: true)
+
+class Test {
+    init(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "update:", name: "update", object: nil)
+    }
+    
+    func update(note:NSNotification){
+        var str = note.object as! String
+        print("update UI")
+    }
+}
+
+var t = Test()
+NSNotificationCenter.defaultCenter().postNotificationName("update", object: "hello")
 
 
 

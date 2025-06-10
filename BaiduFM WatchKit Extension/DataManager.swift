@@ -7,30 +7,20 @@
 //
 
 import Foundation
-import MediaPlayer
 
 class DataManager {
     
-    //单例
-    class var shareDataManager:DataManager{
-        struct Static {
-            static var onceToken : dispatch_once_t = 0
-            static var instance: DataManager? = nil
-        }
-        
-        dispatch_once(&Static.onceToken) { () -> Void in
-            Static.instance = DataManager()
-        }
-        return Static.instance!
-    }
+    // 使用现代的单例模式
+    static let shared = DataManager()
     
-    var mp:MPMoviePlayerController = MPMoviePlayerController()
+    // 移除了废弃的 MPMoviePlayerController
     var curPlayStatus = 0 //0初始 1播放 2暂时 3停止
     
     var chid = "public_tuijian_rege"{
         didSet{
-            NSUserDefaults.standardUserDefaults().setValue(self.chid, forKey: "LAST_PLAY_CHANNEL_ID")
-            NSUserDefaults.standardUserDefaults().synchronize()
+            // 使用现代的 UserDefaults API
+            UserDefaults.standard.setValue(self.chid, forKey: "LAST_PLAY_CHANNEL_ID")
+            UserDefaults.standard.synchronize()
         }
     }
     var chList:[Channel] = []  //类型列表
@@ -56,22 +46,24 @@ class DataManager {
     
     var curLrcInfo:[(lrc:String,time:Int)] = []
     
-    //当前分类最新20首歌曲
-    class func getTop20SongInfoList(finish:()->Void){
-        HttpRequest.getSongList(DataManager.shareDataManager.chid, callback: {(list:[String]?) -> Void in
-            if let songIdList = list {
-                DataManager.shareDataManager.allSongIdList = songIdList
-                //获取歌曲info信息
-                var songlist20 = [] + songIdList[0..<20]
-                HttpRequest.getSongInfoList(songlist20, callback:{ (infolist:[SongInfo]?) -> Void in
-                    if let sInfoList = infolist {
-                        println("getTop20SongInfoList")
-                        DataManager.shareDataManager.songInfoList = sInfoList
-                        DataManager.shareDataManager.curIndex = 0
-                        finish()
-                    }
-                })
+    // 使用async/await重构
+    @available(iOS 13.0, *)
+    func getTop20SongInfoList() async {
+        do {
+            let songIdList = try await HttpRequest.getSongListAsync(ch_name: DataManager.shared.chid)
+            DataManager.shared.allSongIdList = songIdList
+            
+            let songlist20 = Array(songIdList.prefix(20))
+            let sInfoList = try await HttpRequest.getSongInfoListAsync(chidArray: songlist20)
+            
+            await MainActor.run {
+                print("getTop20SongInfoList")
+                DataManager.shared.songInfoList = sInfoList
+                DataManager.shared.curIndex = 0
+                // 在这里可以发送通知或调用闭包来更新UI
             }
-        })
+        } catch {
+            print("Failed to get top 20 song info list: \(error)")
+        }
     }
 }

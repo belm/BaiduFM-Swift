@@ -14,37 +14,46 @@ class SongListInterfaceController: WKInterfaceController {
     
     @IBOutlet weak var table: WKInterfaceTable!
     
-    override func awakeWithContext(context: AnyObject?) {
-        super.awakeWithContext(context)
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
         
-        if context != nil {
-            //分类列表点击过来
-            DataManager.getTop20SongInfoList { () -> Void in
+        // 异步加载数据并更新UI
+        Task {
+            if DataManager.shared.songInfoList.isEmpty {
+                await DataManager.shared.getTop20SongInfoList()
+            }
+            await MainActor.run {
                 self.loadTable()
             }
-        }else{
-            //首页菜单点击过来
-            self.loadTable()
         }
     }
     
     func loadTable(){
         
-        self.table.setNumberOfRows(DataManager.shareDataManager.songInfoList.count, withRowType: "tableRow")
+        self.table.setNumberOfRows(DataManager.shared.songInfoList.count, withRowType: "tableRow")
         
         for i:Int in 0..<self.table.numberOfRows {
             
-            let song:SongInfo = DataManager.shareDataManager.songInfoList[i]
-            let row:MusicTableRow = self.table.rowControllerAtIndex(i) as! MusicTableRow
-            row.image.setImageData(NSData(contentsOfURL: NSURL(string: song.songPicRadio)!)!)
+            let song:SongInfo = DataManager.shared.songInfoList[i]
+            let row = self.table.rowController(at: i) as! MusicTableRow
             row.nameLabel.setText(song.name)
             row.artistLabel.setText(song.artistName)
+
+            if let url = URL(string: song.songPicRadio) {
+                DispatchQueue.global(qos: .userInitiated).async {
+                    if let data = try? Data(contentsOf: url) {
+                        DispatchQueue.main.async {
+                            row.image.setImageData(data)
+                        }
+                    }
+                }
+            }
         }
     }
     
-    override func table(table: WKInterfaceTable, didSelectRowAtIndex rowIndex: Int) {
+    override func table(_ table: WKInterfaceTable, didSelectRowAt rowIndex: Int) {
         
-        DataManager.shareDataManager.curIndex = rowIndex
+        DataManager.shared.curIndex = rowIndex
         self.popToRootController()
     }
 

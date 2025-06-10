@@ -8,7 +8,8 @@
 
 import WatchKit
 import Foundation
-import Async
+import RxSwift
+import RxCocoa
 
 class InterfaceController: WKInterfaceController {
     
@@ -17,142 +18,144 @@ class InterfaceController: WKInterfaceController {
     @IBOutlet weak var playButton: WKInterfaceButton!
     @IBOutlet weak var prevButton: WKInterfaceButton!
     @IBOutlet weak var nextButton: WKInterfaceButton!
-    var curPlaySongId:String? = nil
     
     @IBOutlet weak var progressLabel: WKInterfaceLabel!
     @IBOutlet weak var songTimeLabel: WKInterfaceLabel!
     @IBOutlet weak var lrcLabel: WKInterfaceLabel!
-    
     @IBOutlet weak var nextLrcLabel: WKInterfaceLabel!
-    var timer:NSTimer? = nil
     
-    override func awakeWithContext(context: AnyObject?) {
-        super.awakeWithContext(context)
+    private let disposeBag = DisposeBag()
+    
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
         
-        if let chid = NSUserDefaults.standardUserDefaults().stringForKey("LAST_PLAY_CHANNEL_ID"){
-            DataManager.shareDataManager.chid = chid
-        }
+        setupBindings()
+        loadInitialData()
+    }
     
-        if DataManager.shareDataManager.songInfoList.count == 0 {
-            DataManager.getTop20SongInfoList({ () -> Void in
-                if let song = DataManager.shareDataManager.curSongInfo{
-                    self.playSong(song)
+    private func setupBindings() {
+        // 绑定播放状态到UI
+        AudioManager.shared.playbackState
+            .asDriver(onErrorJustReturn: .idle)
+            .drive(onNext: { [weak self] state in
+                self?.updatePlayButton(for: state)
+            })
+            .disposed(by: disposeBag)
+        
+        // 绑定播放进度到UI
+        AudioManager.shared.currentTime
+            .asDriver(onErrorJustReturn: 0)
+            .drive(onNext: { [weak self] time in
+                self?.progressLabel.setText(Common.getMinuteDisplay(Int(time)))
+                if let (curLrc, nextLrc) = self?.getCurrentLrc(for: time) {
+                    self?.lrcLabel.setText(curLrc)
+                    self?.nextLrcLabel.setText(nextLrc)
                 }
             })
-        }else{
-            if let song = DataManager.shareDataManager.curSongInfo{
-                self.playSong(song)
-            }
-        }
-        
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: Selector("progresstimer:"), userInfo: nil, repeats: true)
-        
-        // Configure interface objects here.
+            .disposed(by: disposeBag)
+            
+        // 绑定歌曲总时长
+        AudioManager.shared.duration
+            .asDriver(onErrorJustReturn: 0)
+            .drive(onNext: { [weak self] duration in
+                self?.songTimeLabel.setText(Common.getMinuteDisplay(Int(duration)))
+            })
+            .disposed(by: disposeBag)
     }
     
-    func playSong(info:SongInfo){
-        
-        self.curPlaySongId = info.id
-        
-        //UI
-        Async.main{
-            
-            self.progressLabel.setText("00:00")
-            self.songTimeLabel.setText("00:00")
-            self.lrcLabel.setText("")
-            self.nextLrcLabel.setText("")
-            
-            self.songImage.setImageData(NSData(contentsOfURL: NSURL(string: info.songPicRadio)!)!)
-            self.songNameLabel.setText(info.name + "-" + info.artistName)
-            
-            if DataManager.shareDataManager.curIndex == 0 {
-                self.prevButton.setEnabled(false)
-            }else{
-                self.prevButton.setEnabled(true)
+    private func loadInitialData() {
+        Task {
+            if DataManager.shared.songInfoList.isEmpty {
+                await DataManager.shared.getTop20SongInfoList()
             }
-            
-            if DataManager.shareDataManager.curIndex >= DataManager.shareDataManager.songInfoList.count-1{
-                self.nextButton.setEnabled(false)
-            }else{
-                self.nextButton.setEnabled(true)
+            // 确保在主线程上更新UI
+            await MainActor.run {
+                if let song = DataManager.shared.curSongInfo {
+                    self.playSong(info: song)
+                }
+            }
+        }
+    }
+    
+    func playSong(info: SongInfo) {
+        self.songNameLabel.setText("\(info.name) - \(info.artistName)")
+        if let url = URL(string: info.songPicRadio) {
+            DispatchQueue.global(qos: .userInitiated).async {
+                if let data = try? Data(contentsOf: url) {
+                    DispatchQueue.main.async {
+                        self.songImage.setImageData(data)
+                    }
+                }
             }
         }
         
-        println("curIndex:\(DataManager.shareDataManager.curIndex),all:\(DataManager.shareDataManager.songInfoList.count)")
-        println(Double(DataManager.shareDataManager.curIndex) / Double(DataManager.shareDataManager.songInfoList.count))
-        if Double(DataManager.shareDataManager.curIndex) / Double(DataManager.shareDataManager.songInfoList.count) >= 0.75{
-            self.loadMoreData()
-        }
+        updateNavigationButtons()
         
-        //请求歌曲地址信息
-        HttpRequest.getSongLink(info.id, callback: {(link:SongLink?) -> Void in
-            if let songLink = link {
-                DataManager.shareDataManager.curSongLink = songLink
-                //播放歌曲
-                DataManager.shareDataManager.mp.stop()
-                var songUrl = Common.getCanPlaySongUrl(songLink.songLink)
-                DataManager.shareDataManager.mp.contentURL = NSURL(string: songUrl)
-                DataManager.shareDataManager.mp.prepareToPlay()
-                DataManager.shareDataManager.mp.play()
-                DataManager.shareDataManager.curPlayStatus = 1
-                
-                //显示歌曲时间
-                Async.main{
-                    self.songTimeLabel.setText(Common.getMinuteDisplay(songLink.time))
+        // 获取并播放歌曲
+        Task {
+            do {
+                let songLink = try await HttpRequest.getSongLinkAsync(songid: info.id)
+                DataManager.shared.curSongLink = songLink
+                if let url = URL(string: songLink.songLink) {
+                    let song = Song(sid: info.id, name: info.name, url: songLink.songLink, pic_url: info.songPicRadio, lrc_url: songLink.lrcLink, artist: info.artistName, album: info.albumName, format: songLink.format, time: songLink.time)
+                    AudioManager.shared.play(from: url, song: song)
                 }
                 
-                HttpRequest.getLrc(songLink.lrcLink, callback: { lrc -> Void in
-                    if let songLrc = lrc {
-                        DataManager.shareDataManager.curLrcInfo = Common.praseSongLrc(songLrc)
-                        //println(songLrc)
-                    }
-                })
+                if let lrc = try await HttpRequest.getLrcAsync(lrcUrl: songLink.lrcLink) {
+                    DataManager.shared.curLrcInfo = Common.praseSongLrc(lrc)
+                }
+                
+            } catch {
+                print("Failed to get song link or lrc: \(error)")
             }
-        })
+        }
     }
     
+    private func updatePlayButton(for state: PlaybackState) {
+        switch state {
+        case .playing:
+            playButton.setBackgroundImage(UIImage(named: "btn_pause"))
+        case .paused, .idle, .stopped, .error:
+            playButton.setBackgroundImage(UIImage(named: "btn_play"))
+        case .loading:
+            // Optionally show a loading indicator
+            break
+        }
+    }
+    
+    private func updateNavigationButtons() {
+        prevButton.setEnabled(DataManager.shared.curIndex > 0)
+        nextButton.setEnabled(DataManager.shared.curIndex < DataManager.shared.songInfoList.count - 1)
+    }
+
+    private func getCurrentLrc(for time: TimeInterval) -> (String, String) {
+        return Common.currentLrcByTime(Int(time), lrcArray: DataManager.shared.curLrcInfo)
+    }
+
     @IBAction func playButtonAction() {
-        
-        if DataManager.shareDataManager.curPlayStatus == 1 {
-            DataManager.shareDataManager.mp.pause()
-            DataManager.shareDataManager.curPlayStatus = 2
-            self.playButton.setBackgroundImage(UIImage(named: "btn_play"))
-        }else{
-            DataManager.shareDataManager.mp.play()
-            DataManager.shareDataManager.curPlayStatus = 1
-            self.playButton.setBackgroundImage(UIImage(named: "btn_pause"))
+        let state = AudioManager.shared.playbackState.value
+        if state == .playing {
+            AudioManager.shared.pause()
+        } else {
+            AudioManager.shared.resume()
         }
     }
     
     @IBAction func prevButtonAction() {
-        
-        self.prev()
-    }
-    
-    @IBAction func nextButtonAction() {
-        
-        self.next()
-    }
-    
-    
-    func prev(){
-        
-        DataManager.shareDataManager.curIndex--
-        if let song = DataManager.shareDataManager.curSongInfo{
-            self.playSong(song)
+        DataManager.shared.curIndex -= 1
+        if let song = DataManager.shared.curSongInfo {
+            playSong(info: song)
         }
     }
     
-    func next(){
-        
-        DataManager.shareDataManager.curIndex++
-        if let song = DataManager.shareDataManager.curSongInfo{
-            self.playSong(song)
+    @IBAction func nextButtonAction() {
+        DataManager.shared.curIndex += 1
+        if let song = DataManager.shared.curSongInfo {
+            playSong(info: song)
         }
     }
     
     @IBAction func songListAction() {
-        
         self.pushControllerWithName("SongListInterfaceController", context: nil)
     }
     
@@ -160,67 +163,13 @@ class InterfaceController: WKInterfaceController {
         self.pushControllerWithName("ChannelListInterfaceController", context: nil)
     }
     
-    func loadMoreData(){
-        
-        if DataManager.shareDataManager.songInfoList.count >= DataManager.shareDataManager.allSongIdList.count{
-            println("no more data:\(DataManager.shareDataManager.songInfoList.count),\(DataManager.shareDataManager.allSongIdList.count)")
-            return
-        }
-        
-        var curMaxCount = (Int(DataManager.shareDataManager.curIndex / 20) + 2) * 20
-        println("curMaxCount:\(curMaxCount)")
-        if DataManager.shareDataManager.songInfoList.count >= curMaxCount {
-            return
-        }
-        
-        var startIndex = DataManager.shareDataManager.songInfoList.count
-        var endIndex = startIndex + 20
-        
-        if endIndex > DataManager.shareDataManager.allSongIdList.count-1 {
-            endIndex = DataManager.shareDataManager.allSongIdList.count-1
-        }
-        
-        var ids = [] + DataManager.shareDataManager.allSongIdList[startIndex..<endIndex]
-        
-        println("start load more data:\(startIndex),\(endIndex)")
-        HttpRequest.getSongInfoList(ids, callback:{ (infolist:[SongInfo]?) -> Void in
-            if let sInfoList = infolist {
-                DataManager.shareDataManager.songInfoList += sInfoList
-                println("load more data success,count=\(DataManager.shareDataManager.songInfoList.count)")
-            }
-        })
-
-    }
-    
-    func progresstimer(time:NSTimer){
-    
-        if let link = DataManager.shareDataManager.curSongLink {
-            var currentPlaybackTime = DataManager.shareDataManager.mp.currentPlaybackTime
-            if currentPlaybackTime.isNaN {return}
-            
-            var curTime = Int(currentPlaybackTime)
-            self.progressLabel.setText(Common.getMinuteDisplay(curTime))
-            
-            if link.time == curTime{
-                self.next()
-            }
-            
-            var (curLrc,nextLrc) = Common.currentLrcByTime(curTime, lrcArray: DataManager.shareDataManager.curLrcInfo)
-            self.lrcLabel.setText(curLrc)
-            self.nextLrcLabel.setText(nextLrc)
-        }
-    }
-    
     override func willActivate() {
-        // This method is called when watch view controller is about to be visible to user
         super.willActivate()
-        
-        if let cur = curPlaySongId {
-            if let song = DataManager.shareDataManager.curSongInfo{
-                if cur != song.id {
-                    self.playSong(song)
-                }
-            }
+        // Refresh UI if the song changed from another screen
+        if let currentSong = AudioManager.shared.currentSong,
+           let displayedSong = DataManager.shared.curSongInfo,
+           currentSong.sid != displayedSong.id {
+            playSong(info: displayedSong)
         }
     }
 

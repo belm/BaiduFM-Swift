@@ -41,6 +41,10 @@ class Song:NSObject{
         
         super.init()
     }
+    
+    convenience init(sid: String, name: String, url: String, pic_url: String, lrc_url: String, artist: String, album: String, format: String, time: Int) {
+        self.init(sid: sid, name: name, artist: artist, album: album, song_url: url, pic_url: pic_url, lrc_url: lrc_url, time: time, is_dl: 0, dl_file: "", is_like: 0, is_recent: 0, format: format)
+    }
 }
 
 struct SongInfo {

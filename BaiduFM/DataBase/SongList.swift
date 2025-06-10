@@ -100,7 +100,7 @@ class SongList:BaseDb {
         if self.open(){
             
             if let song = self.get(info.id) {
-                println("\(info.id)已经添加")
+                print("\(info.id)已经添加")
                 return false
             }
             
