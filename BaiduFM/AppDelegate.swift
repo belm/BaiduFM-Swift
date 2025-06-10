@@ -10,55 +10,136 @@ import UIKit
 import AVFoundation
 import Kingfisher
 
-@UIApplicationMain
+@main  // 使用@main替代@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // 应用启动后的自定义配置
         
-        //后台播放音乐
-        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error: nil)
-        AVAudioSession.sharedInstance().setActive(true, error: nil)
-        UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
+        // 配置音频会话支持后台播放
+        setupAudioSession()
         
-        var db = BaseDb()
+        // 启用远程控制事件接收
+        UIApplication.shared.beginReceivingRemoteControlEvents()
         
-        //初始化图片缓存库配置  Kingfisher
-        let downloader = KingfisherManager.sharedManager.downloader
-        downloader.downloadTimeout = 5
+        // 初始化数据库
+        let db = BaseDb()
         
-        let cache = KingfisherManager.sharedManager.cache
-        cache.maxDiskCacheSize = 100 * 1024 * 1024 //defalut is no limit
-        cache.maxCachePeriodInSecond = 60 * 60 * 24 * 10 //default is 7days
-
+        // 配置Kingfisher图片缓存库
+        setupKingfisherConfiguration()
+        
         return true
     }
 
-    func applicationWillResignActive(application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    // MARK: - UISceneSession Lifecycle（iOS 13+支持）
+    @available(iOS 13.0, *)
+    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    @available(iOS 13.0, *)
+    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
+        // 场景会话被丢弃时的清理工作
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    // MARK: - 应用生命周期方法
+    func applicationWillResignActive(_ application: UIApplication) {
+        // 应用即将进入非活跃状态时的处理
+        // 可以在这里暂停正在进行的任务，禁用计时器等
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        // 应用进入后台时的处理
+        // 保存用户数据，失效计时器，存储足够的应用状态信息以便恢复
     }
 
-    func applicationWillTerminate(application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        // 应用即将从后台进入前台时的处理
+        // 可以在这里撤销进入后台时的更改
     }
 
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        // 应用变为活跃状态时的处理
+        // 重启被暂停的任务，刷新用户界面等
+    }
 
+    func applicationWillTerminate(_ application: UIApplication) {
+        // 应用即将终止时的处理
+        // 保存数据，释放资源等
+        AudioManager.shared.stop()
+    }
+    
+    // MARK: - 远程控制事件处理
+    override func remoteControlReceived(with event: UIEvent?) {
+        guard let event = event,
+              event.type == .remoteControl else { return }
+        
+        let audioManager = AudioManager.shared
+        
+        switch event.subtype {
+        case .remoteControlPlay:
+            audioManager.resume()
+        case .remoteControlPause:
+            audioManager.pause()
+        case .remoteControlNextTrack:
+            audioManager.playNext()
+        case .remoteControlPreviousTrack:
+            audioManager.playPrevious()
+        case .remoteControlTogglePlayPause:
+            if audioManager.playbackState.value == .playing {
+                audioManager.pause()
+            } else {
+                audioManager.resume()
+            }
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - 私有配置方法
+private extension AppDelegate {
+    
+    /// 配置音频会话
+    func setupAudioSession() {
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            // 设置音频会话类别为播放，支持后台播放
+            try audioSession.setCategory(
+                .playback,
+                mode: .default,
+                options: [.allowAirPlay, .allowBluetooth, .allowBluetoothA2DP]
+            )
+            // 激活音频会话
+            try audioSession.setActive(true)
+        } catch {
+            print("音频会话配置失败: \(error.localizedDescription)")
+        }
+    }
+    
+    /// 配置Kingfisher图片缓存
+    func setupKingfisherConfiguration() {
+        // 获取下载器实例并配置
+        let downloader = KingfisherManager.shared.downloader
+        downloader.downloadTimeout = 15.0  // 下载超时时间
+        downloader.sessionConfiguration.timeoutIntervalForRequest = 15.0
+        
+        // 获取缓存实例并配置
+        let cache = KingfisherManager.shared.cache
+        cache.diskStorage.config.sizeLimit = 200 * 1024 * 1024  // 磁盘缓存最大200MB
+        cache.memoryStorage.config.totalCostLimit = 50 * 1024 * 1024  // 内存缓存最大50MB
+        cache.diskStorage.config.expiration = .days(7)  // 磁盘缓存过期时间7天
+        
+        // 配置图片处理器
+        let processor = DownsamplingImageProcessor(size: CGSize(width: 300, height: 300))
+        KingfisherManager.shared.defaultOptions = [
+            .processor(processor),
+            .scaleFactor(UIScreen.main.scale),
+            .transition(.fade(0.3)),
+            .cacheOriginalImage
+        ]
+    }
 }
 

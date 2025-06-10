@@ -1,6 +1,0 @@
-framework module LTMorphingLabel {
-  umbrella header "Pods-BaiduFM-LTMorphingLabel-umbrella.h"
-
-  export *
-  module * { export * }
-}
