@@ -162,8 +162,13 @@ extension NetworkManager {
                 let channelArray = json["channel_list"].arrayValue
                 return channelArray.compactMap { channelJSON in
                     Channel(
-                        channelId: channelJSON["channel_id"].stringValue,
-                        channelName: channelJSON["channel_name"].stringValue
+                        id: channelJSON["channel_id"].stringValue,
+                        name: channelJSON["channel_name"].stringValue,
+                        order: channelJSON["channel_order"].intValue,
+                        cate_id: channelJSON["cate_id"].stringValue,
+                        cate: channelJSON["cate"].stringValue,
+                        cate_order: channelJSON["cate_order"].intValue,
+                        pv_order: channelJSON["pv_order"].intValue
                     )
                 }
             }

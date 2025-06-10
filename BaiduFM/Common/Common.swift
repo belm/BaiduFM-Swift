@@ -186,5 +186,20 @@ class Common {
         
         return ("","")
     }
+    
+    // MARK: - 现代化的文件管理方法
+    
+    /// 删除下载的歌曲文件
+    class func deleteDownloadedSong(song: Song) -> Bool {
+        let musicPath = musicLocalPath(songId: song.sid, format: song.format)
+        return NSFileManager.defaultManager().removeItemAtPath(musicPath, error: nil)
+    }
+    
+    /// 获取数据库路径
+    class func getDbPath() -> String {
+        let documentsPath = Utils.documentPath()
+        let dbPath = documentsPath.stringByAppendingPathComponent("music.db")
+        return dbPath
+    }
 
 }

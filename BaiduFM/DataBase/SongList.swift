@@ -185,4 +185,38 @@ class SongList:BaseDb {
         }
         return false
     }
+    
+    // MARK: - 现代化的删除方法
+    
+    /// 删除单个歌曲
+    func deleteSong(songId: String) -> Bool {
+        return delete(sid: songId)
+    }
+    
+    /// 删除单个喜欢的歌曲
+    func deleteLikeSong(songId: String) -> Bool {
+        return updateLikeStatus(sid: songId, status: 0)
+    }
+    
+    /// 删除单个最近播放的歌曲
+    func deleteRecentSong(songId: String) -> Bool {
+        if self.open(){
+            var sql = "UPDATE tbl_song_list SET is_recent=0 WHERE sid=?"
+            var ret = self.db.executeUpdate(sql, withArgumentsInArray: [songId])
+            self.close()
+            return ret
+        }
+        return false
+    }
+    
+    /// 添加最近播放记录
+    func addRecentSong(songId: String) -> Bool {
+        if self.open(){
+            var sql = "UPDATE tbl_song_list SET is_recent=1 WHERE sid=?"
+            var ret = self.db.executeUpdate(sql, withArgumentsInArray: [songId])
+            self.close()
+            return ret
+        }
+        return false
+    }
 }

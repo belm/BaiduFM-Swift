@@ -37,4 +37,16 @@ class BaseDb {
             return false
         }
     }
+    
+    // MARK: - 现代化的数据库操作方法
+    
+    /// 打开数据库连接
+    func open() -> Bool {
+        return db.open()
+    }
+    
+    /// 关闭数据库连接
+    func close() {
+        db.close()
+    }
 }

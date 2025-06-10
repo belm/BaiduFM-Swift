@@ -7,122 +7,201 @@
 //
 
 import UIKit
-import MJRefresh
+import RxSwift
+import RxCocoa
+import Kingfisher
 
+// MARK: - 音乐列表视图控制器
 class MusicListTableViewController: UITableViewController {
     
-    var channel:String = "public_tuijian_zhongguohaoshengyin"
-    var curChannelList:[String] = []
+    // MARK: - 私有属性
+    private let disposeBag = DisposeBag()
+    private var songs: [SongInfo] = []
+    private var isLoading = false
     
+    // MARK: - 生命周期方法
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.channel = DataCenter.shareDataCenter.currentChannel
-        
-        HttpRequest.getSongList(self.channel, callback: { (list) -> Void in
-            if list == nil {return}
-            DataCenter.shareDataCenter.currentAllSongId = list!
-            self.loadSongData()
-        })
-        
-        //下拉刷新
-        self.tableView.addLegendHeaderWithRefreshingTarget(self, refreshingAction: Selector("refreshList"))
-        
-        self.tableView.addLegendFooterWithRefreshingTarget(self, refreshingAction: Selector("loadMore"))
+        setupUI()
+        bindData()
+        loadInitialData()
     }
     
-    func loadSongData(){
+    // MARK: - 私有方法
+    
+    /// 设置UI
+    private func setupUI() {
+        title = "歌曲列表"
         
-        self.curChannelList = DataCenter.shareDataCenter.curShowAllSongId
+        // 设置下拉刷新
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
         
-        HttpRequest.getSongInfoList(self.curChannelList, callback: { (info) -> Void in
-            
-            if info == nil {return}
-            
-            DataCenter.shareDataCenter.curShowAllSongInfo = info!
-            self.tableView.reloadData()
-            
-            self.tableView.header.endRefreshing()
-            self.tableView.footer.endRefreshing()
-        })
-        
-        HttpRequest.getSongLinkList(self.curChannelList, callback: { (link) -> Void in
-            DataCenter.shareDataCenter.curShowAllSongLink = link!
-        })
+        // 设置表格属性
+        tableView.rowHeight = 60
+        tableView.estimatedRowHeight = UITableView.automaticDimension
     }
     
-    func refreshList(){
+    /// 绑定数据
+    private func bindData() {
+        // 监听歌曲信息列表变化
+        DataCenter.shared.currentSongInfoList
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] songInfoList in
+                self?.songs = songInfoList
+                self?.tableView.reloadData()
+                self?.refreshControl?.endRefreshing()
+                self?.isLoading = false
+            })
+            .disposed(by: disposeBag)
         
-        DataCenter.shareDataCenter.curShowStartIndex += 20
-        DataCenter.shareDataCenter.curShowEndIndex += 20
+        // 监听当前频道变化
+        DataCenter.shared.currentChannelName
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] channelName in
+                self?.title = channelName.isEmpty ? "歌曲列表" : channelName
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// 加载初始数据
+    private func loadInitialData() {
+        guard !isLoading else { return }
         
-        if DataCenter.shareDataCenter.curShowEndIndex > DataCenter.shareDataCenter.currentAllSongId.count{
-            DataCenter.shareDataCenter.curShowEndIndex = DataCenter.shareDataCenter.currentAllSongId.count
-            DataCenter.shareDataCenter.curShowStartIndex = DataCenter.shareDataCenter.curShowEndIndex-20
+        let currentChannelId = DataCenter.shared.currentChannel.value
+        guard !currentChannelId.isEmpty else {
+            showErrorAlert(message: "请先选择一个频道")
+            return
         }
         
-        loadSongData()
+        isLoading = true
+        refreshControl?.beginRefreshing()
+        
+        // 加载歌曲列表
+        DataCenter.shared.loadSongList(channelId: currentChannelId)
+            .flatMap { _ in
+                // 然后加载歌曲详情
+                return DataCenter.shared.loadSongDetails()
+            }
+            .observe(on: MainScheduler.instance)
+            .subscribe(
+                onNext: { [weak self] in
+                    print("歌曲列表加载成功")
+                },
+                onError: { [weak self] error in
+                    print("歌曲列表加载失败: \(error.localizedDescription)")
+                    self?.refreshControl?.endRefreshing()
+                    self?.isLoading = false
+                    self?.showErrorAlert(message: "加载歌曲列表失败，请检查网络连接")
+                }
+            )
+            .disposed(by: disposeBag)
     }
     
-    func loadMore(){
-
-        DataCenter.shareDataCenter.curShowEndIndex += 20
+    /// 加载更多歌曲
+    private func loadMoreSongs() {
+        guard !isLoading else { return }
         
-        if DataCenter.shareDataCenter.curShowEndIndex > DataCenter.shareDataCenter.currentAllSongId.count{
-            DataCenter.shareDataCenter.curShowEndIndex = DataCenter.shareDataCenter.currentAllSongId.count
-            DataCenter.shareDataCenter.curShowStartIndex = DataCenter.shareDataCenter.curShowEndIndex-20
-        }
+        isLoading = true
         
-        loadSongData()
+        DataCenter.shared.loadMoreSongs()
+            .observe(on: MainScheduler.instance)
+            .subscribe(
+                onNext: { [weak self] in
+                    print("加载更多歌曲成功")
+                },
+                onError: { [weak self] error in
+                    print("加载更多歌曲失败: \(error.localizedDescription)")
+                    self?.isLoading = false
+                    self?.showErrorAlert(message: "加载更多歌曲失败")
+                }
+            )
+            .disposed(by: disposeBag)
+    }
+    
+    /// 处理下拉刷新
+    @objc private func handleRefresh() {
+        // 重置显示范围并重新加载
+        DataCenter.shared.currentStartIndex.accept(0)
+        DataCenter.shared.currentEndIndex.accept(DataCenter.shared.pageSize)
+        loadInitialData()
+    }
+    
+    /// 显示错误提示
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "错误", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "确定", style: .default))
+        present(alert, animated: true)
     }
 
+    // MARK: - 内存管理
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        print("收到内存警告 - MusicListTableViewController")
     }
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Potentially incomplete method implementation.
-        // Return the number of sections.
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete method implementation.
-        // Return the number of rows in the section.
-        return self.curChannelList.count
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return songs.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UITableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
-        var info =  DataCenter.shareDataCenter.curShowAllSongInfo[indexPath.row]
+        let songInfo = songs[indexPath.row]
         
-        cell.textLabel?.text = info.name
-        //cell.imageView?.kf_setImageWithURL(NSURL(string: info.songPicRadio)!, placeholderImage: nil)
-        cell.imageView?.image = UIImage(data: NSData(contentsOfURL: NSURL(string: info.songPicRadio)!)!)
-        cell.detailTextLabel?.text = info.artistName
-        // Configure the cell...
-
+        // 配置单元格
+        cell.textLabel?.text = songInfo.name
+        cell.detailTextLabel?.text = songInfo.artistName
+        
+        // 使用Kingfisher加载图片
+        if let imageView = cell.imageView,
+           let url = URL(string: songInfo.picUrl) {
+            imageView.kf.setImage(
+                with: url,
+                placeholder: UIImage(named: "placeholder"),
+                options: [
+                    .transition(.fade(0.2)),
+                    .cacheOriginalImage
+                ]
+            )
+        }
+        
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         
-        DataCenter.shareDataCenter.curPlayIndex = indexPath.row
+        // 播放选中的歌曲
+        DataCenter.shared.playSong(at: indexPath.row)
         
-        NSNotificationCenter.defaultCenter().postNotificationName(CHANNEL_MUSIC_LIST_CLICK_NOTIFICATION, object: nil)
+        // 发送通知
+        NotificationCenter.default.post(
+            name: Notification.Name("CHANNEL_MUSIC_LIST_CLICK_NOTIFICATION"),
+            object: nil
+        )
         
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        // 返回上一页
+        navigationController?.popToRootViewController(animated: true)
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // 添加动画效果
         cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1)
-        UIView.animateWithDuration(0.25, animations: { () -> Void in
+        UIView.animate(withDuration: 0.25) {
             cell.layer.transform = CATransform3DMakeScale(1, 1, 1)
-        })
+        }
+        
+        // 检查是否需要加载更多
+        if indexPath.row == songs.count - 3 { // 提前3行开始加载
+            loadMoreSongs()
+        }
     }
-
 }
