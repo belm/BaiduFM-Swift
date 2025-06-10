@@ -1,4 +1,7 @@
 # BaiduFM-Swift
+
+**Language**: [English](#) | [中文](./README-zh.md)
+
 [![](http://img.shields.io/badge/build-passing-4BC51D.svg)]()
 [![](http://img.shields.io/badge/OS%20X-10.10.3-blue.svg)]() 
 [![](http://img.shields.io/badge/xcode-6.3-blue.svg)]()
@@ -6,110 +9,81 @@
 [![](http://img.shields.io/badge/Swift-1.2-blue.svg)]() 
 [![CocoaPods compatible](https://img.shields.io/badge/CocoaPods-compatible-4BC51D.svg)](https://github.com/cocoapods/cocoapods)
 
-百度FM, swift语言实现，基于最新xcode6.3+swift1.2,初步只是为了实现功能，代码比较粗燥，后面有时间会整理。
+A Baidu FM client implemented in Swift, based on the latest Xcode 6.3 + Swift 1.2. This project was initially focused on implementing basic functionality, and the code may be rough in some areas. I plan to refactor and optimize it when time permits.
 
-##API接口申明
--本APP接口使用百度FM非公开API,音乐版权归百度所有
+## API Disclaimer
+- This app uses Baidu FM's non-public API. All music copyrights belong to Baidu.
 
-##功能
+## Features
 
-- 增加Apple Watch支持(歌词同步显示)
+- Apple Watch support (synchronized lyrics display)
+- Download songs to local storage (with delete functionality)
+- Favorite music management (add/remove favorites)
+- Recently played music history (with clear functionality)
+- Pull-to-refresh and load more songs
+- Auto-scrolling lyrics
+- Real-time playback progress display
+- Play/pause control
+- Previous/next track navigation
+- Music category browsing
+- Categorized song lists
+- Background playback support
+- Lock screen album artwork and song info display
+- Lock screen music controls (next/previous, play/pause)
+- Favorites list, recently played list, and downloaded songs list
 
-- (删除)下载歌曲到本地
+## Screenshots
 
-- (取消)收藏喜欢的音乐
+- Apple Watch Home ![Screenshot 0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_00.png?raw=true)
 
-- (清空)最近播放的音乐
+- Apple Watch Menu ![Screenshot 0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_01.png?raw=true)
 
-- 可以下拉刷新,上拉加载更多歌曲列表
+- Apple Watch Song List ![Screenshot 0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_02.png?raw=true)
 
-- 歌词自动滚动
+- Apple Watch Category Selection ![Screenshot 0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_03.png?raw=true)
 
-- 实时显示歌曲播放进度
+- iPhone Lock Screen Display & Controls ![Screenshot 0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_00.png?raw=true)
 
-- 暂停继续播放
+- iPhone Home Screen ![Screenshot 1](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_01.png?raw=true)
 
-- 上一曲下一曲
+- iPhone Music Categories ![Screenshot 2](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_02.png?raw=true)
 
-- 歌曲类型列表
+- iPhone Song List ![Screenshot 3](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_03.png?raw=true)
 
-- 分类歌曲列表
+## Setup Instructions
+- This project uses [COCOAPODS](https://github.com/cocoapods/cocoapods) to manage third-party libraries. Please run `pod install` before running the project to install dependencies.
 
-- 支持后台播放
+## Third-Party Libraries
 
-- 锁屏显示歌曲专辑信息
+- [Alamofire](https://github.com/Alamofire/Alamofire) - Networking library
+- [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) - JSON parsing
+- [FMDB](https://github.com/ccgus/fmdb) - SQLite database wrapper
+- [Async](https://github.com/duemunk/Async) - Asynchronous programming
+- [MJRefresh](https://github.com/CoderMJLee/MJRefresh) - Pull-to-refresh
+- [LTMorphingLabel](https://github.com/lexrus/LTMorphingLabel) - Text animation effects
+- [Kingfisher](https://github.com/onevcat/Kingfisher) - Image caching and downloading
 
-- 锁屏控制音乐下一曲/上一曲、暂停播放
+## Swift Concepts Used
+- Network requests
+- JSON parsing
+- Swift regular expressions
+- Swift singleton pattern
+- Pull-to-refresh & load more with MJRefresh
+- Song progress with UIProgressView
+- Lyrics scrolling with UITextView
+- Closures
+- Property observers (get, set, didSet)
+- Online MP3 playback using MPMoviePlayerController
+- NSNotificationCenter for data passing
 
-- 新增收藏列表，最近播放列表，下载歌曲列表
+## TODO Features
 
+- Replace music playback with AVAudioPlayer
+- Third-party library consolidation (now using [COCOAPODS](https://github.com/cocoapods/cocoapods))
+- Enhanced Apple Watch support
 
-##项目截图
-
-- Apple Watch首页![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_00.png?raw=true)
-
-- Apple Watch首页菜单页面![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_01.png?raw=true)
-
-- Apple Watch歌曲列表![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_02.png?raw=true)
-
-- Apple Watch歌曲类型选择列表![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_AppleWatch_03.png?raw=true)
-
-- iPhone锁屏显示、播放控制![项目截图0](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_00.png?raw=true)
-
-- iPhone项目首页![项目截图1](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_01.png?raw=true)
-
-- iPhone歌曲分类![项目截图2](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_02.png?raw=true)
-
-- iPhone歌曲列表![项目截图3](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_03.png?raw=true)
-
-##项目使用注意事项
--项目里使用[COCOAPODS](https://github.com/cocoapods/cocoapods)管理第三方库，运行前请执行pod install安装依赖库
-
-##项目使用的第三方库
-
--[网络库Alamofire](https://github.com/Alamofire/Alamofire)
-
--[JSON解析SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON)
-
--[SQLite数据库FMDB](https://github.com/ccgus/fmdb)
-
--[异步Async](https://github.com/duemunk/Async)
-
--[MJRefresh](https://github.com/CoderMJLee/MJRefresh)
-
--[文字效果LTMorphingLabel](https://github.com/lexrus/LTMorphingLabel)
-
--[图片缓存Kingfisher](https://github.com/onevcat/Kingfisher)
-
-##使用的swift知识点
--网络请求
-
--JSON解析
-
--swift正则
-
--swift单例
-
--下拉刷新、上拉加载更多MJRefresh，歌曲进度UIProgressView，歌词滚动UITextView
-
--闭包
-
--get，set，didSet
-
--使用MPMoviePlayerController在线播放网络mp3 
-
--NSNotificationCenter传值
-
-##待完成功能
-
--播放音乐改用AVAudioPlayer
-
--第三方库合并(已经改用[COCOAPODS](https://github.com/cocoapods/cocoapods)管理)
-
--支持Apple Watch
-
-##联系我
-- [QQ邮箱](mailto:belm@vip.qq.com)
-- [微博](http://weibo.com/belmeng)
+## Contact
+- [QQ Email](mailto:belm@vip.qq.com)
+- [Weibo](http://weibo.com/belmeng)
 
 [![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
