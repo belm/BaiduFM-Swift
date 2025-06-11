@@ -102,7 +102,7 @@ class InterfaceController: WKInterfaceController {
                 }
                 
                 if let lrc = try await HttpRequest.getLrcAsync(lrcUrl: songLink.lrcLink) {
-                    DataManager.shared.curLrcInfo = Common.praseSongLrc(lrc)
+                    DataManager.shared.curLrcInfo = Common.praseSongLrc(lrc: lrc)
                 }
                 
             } catch {
@@ -129,7 +129,7 @@ class InterfaceController: WKInterfaceController {
     }
 
     private func getCurrentLrc(for time: TimeInterval) -> (String, String) {
-        return Common.currentLrcByTime(Int(time), lrcArray: DataManager.shared.curLrcInfo)
+        return Common.currentLrcByTime(curLength: Int(time), lrcArray: DataManager.shared.curLrcInfo)
     }
 
     @IBAction func playButtonAction() {
