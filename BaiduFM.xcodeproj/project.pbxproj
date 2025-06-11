@@ -132,6 +132,7 @@
 		679796AC1AEC574800FF780F /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				672EA33F1AEC6E2800E6F9AE /* DataManager.swift */,
 				6749F3831AEC7F5700A892ED /* Song.swift */,
 				6749F3841AEC7F5700A892ED /* Channel.swift */,
 				679796AE1AEC574800FF780F /* DataCenter.swift */,
@@ -278,7 +279,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				A6E9411A2AD3214500C1B479 /* PBXTargetDependency */,
+				A6E941B02AD3214500C1B479 /* PBXTargetDependency */,
 			);
 			name = BaiduFM;
 			productName = BaiduFM;
@@ -296,7 +297,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				A6E9411A2AD3214500C1B479 /* PBXTargetDependency */,
+				A6E941B02AD3214500C1B479 /* PBXTargetDependency */,
 			);
 			name = BaiduFMTests;
 			productName = BaiduFMTests;
@@ -351,6 +352,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				672EA3401AEC6E2800E6F9AE /* DataManager.swift in Sources */,
 				67B9C3571AEBF63100107696 /* ViewController.swift in Sources */,
 				67B9C3541AEBF63100107696 /* RoundImageView.swift in Sources */,
 				67B9C3481AEBF63100107696 /* DownloadTableViewController.swift in Sources */,
@@ -378,8 +380,56 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A6E941172AD3214500C1B479 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \\\"${PODS_ROOT}/../Podfile.lock\\\" \\\"${PODS_ROOT}/Manifest.lock\\\" > /dev/null\\nif [ $? != 0 ] ; then\\n    # print error to Xcode's issue navigator\\n    echo \\\"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\\\" >&2\\n    exit 1\\nfi";
+			showEnvVarsInLog = 0;
+		};
+		A6E9411A2AD3214500C1B479 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\\\"${PODS_ROOT}/Target Support Files/Pods-BaiduFM/Pods-BaiduFM-frameworks.sh\\\"";
+			showEnvVarsInLog = 0;
+		};
+		A6E9411B2AD3214500C1B479 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\\\"${PODS_ROOT}/Target Support Files/Pods-BaiduFM/Pods-BaiduFM-resources.sh\\\"";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXTargetDependency section */
-		A6E9411A2AD3214500C1B479 /* PBXTargetDependency */ = {
+		A6E941B02AD3214500C1B479 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 67F0AEB31AD9FF8C000CB588 /* BaiduFM */;
 			targetProxy = A6E941A52AD3214500C1B479 /* PBXContainerItemProxy */;
