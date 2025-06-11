@@ -16,18 +16,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
-    - name: Cache CocoaPods
-      uses: actions/cache@v4
-      with:
-        path: Pods
-        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-pods-
-
-    - name: Install CocoaPods
-      run: pod install
-
     - name: Build
       run: xcodebuild clean build -project BaiduFM.xcodeproj -scheme BaiduFM -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15 Pro'
     - name: Run tests
