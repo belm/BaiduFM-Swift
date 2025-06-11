@@ -73,9 +73,11 @@ class Common {
     
     :returns: 替换后的字符串
     */
-    class func replaceString(pattern:String, replace:String, place:String)->String?{
-        var exp =  NSRegularExpression(pattern: pattern, options: NSRegularExpressionOptions.CaseInsensitive, error: nil)
-        return exp?.stringByReplacingMatchesInString(replace, options: nil, range: NSRange(location: 0,length: count(replace)), withTemplate: place)
+    class func replaceString(pattern: String, replace: String, place: String) -> String? {
+        // 创建正则表达式（忽略大小写），Swift 5 需要使用 try? 语法
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) else { return nil }
+        let range = NSRange(location: 0, length: replace.utf16.count)
+        return regex.stringByReplacingMatches(in: replace, options: [], range: range, withTemplate: place)
     }
     
     class func fileIsExist(filePath:String)->Bool{
@@ -107,84 +109,67 @@ class Common {
         return ret
     }
     
-    class func matchesForRegexInText(regex: String!, text: String!) -> [String] {
-        
-        let regex = NSRegularExpression(pattern: regex,
-            options: nil, error: nil)!
+    class func matchesForRegexInText(_ regex: String, text: String) -> [String] {
+        guard let regex = try? NSRegularExpression(pattern: regex, options: []) else { return [] }
         let nsString = text as NSString
-        let results = regex.matchesInString(text,
-            options: nil, range: NSMakeRange(0, nsString.length))
-            as! [NSTextCheckingResult]
-        return map(results) { nsString.substringWithRange($0.range)}
+        let results = regex.matches(in: text, options: [], range: NSRange(location: 0, length: nsString.length))
+        return results.map { nsString.substring(with: $0.range) }
     }
     
     //02:57 => 2*60+57=177
-    class func timeStringToSecond(time:String)->Int?{
-        
-        var strArr = time.componentsSeparatedByString(":")
-        if strArr.count == 0 {return nil}
-        
-        var minute =  strArr[0].toInt()
-        var second = strArr[1].toInt()
-        
-        if let min = minute, sec = second{
-            return min * 60 + sec
-        }
-        return nil
+    class func timeStringToSecond(_ time: String) -> Int? {
+        let components = time.split(separator: ":")
+        guard components.count >= 2, let minutes = Int(components[0]), let seconds = Int(components[1]) else { return nil }
+        return minutes * 60 + seconds
     }
     
-    class func subStr(str:String, start:Int, length:Int)->String{
-        
-        return str.substringWithRange(Range<String.Index>(start: advance(str.startIndex, start), end: advance(str.startIndex, start+length)))
-        
+    /// 字符串截取工具（从 start 开始截取 length 个字符）
+    class func subStr(_ str: String, start: Int, length: Int) -> String {
+        guard start >= 0, length > 0, start + length <= str.count else { return "" }
+        let startIndex = str.index(str.startIndex, offsetBy: start)
+        let endIndex = str.index(startIndex, offsetBy: length)
+        return String(str[startIndex..<endIndex])
     }
     
-    class func praseSongLrc(lrc:String)->[(lrc:String,time:Int)]{
-        
-        var list = lrc.componentsSeparatedByString("\n")
-        var ret:[(lrc:String,time:Int)] = []
+    /// 解析歌词，返回 (歌词, 时间秒数) 元组数组
+    class func praseSongLrc(lrc: String) -> [(lrc: String, time: Int)] {
+        let list = lrc.split(separator: "\n").map(String.init)
+        var ret: [(lrc: String, time: Int)] = []
         
         for row in list {
-            //匹配[]歌词时间
-            var timeArray = matchesForRegexInText("(\\[\\d{2}\\:\\d{2}\\.\\d{2}\\])", text: row)
-            var lrcArray = matchesForRegexInText("\\](.*)", text: row)
+            // 匹配 [] 中的时间标记
+            let timeArray = matchesForRegexInText("(\\[\\d{2}\\:\\d{2}\\.\\d{2}\\])", text: row)
+            let lrcArray = matchesForRegexInText("\\](.*)", text: row)
+            guard !timeArray.isEmpty else { continue }
+            let lrcTime = timeArray[0] // e.g. [02:57.26]
             
-            if timeArray.count == 0 {continue}
-            //[02:57.26]
-            var lrcTime = timeArray[0]
-            
-            var lrcTxt:String = ""
-            if lrcArray.count >= 1 {
-                lrcTxt = lrcArray[0]
-                lrcTxt = subStr(lrcTxt, start: 1, length: count(lrcTxt)-1)
+            var lrcTxt = ""
+            if let txtPart = lrcArray.first {
+                lrcTxt = txtPart
+                if lrcTxt.hasPrefix("]") {
+                    lrcTxt.removeFirst()
+                }
             }
-            
-            //02:57
-            var time = subStr(lrcTime, start: 1, length: 5)
-            
-            //println("time=\(time),txt=\(lrcTxt)")
-            
-            if let t = timeStringToSecond(time){
-                ret += [(lrc:lrcTxt,time:t)]
+            // 取 mm:ss 部分
+            let timeStr = subStr(lrcTime, start: 1, length: 5)
+            if let t = timeStringToSecond(timeStr) {
+                ret.append((lrc: lrcTxt, time: t))
             }
         }
         return ret
     }
     
-    class func currentLrcByTime(curLength:Int, lrcArray:[(lrc:String,time:Int)])->(String,String){
-        
-        var i = 0
-        for (lrc:String,time:Int) in lrcArray {
-
+    /// 根据当前播放进度返回当前行和下一行歌词
+    class func currentLrcByTime(curLength: Int, lrcArray: [(lrc: String, time: Int)]) -> (String, String) {
+        for (index, tuple) in lrcArray.enumerated() {
+            let (lrc, time) = tuple
             if time >= curLength {
-                if i == 0 { return (lrc, "") }
-                var prev = lrcArray[i-1]
-                return (prev.lrc,lrc)
+                if index == 0 { return (lrc, "") }
+                let prev = lrcArray[index - 1]
+                return (prev.lrc, lrc)
             }
-            i++
         }
-        
-        return ("","")
+        return ("", "")
     }
     
     // MARK: - 现代化的文件管理方法
