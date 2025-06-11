@@ -7,7 +7,6 @@
 [![](http://img.shields.io/badge/xcode-6.3-blue.svg)]()
 [![](http://img.shields.io/badge/iOS-8.0%2B-blue.svg)]() 
 [![](http://img.shields.io/badge/Swift-1.2-blue.svg)]() 
-[![CocoaPods compatible](https://img.shields.io/badge/CocoaPods-compatible-4BC51D.svg)](https://github.com/cocoapods/cocoapods)
 
 A Baidu FM client implemented in Swift, based on the latest Xcode 6.3 + Swift 1.2. This project was initially focused on implementing basic functionality, and the code may be rough in some areas. I plan to refactor and optimize it when time permits.
 
@@ -50,9 +49,6 @@ A Baidu FM client implemented in Swift, based on the latest Xcode 6.3 + Swift 1.
 
 - iPhone Song List ![Screenshot 3](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_03.png?raw=true)
 
-## Setup Instructions
-- This project uses [COCOAPODS](https://github.com/cocoapods/cocoapods) to manage third-party libraries. Please run `pod install` before running the project to install dependencies.
-
 ## Third-Party Libraries
 
 - [Alamofire](https://github.com/Alamofire/Alamofire) - Networking library
@@ -79,7 +75,6 @@ A Baidu FM client implemented in Swift, based on the latest Xcode 6.3 + Swift 1.
 ## TODO Features
 
 - Replace music playback with AVAudioPlayer
-- Third-party library consolidation (now using [COCOAPODS](https://github.com/cocoapods/cocoapods))
 - Enhanced Apple Watch support
 
 ## Contact

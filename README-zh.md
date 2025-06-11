@@ -7,7 +7,6 @@
 [![](http://img.shields.io/badge/xcode-6.3-blue.svg)]()
 [![](http://img.shields.io/badge/iOS-8.0%2B-blue.svg)]() 
 [![](http://img.shields.io/badge/Swift-1.2-blue.svg)]() 
-[![CocoaPods compatible](https://img.shields.io/badge/CocoaPods-compatible-4BC51D.svg)](https://github.com/cocoapods/cocoapods)
 
 百度FM 客户端，使用 Swift 语言实现，基于最新的 Xcode 6.3 + Swift 1.2 开发。项目初期主要专注于功能实现，代码可能在某些地方比较粗糙，后续有时间会进行重构和优化。
 
@@ -50,9 +49,6 @@
 
 - iPhone 歌曲列表 ![项目截图3](https://github.com/belm/BaiduFM-Swift/blob/master/ScreenShot/BaiduFM-Swift_03.png?raw=true)
 
-## 使用说明
-- 项目使用 [COCOAPODS](https://github.com/cocoapods/cocoapods) 管理第三方库，运行前请先执行 `pod install` 安装依赖库。
-
 ## 第三方库依赖
 
 - [Alamofire](https://github.com/Alamofire/Alamofire) - 网络请求库
@@ -79,7 +75,6 @@
 ## 待完成功能
 
 - 使用 AVAudioPlayer 替换音乐播放
-- 第三方库整合（已改用 [COCOAPODS](https://github.com/cocoapods/cocoapods) 管理）
 - 增强 Apple Watch 支持
 
 ## 联系方式
