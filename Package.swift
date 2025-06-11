@@ -8,6 +8,8 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [
         .iOS(.v13),
+        .macOS(.v10_15),
+        .tvOS(.v13),
         .watchOS(.v6)
     ],
     products: [
@@ -42,7 +44,7 @@ let package = Package(
         .package(url: "https://github.com/CoderMJLee/MJRefresh.git", from: "3.7.0"),
         
         // 文字动画效果库 - 酷炫的文字变换动画
-        .package(name: "LTMorphingLabelPackage", url: "https://github.com/lexrus/LTMorphingLabel.git", from: "0.9.0")
+        .package(url: "https://github.com/lexrus/LTMorphingLabel.git", from: "0.9.0")
     ],
     targets: [
         .target(
@@ -57,8 +59,14 @@ let package = Package(
                 .product(name: "SQLite", package: "SQLite.swift"),
                 "Async",
                 "MJRefresh",
-                .product(name: "LTMorphingLabel", package: "LTMorphingLabelPackage"),
+                .product(name: "MorphingLabel", package: "LTMorphingLabel"),
                 "Cfmdb"
+            ],
+            exclude: [
+                "Info.plist"
+            ],
+            resources: [
+                .process("Images.xcassets")
             ]
         ),
         .target(

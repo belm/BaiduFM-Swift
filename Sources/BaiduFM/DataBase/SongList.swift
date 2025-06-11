@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import fmdb
+import Cfmdb
 
 // SongList不再继承任何类，它是一个专门用于操作歌曲数据的服务类
 class SongList {

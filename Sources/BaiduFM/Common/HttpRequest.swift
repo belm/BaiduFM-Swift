@@ -66,16 +66,11 @@ class HttpRequest {
                 case .success(let value):
                     let lists = JSON(value)["data"]["songList"].arrayValue
                     let infos: [SongInfo] = lists.map { list in
-                        SongInfo(id: list["songId"].stringValue,
+                        SongInfo(songId: list["songId"].stringValue,
                                  name: list["songName"].stringValue,
-                                 artistId: list["artistId"].stringValue,
                                  artistName: list["artistName"].stringValue,
-                                 albumId: list["albumId"].intValue,
                                  albumName: list["albumName"].stringValue,
-                                 songPicSmall: list["songPicSmall"].stringValue,
-                                 songPicBig: list["songPicBig"].stringValue,
-                                 songPicRadio: list["songPicRadio"].stringValue,
-                                 allRate: list["allRate"].stringValue)
+                                 picUrl: list["songPicBig"].stringValue)
                     }
                     callback(infos)
                 case .failure:

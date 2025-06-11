@@ -1,7 +1,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import LTMorphingLabel
+import MorphingLabel
 
 class ViewController: UIViewController {
 

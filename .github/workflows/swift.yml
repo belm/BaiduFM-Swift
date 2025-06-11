@@ -17,6 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build
-      run: swift build
+      run: xcodebuild -scheme BaiduFM -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' build
     - name: Run tests
-      run: swift test
+      run: xcodebuild -scheme BaiduFM -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' test

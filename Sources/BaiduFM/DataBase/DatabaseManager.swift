@@ -9,7 +9,7 @@
 //
 
 import Foundation
-import fmdb
+import Cfmdb
 
 /// 数据库管理器，采用单例模式，并使用FMDatabaseQueue保证线程安全
 final class DatabaseManager {
