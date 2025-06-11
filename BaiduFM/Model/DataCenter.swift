@@ -25,11 +25,8 @@ class DataCenter {
     // 频道列表信息
     let channelListInfo = BehaviorRelay<[Channel]>(value: [])
     
-    // 当前选中的频道
-    let currentChannel = BehaviorRelay<String>(value: "public_tuijian_zhongguohaoshengyin")
-    
-    // 当前频道名称
-    let currentChannelName = BehaviorRelay<String>(value: "中国好声音")
+    // 当前选中的频道 (现在存储整个Channel对象)
+    let currentChannel = BehaviorRelay<Channel?>(value: nil)
     
     // 当前频道所有歌曲ID
     let currentAllSongId = BehaviorRelay<[String]>(value: [])
@@ -63,19 +60,12 @@ class DataCenter {
     // MARK: - 设置数据绑定
     private func setupBindings() {
         
-        // 监听频道变化，自动保存到UserDefaults
+        // 监听频道变化，自动保存其ID到UserDefaults
         currentChannel
+            .compactMap { $0?.id } // 确保频道对象不为nil，并获取其ID
             .skip(1) // 跳过初始值
             .subscribe(onNext: { [weak self] channelId in
                 self?.userDefaults.set(channelId, forKey: "LAST_PLAY_CHANNEL_ID")
-            })
-            .disposed(by: disposeBag)
-        
-        // 监听频道名称变化，自动保存到UserDefaults
-        currentChannelName
-            .skip(1)
-            .subscribe(onNext: { [weak self] channelName in
-                self?.userDefaults.set(channelName, forKey: "LAST_PLAY_CHANNEL_NAME")
             })
             .disposed(by: disposeBag)
         
@@ -108,14 +98,11 @@ class DataCenter {
     
     // MARK: - 加载用户偏好设置
     private func loadUserPreferences() {
-        // 加载上次播放的频道
+        // 加载上次播放的频道ID，后续在频道列表加载后会用此ID来设置currentChannel
         if let savedChannelId = userDefaults.string(forKey: "LAST_PLAY_CHANNEL_ID") {
-            currentChannel.accept(savedChannelId)
-        }
-        
-        // 加载上次播放的频道名称
-        if let savedChannelName = userDefaults.string(forKey: "LAST_PLAY_CHANNEL_NAME") {
-            currentChannelName.accept(savedChannelName)
+            // 临时存储，等待频道列表加载
+            let initialChannel = Channel(id: savedChannelId, name: "Loading...", order: 0, cate_id: "", cate: "", cate_order: 0, pv_order: 0)
+            currentChannel.accept(initialChannel)
         }
     }
     
@@ -139,13 +126,27 @@ class DataCenter {
     func loadChannelList() -> Observable<Void> {
         return NetworkManager.shared.getChannelList()
             .do(onNext: { [weak self] channels in
-                self?.channelListInfo.accept(channels)
+                guard let self = self else { return }
+                self.channelListInfo.accept(channels)
+                
+                // 列表加载后，根据保存的ID或默认值更新currentChannel
+                if let savedChannelId = self.userDefaults.string(forKey: "LAST_PLAY_CHANNEL_ID"),
+                   let channelToRestore = channels.first(where: { $0.id == savedChannelId }) {
+                    self.currentChannel.accept(channelToRestore)
+                } else if let defaultChannel = channels.first {
+                    self.currentChannel.accept(defaultChannel) // 如果没有保存的，则使用列表的第一个
+                }
             })
             .map { _ in () }
     }
     
     /// 加载指定频道的歌曲列表
-    func loadSongList(channelId: String) -> Observable<Void> {
+    func loadSongList() -> Observable<Void> {
+        // 从currentChannel获取ID
+        guard let channelId = currentChannel.value?.id else {
+            return .error(NSError(domain: "DataCenter", code: -1, userInfo: [NSLocalizedDescriptionKey: "Channel ID is missing"]))
+        }
+        
         return NetworkManager.shared.getSongList(channelId: channelId)
             .do(onNext: { [weak self] songIds in
                 self?.currentAllSongId.accept(songIds)

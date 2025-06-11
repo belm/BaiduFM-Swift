@@ -40,7 +40,7 @@ class PlayerViewModel {
         let audioManager = self.audioManager
         let dataCenter = self.dataCenter
         
-        // MARK: - 输出绑定
+        // MARK: - Outputs binding
         
         let currentSong = dataCenter.currentPlayingSong.asDriver(onErrorJustReturn: nil).compactMap { $0 }
         
@@ -64,34 +64,35 @@ class PlayerViewModel {
         songProgress = audioManager.progress.asDriver()
         
         currentTimeText = audioManager.currentTime
-            .map { Common.getMinuteDisplay(Int($0)) }
+            .map { Common.getMinuteDisplay(seconds: $0) }
             .asDriver(onErrorJustReturn: "00:00")
             
         totalTimeText = audioManager.duration
-            .map { Common.getMinuteDisplay(Int($0)) }
+            .map { Common.getMinuteDisplay(seconds: $0) }
             .asDriver(onErrorJustReturn: "00:00")
             
         let currentLrcTuple = Observable.combineLatest(audioManager.currentTime, self.parsedLrc)
             .map { (time, lrcArray) -> (String, String) in
                 return Common.currentLrcByTime(curLength: Int(time), lrcArray: lrcArray)
             }
-            .asDriver(onErrorJustReturn: ("暂无歌词", ""))
+            .asDriver(onErrorJustReturn: ("No Lyrics", ""))
             
         lyrics = currentLrcTuple.map { $0.0 }
         nextLyricLine = currentLrcTuple.map { $0.1 }
         
         channelName = dataCenter.currentChannel
-            .map { $0.name }
+            .compactMap { $0?.name } // Safely unwrap the optional Channel and get its name
             .asDriver(onErrorJustReturn: "Baidu FM")
 
         isLikeButtonEnabled = .just(true)
         isDownloadButtonEnabled = .just(true)
         
-        // MARK: - 输入处理
+        // MARK: - Inputs handling
         
         let songLoading = viewDidLoad
-            .flatMapLatest { [dataCenter] _ -> Observable<Void> in
-                return dataCenter.loadSongList(channelId: dataCenter.currentChannel.value)
+            .flatMapLatest { _ -> Observable<Void> in
+                // loadSongList no longer needs a parameter
+                return dataCenter.loadSongList()
             }
             .flatMapLatest { [dataCenter] _ -> Observable<Void> in
                 return dataCenter.loadSongDetails()
