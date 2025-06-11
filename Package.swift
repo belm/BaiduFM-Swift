@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "BaiduFM",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v13),
         .watchOS(.v6)
@@ -56,8 +57,15 @@ let package = Package(
                 .product(name: "SQLite", package: "SQLite.swift"),
                 "Async",
                 "MJRefresh",
-                "LTMorphingLabel"
+                .product(name: "LTMorphingLabel", package: "ltmorphinglabel"),
+                "Cfmdb"
             ]
+        ),
+        .target(
+            name: "Cfmdb",
+            dependencies: [],
+            path: "Sources/Libs/fmdb",
+            publicHeadersPath: "."
         ),
         .testTarget(
             name: "BaiduFMTests",
