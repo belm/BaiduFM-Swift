@@ -46,6 +46,9 @@ class DataCenter {
     // 喜欢的歌曲列表
     let likedSongs = BehaviorRelay<[Song]>(value: [])
     
+    // 最近播放的歌曲列表
+    let recentSongs = BehaviorRelay<[Song]>(value: [])
+    
     // 播放状态
     let playbackState = BehaviorRelay<PlaybackState>(value: .idle)
     
@@ -178,6 +181,12 @@ class DataCenter {
     func loadLikedSongs() {
         let songs = dbSongList.getAllLike() ?? []
         likedSongs.accept(songs)
+    }
+    
+    /// 加载最近播放的歌曲列表
+    func loadRecentSongs() {
+        let songs = dbSongList.getAllRecent() ?? []
+        recentSongs.accept(songs)
     }
     
     // MARK: - 播放控制方法
@@ -322,6 +331,20 @@ class DataCenter {
         if dbSongList.deleteLikeSong(songId: songId) {
             // 如果成功，重新加载以更新UI绑定的数据流
             loadLikedSongs()
+        }
+    }
+    
+    /// 清空最近播放的歌曲列表
+    func clearRecentSongs() {
+        if dbSongList.cleanRecentList() {
+            loadRecentSongs()
+        }
+    }
+    
+    /// 从最近播放列表中移除单个歌曲
+    func removeSongFromRecents(songId: String) {
+        if dbSongList.deleteRecentSong(songId: songId) {
+            loadRecentSongs()
         }
     }
 }

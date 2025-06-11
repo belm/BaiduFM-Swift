@@ -11,224 +11,113 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 
-// MARK: - 最近播放列表视图控制器
+// MARK: - Recent Songs View Controller
 class RecentTableViewController: UITableViewController {
     
-    // MARK: - 私有属性
+    // MARK: - Properties
     private let disposeBag = DisposeBag()
-    private var recentSongs: [Song] = []
+    private let dataCenter = DataCenter.shared
 
-    // MARK: - 生命周期方法
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupNavigationBar()
+        setupBindings()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        loadRecentSongs()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Refresh recent songs every time the view appears
+        dataCenter.loadRecentSongs()
     }
     
-    // MARK: - 私有方法
+    // MARK: - UI Setup
     
-    /// 设置UI
     private func setupUI() {
-        title = "最近播放"
-        
-        // 设置表格属性
+        title = "Recently Played"
         tableView.rowHeight = 60
-        tableView.estimatedRowHeight = UITableView.automaticDimension
-        
-        // 设置空状态
-        tableView.tableFooterView = UIView()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "recentCell")
     }
     
-    /// 设置导航栏
     private func setupNavigationBar() {
-        // 添加清空按钮
-        let clearButton = UIBarButtonItem(
-            title: "清空",
-            style: .plain,
-            target: self,
-            action: #selector(clearAllRecent)
-        )
+        let clearButton = UIBarButtonItem(title: "Clear All", style: .plain, target: nil, action: nil)
         navigationItem.rightBarButtonItem = clearButton
     }
     
-    /// 加载最近播放的歌曲
-    private func loadRecentSongs() {
-        // 从数据库获取最近播放的歌曲
-        recentSongs = DataCenter.shared.dbSongList.getAllRecent() ?? []
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
-            self?.updateEmptyState()
-        }
+    // MARK: - Bindings
+    private func setupBindings() {
+        // Data binding
+        dataCenter.recentSongs
+            .asDriver(onErrorJustReturn: [])
+            .drive(tableView.rx.items(cellIdentifier: "recentCell", cellType: UITableViewCell.self)) { (row, song, cell) in
+                self.configure(cell: cell, with: song)
+            }
+            .disposed(by: disposeBag)
+            
+        // Empty state handling
+        dataCenter.recentSongs
+            .map { !$0.isEmpty }
+            .asDriver(onErrorJustReturn: true)
+            .drive(onNext: { [weak self] hasSongs in
+                self?.tableView.backgroundView = hasSongs ? nil : self?.createEmptyStateView()
+            })
+            .disposed(by: disposeBag)
+            
+        // Row selection
+        tableView.rx.modelSelected(Song.self)
+            .subscribe(onNext: { [weak self] song in
+                self?.dataCenter.playSong(song: song)
+                self?.tabBarController?.selectedIndex = 0
+            })
+            .disposed(by: disposeBag)
+            
+        // Row deletion
+        tableView.rx.itemDeleted
+            .map { [dataCenter] indexPath in dataCenter.recentSongs.value[indexPath.row] }
+            .subscribe(onNext: { [dataCenter] song in
+                dataCenter.removeSongFromRecents(songId: song.sid)
+            })
+            .disposed(by: disposeBag)
+            
+        // Clear all button action
+        navigationItem.rightBarButtonItem?.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.showClearAllConfirmation()
+            })
+            .disposed(by: disposeBag)
     }
     
-    /// 更新空状态显示
-    private func updateEmptyState() {
-        if recentSongs.isEmpty {
-            showEmptyState()
-        } else {
-            hideEmptyState()
-        }
-    }
-    
-    /// 显示空状态
-    private func showEmptyState() {
-        let emptyLabel = UILabel()
-        emptyLabel.text = "暂无播放记录\n开始播放音乐后这里会显示最近播放的歌曲"
-        emptyLabel.textAlignment = .center
-        emptyLabel.textColor = .gray
-        emptyLabel.font = UIFont.systemFont(ofSize: 16)
-        emptyLabel.numberOfLines = 0
-        tableView.backgroundView = emptyLabel
-    }
-    
-    /// 隐藏空状态
-    private func hideEmptyState() {
-        tableView.backgroundView = nil
-    }
-    
-    /// 清空所有最近播放
-    @objc private func clearAllRecent() {
-        let alert = UIAlertController(
-            title: "确认清空",
-            message: "确定要清空所有播放记录吗？此操作不可恢复。",
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(UIAlertAction(title: "取消", style: .cancel))
-        alert.addAction(UIAlertAction(title: "确定", style: .destructive) { [weak self] _ in
-            self?.performClearAllRecent()
-        })
-        
-        present(alert, animated: true)
-    }
-    
-    /// 执行清空操作
-    private func performClearAllRecent() {
-        // 清理数据库
-        DataCenter.shared.dbSongList.clearRecentList()
-        
-        // 重新加载数据
-        loadRecentSongs()
-        
-        // 显示成功提示
-        let alert = UIAlertController(
-            title: "清空完成",
-            message: "所有播放记录已清空",
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "确定", style: .default))
-        present(alert, animated: true)
-    }
+    // MARK: - Private Helpers
 
-    // MARK: - 内存管理
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        print("收到内存警告 - RecentTableViewController")
-    }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recentSongs.count
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        
-        let song = recentSongs[indexPath.row]
-        
-        // 配置单元格
+    private func configure(cell: UITableViewCell, with song: Song) {
         cell.textLabel?.text = song.name
         cell.detailTextLabel?.text = song.artist
-        
-        // 使用Kingfisher加载图片
-        if let imageView = cell.imageView,
-           let url = URL(string: song.pic_url) {
-            imageView.kf.setImage(
-                with: url,
-                placeholder: UIImage(named: "placeholder"),
-                options: [
-                    .transition(.fade(0.2)),
-                    .cacheOriginalImage
-                ]
-            )
+        if let url = URL(string: song.pic_url) {
+            cell.imageView?.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
         }
-        
-        // 添加播放次数或时间标识
-        cell.accessoryType = .detailButton
-        
-        return cell
+    }
+    
+    private func createEmptyStateView() -> UIView {
+        let label = UILabel()
+        label.text = "No recently played songs.\nStart listening to see your history here."
+        label.textAlignment = .center
+        label.textColor = .gray
+        label.font = .systemFont(ofSize: 16)
+        label.numberOfLines = 0
+        return label
     }
 
-    // MARK: - 滑动删除支持
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let song = recentSongs[indexPath.row]
-            
-            // 从数组中移除
-            recentSongs.remove(at: indexPath.row)
-            
-            // 从数据库中删除
-            DataCenter.shared.dbSongList.deleteRecentSong(songId: song.sid)
-            
-            // 更新UI
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            updateEmptyState()
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        let song = recentSongs[indexPath.row]
-        let songData: [String: Any] = ["song": song]
-        
-        // 发送通知播放最近播放的歌曲
-        NotificationCenter.default.post(
-            name: Notification.Name("OTHER_MUSIC_LIST_CLICK_NOTIFICATION"),
-            object: nil,
-            userInfo: songData
-        )
-        
-        // 切换到播放页面
-        tabBarController?.selectedIndex = 0
-        if let mainNav = tabBarController?.viewControllers?[0] as? UINavigationController {
-            mainNav.popToRootViewController(animated: true)
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // 添加动画效果
-        cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1)
-        UIView.animate(withDuration: 0.25) {
-            cell.layer.transform = CATransform3DMakeScale(1, 1, 1)
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        // 可以在这里添加详情页面或更多操作
-        let song = recentSongs[indexPath.row]
-        
+    private func showClearAllConfirmation() {
         let alert = UIAlertController(
-            title: song.name,
-            message: "艺术家: \(song.artist)\n专辑: \(song.album)",
+            title: "Confirm Clear",
+            message: "Are you sure you want to clear all recently played songs? This action cannot be undone.",
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "确定", style: .default))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { [dataCenter] _ in
+            dataCenter.clearRecentSongs()
+        }))
         present(alert, animated: true)
     }
 }
