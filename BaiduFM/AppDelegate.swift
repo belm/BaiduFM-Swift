@@ -24,8 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // 启用远程控制事件接收
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
-        // 初始化数据库
-        let db = BaseDb()
+        // 初始化数据库单例，确保在应用启动时创建数据库和表
+        let _ = DatabaseManager.shared
         
         // 配置Kingfisher图片缓存库
         setupKingfisherConfiguration()
