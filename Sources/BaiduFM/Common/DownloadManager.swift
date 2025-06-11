@@ -383,13 +383,13 @@ class DownloadManager {
             return Song(
                 sid: nameWithoutExtension.hashValue.description,
                 name: title,
+                url: "",
+                pic_url: "",
+                lrc_url: "",
                 artist: artist,
                 album: "",
-                pic_url: "",
-                song_url: "",
-                lrc_url: "",
-                time: 0,
-                format: "mp3"
+                format: "mp3",
+                time: 0
             )
         }
         

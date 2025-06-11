@@ -89,15 +89,11 @@ class HttpRequest {
                 case .success(let value):
                     let lists = JSON(value)["data"]["songList"].arrayValue
                     let links: [SongLink] = lists.map { list in
-                        SongLink(id: list["songId"].stringValue,
-                                 name: list["songName"].stringValue,
-                                 lrcLink: list["lrcLink"].stringValue,
-                                 linkCode: list["linkCode"].intValue,
+                        SongLink(songId: list["songId"].stringValue,
                                  songLink: list["songLink"].stringValue,
-                                 format: list["format"].stringValue,
+                                 lrcLink: list["lrcLink"].stringValue,
                                  time: list["time"].intValue,
-                                 size: list["size"].intValue,
-                                 rate: list["rate"].intValue)
+                                 format: list["format"].stringValue)
                     }
                     callback(links)
                 case .failure:
@@ -115,15 +111,11 @@ class HttpRequest {
                 case .success(let value):
                     let lists = JSON(value)["data"]["songList"].arrayValue
                     let link = lists.first.flatMap { list -> SongLink in
-                        SongLink(id: list["songId"].stringValue,
-                                 name: list["songName"].stringValue,
-                                 lrcLink: list["lrcLink"].stringValue,
-                                 linkCode: list["linkCode"].intValue,
+                        SongLink(songId: list["songId"].stringValue,
                                  songLink: list["songLink"].stringValue,
-                                 format: list["format"].stringValue,
+                                 lrcLink: list["lrcLink"].stringValue,
                                  time: list["time"].intValue,
-                                 size: list["size"].intValue,
-                                 rate: list["rate"].intValue)
+                                 format: list["format"].stringValue)
                     }
                     callback(link)
                 case .failure:
@@ -197,18 +189,13 @@ class HttpRequest {
         }
         
         let songInfoList = lists.map { list -> SongInfo in
-            let id = list["songId"].stringValue
+            let songId = list["songId"].stringValue
             let name = list["songName"].stringValue
-            let artistId = list["artistId"].stringValue
             let artistName = list["artistName"].stringValue
-            let albumId = list["albumId"].intValue
             let albumName = list["albumName"].stringValue
-            let songPicSmall = list["songPicSmall"].stringValue
-            let songPicBig = list["songPicBig"].stringValue
-            let songPicRadio = list["songPicRadio"].stringValue
-            let allRate = list["allRate"].stringValue
+            let picUrl = list["songPicBig"].stringValue.isEmpty ? list["songPicSmall"].stringValue : list["songPicBig"].stringValue
             
-            return SongInfo(id: id, name: name, artistId: artistId, artistName: artistName, albumId: albumId, albumName: albumName, songPicSmall: songPicSmall, songPicBig: songPicBig, songPicRadio: songPicRadio, allRate: allRate)
+            return SongInfo(songId: songId, name: name, artistName: artistName, albumName: albumName, picUrl: picUrl)
         }
         
         return songInfoList
@@ -225,17 +212,13 @@ class HttpRequest {
             throw NetworkError.jsonParsingFailed
         }
         
-        let id = list["songId"].stringValue
-        let name = list["songName"].stringValue
+        let songId = list["songId"].stringValue
+        let songLink = list["songLink"].stringValue
         let lrcLink = list["lrcLink"].stringValue
-        let linkCode = list["linkCode"].intValue
-        let link = list["songLink"].stringValue
-        let format = list["format"].stringValue
         let time = list["time"].intValue
-        let size = list["size"].intValue
-        let rate = list["rate"].intValue
+        let format = list["format"].stringValue
         
-        return SongLink(id: id, name: name, lrcLink: lrcLink, linkCode: linkCode, songLink: link, format: format, time: time, size: size, rate: rate)
+        return SongLink(songId: songId, songLink: songLink, lrcLink: lrcLink, time: time, format: format)
     }
 
     @available(iOS 13.0, *)

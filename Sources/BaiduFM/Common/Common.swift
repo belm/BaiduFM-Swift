@@ -11,7 +11,7 @@ import Foundation
 class Common {
     
     /**
-    获取可以播放的音乐
+    获取可以播放的音乐 - 处理百度音乐的URL格式
     
     :param: url 音乐播放URL
     
@@ -20,34 +20,27 @@ class Common {
     class func getCanPlaySongUrl(url: String)->String{
         
         if url.hasPrefix("http://file.qianqian.com"){
-            return replaceString("&src=.+", replace: url, place: "")!
+            return replaceString(pattern: "&src=.+", replace: url, place: "")!
             //return url.substringToIndex(advance(url.startIndex, 114))
         }
         return url
     }
     
     /**
-    获取首页显示图片
+    获取首页显示图片 - 根据优先级选择合适的图片尺寸
     
     :param: info 歌曲信息
     
-    :returns: 首页显示的图片
+    :returns: 首页显示的图片URL
     */
     class func getIndexPageImage(info :SongInfo) -> String{
         
-        if info.songPicBig.isEmpty == false {
-            return info.songPicBig
-        }
-        
-        if info.songPicRadio.isEmpty == false {
-            return info.songPicRadio
-        }
-        
-        return info.songPicSmall
+        // 使用统一的picUrl属性
+        return info.picUrl
     }
     
     /**
-    获取友好显示的时间
+    获取友好显示的时间 - 将秒数转换为MM:SS格式
     
     :param: seconds 秒数
     
@@ -55,17 +48,17 @@ class Common {
     */
     class func getMinuteDisplay(seconds: Int) ->String{
         
-        var minute = Int(seconds/60)
-        var second = seconds%60
+        let minute = Int(seconds/60)
+        let second = seconds%60
         
-        var minuteStr = minute >= 10 ? String(minute) : "0\(minute)"
-        var secondStr = second >= 10 ? String(second) : "0\(second)"
+        let minuteStr = minute >= 10 ? String(minute) : "0\(minute)"
+        let secondStr = second >= 10 ? String(second) : "0\(second)"
         
         return "\(minuteStr):\(secondStr)"
     }
     
     /**
-    正则替换字符串
+    正则替换字符串 - 使用现代Swift正则表达式API
     
     :param: pattern 正则表达式
     :param: replace 需要被替换的字符串
@@ -80,33 +73,41 @@ class Common {
         return regex.stringByReplacingMatches(in: replace, options: [], range: range, withTemplate: place)
     }
     
+    /// 检查文件是否存在 - 使用现代FileManager API
     class func fileIsExist(filePath:String)->Bool{
-        return NSFileManager.defaultManager().fileExistsAtPath(filePath)
+        return FileManager.default.fileExists(atPath: filePath)
     }
     
+    /// 获取音乐本地存储路径 - 使用现代路径API
     class func musicLocalPath(songId:String, format:String) -> String{
         
-        var musicDir = Utils.documentPath().stringByAppendingPathComponent("download")
-        if !NSFileManager.defaultManager().fileExistsAtPath(musicDir){
-            NSFileManager.defaultManager().createDirectoryAtPath(musicDir, withIntermediateDirectories: false, attributes: nil, error: nil)
+        let musicDir = Utils.documentPath().appendingPathComponent("download")
+        if !FileManager.default.fileExists(atPath: musicDir){
+            try? FileManager.default.createDirectory(atPath: musicDir, withIntermediateDirectories: false, attributes: nil)
         }
-        var musicPath = musicDir.stringByAppendingPathComponent(songId + "." + format)
+        let musicPath = musicDir.appendingPathComponent(songId + "." + format)
         return musicPath
     }
     
+    /// 清理所有下载的歌曲 - 删除整个下载文件夹
     class func cleanAllDownloadSong(){
        
         //删除歌曲文件夹
-        var musicDir = Utils.documentPath().stringByAppendingPathComponent("download")
-        NSFileManager.defaultManager().removeItemAtPath(musicDir, error: nil)
+        let musicDir = Utils.documentPath().appendingPathComponent("download")
+        try? FileManager.default.removeItem(atPath: musicDir)
         
     }
     
+    /// 删除指定歌曲文件 - 删除单个歌曲文件
     class func deleteSong(songId:String, format:String)->Bool{
         //删除本地歌曲
-        var musicPath = self.musicLocalPath(songId, format: format)
-        var ret = NSFileManager.defaultManager().removeItemAtPath(musicPath, error: nil)
-        return ret
+        let musicPath = self.musicLocalPath(songId: songId, format: format)
+        do {
+            try FileManager.default.removeItem(atPath: musicPath)
+            return true
+        } catch {
+            return false
+        }
     }
     
     class func matchesForRegexInText(_ regex: String, text: String) -> [String] {
@@ -177,13 +178,18 @@ class Common {
     /// 删除下载的歌曲文件
     class func deleteDownloadedSong(song: Song) -> Bool {
         let musicPath = musicLocalPath(songId: song.sid, format: song.format)
-        return NSFileManager.defaultManager().removeItemAtPath(musicPath, error: nil)
+        do {
+            try FileManager.default.removeItem(atPath: musicPath)
+            return true
+        } catch {
+            return false
+        }
     }
     
     /// 获取数据库路径
     class func getDbPath() -> String {
         let documentsPath = Utils.documentPath()
-        let dbPath = documentsPath.stringByAppendingPathComponent("music.db")
+        let dbPath = documentsPath.appendingPathComponent("music.db")
         return dbPath
     }
 
