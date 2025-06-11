@@ -57,7 +57,7 @@ let package = Package(
                 .product(name: "SQLite", package: "SQLite.swift"),
                 "Async",
                 "MJRefresh",
-                .product(name: "LTMorphingLabel", package: "ltmorphinglabel"),
+                "LTMorphingLabel",
                 "Cfmdb"
             ]
         ),
