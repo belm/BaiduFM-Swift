@@ -63,7 +63,7 @@ final class DatabaseManager {
             """
             
             if !database.executeStatements(sql) {
-                print("创建表 tbl_song_list 失败: \(database.lastErrorMessage())")
+                print("创建表 tbl_song_list 失败: \(database.lastErrorMessage() ?? "未知错误")")
             } else {
                 print("创建/检查表 tbl_song_list 成功")
             }

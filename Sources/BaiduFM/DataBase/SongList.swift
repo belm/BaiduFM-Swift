@@ -119,7 +119,13 @@ class SongList {
             
             // 首先检查歌曲是否已存在
             let checkSql = "SELECT COUNT(*) FROM tbl_song_list WHERE sid=?"
-            let count = database.scalar(forQuery: checkSql, arguments: [info.songId]) as? Int ?? 0
+            var count = 0
+            if let rs = database.executeQuery(checkSql, withArgumentsIn: [info.songId]) {
+                if rs.next() {
+                    count = Int(rs.int(forColumn: "COUNT(*)"))
+                }
+                rs.close()
+            }
             if count > 0 {
                 print("\(info.songId)已经添加")
                 // 歌曲已存在，设置success为true或false取决于业务逻辑，这里假设不重复添加即为成功
