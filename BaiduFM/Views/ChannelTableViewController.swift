@@ -10,136 +10,116 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-// MARK: - 频道列表视图控制器
+// MARK: - Channel List View Controller
 class ChannelTableViewController: UITableViewController {
     
-    // MARK: - 私有属性
+    // MARK: - Properties
     private let disposeBag = DisposeBag()
-    private var channels: [Channel] = []
+    private let dataCenter = DataCenter.shared
     
-    // MARK: - 生命周期方法
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
-        bindData()
+        setupBindings()
         loadChannels()
     }
     
-    // MARK: - 私有方法
+    // MARK: - Private Methods
     
-    /// 设置UI
+    /// Setup the basic UI elements
     private func setupUI() {
-        title = "频道列表"
+        title = "Channels"
         
-        // 设置下拉刷新
+        // Setup pull-to-refresh
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        
+        // Register cell
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "channelCell")
     }
     
-    /// 绑定数据
-    private func bindData() {
-        // 监听频道列表数据变化
-        DataCenter.shared.channelListInfo
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] channels in
-                self?.channels = channels
-                self?.tableView.reloadData()
-                self?.refreshControl?.endRefreshing()
+    /// Bind ViewModel data to UI
+    private func setupBindings() {
+        // Bind channel list data directly to the table view
+        dataCenter.channelListInfo
+            .asDriver()
+            .drive(tableView.rx.items(cellIdentifier: "channelCell", cellType: UITableViewCell.self)) { (row, channel, cell) in
+                cell.textLabel?.text = channel.name
+                cell.accessoryType = .disclosureIndicator
+            }
+            .disposed(by: disposeBag)
+        
+        // Handle row selection
+        tableView.rx.modelSelected(Channel.self)
+            .subscribe(onNext: { [weak self] channel in
+                // Update the current channel in DataCenter
+                self?.dataCenter.currentChannel.accept(channel)
+                
+                // Pop back to the previous view controller
+                self?.navigationController?.popViewController(animated: true)
             })
+            .disposed(by: disposeBag)
+            
+        // End refreshing when data loads
+        dataCenter.channelListInfo
+            .map { _ in false }
+            .asDriver(onErrorJustReturn: false)
+            .drive(refreshControl!.rx.isRefreshing)
             .disposed(by: disposeBag)
     }
     
-    /// 加载频道列表
+    /// Load channel list from DataCenter
     private func loadChannels() {
-        // 如果已有数据，直接使用
-        if !DataCenter.shared.channelListInfo.value.isEmpty {
+        // If data already exists, don't reload unless refreshing
+        if !dataCenter.channelListInfo.value.isEmpty {
             return
         }
         
-        // 显示加载指示器
         refreshControl?.beginRefreshing()
         
-        // 加载频道数据
-        DataCenter.shared.loadChannelList()
+        dataCenter.loadChannelList()
             .observe(on: MainScheduler.instance)
             .subscribe(
-                onNext: { [weak self] in
-                    // 数据加载成功，UI会通过绑定自动更新
-                    print("频道列表加载成功")
-                },
                 onError: { [weak self] error in
-                    print("频道列表加载失败: \(error.localizedDescription)")
-                    self?.refreshControl?.endRefreshing()
-                    
-                    // 显示错误提示
-                    self?.showErrorAlert(message: "加载频道列表失败，请检查网络连接")
+                    print("Failed to load channels: \(error.localizedDescription)")
+                    self?.showErrorAlert(message: "Failed to load channels. Please check your network connection.")
                 }
             )
             .disposed(by: disposeBag)
     }
     
-    /// 处理下拉刷新
+    /// Handle pull-to-refresh action
     @objc private func handleRefresh() {
-        loadChannels()
+        // Always reload channels on refresh
+        dataCenter.loadChannelList()
+            .subscribe(
+                onError: { [weak self] error in
+                    print("Failed to refresh channels: \(error.localizedDescription)")
+                    self?.showErrorAlert(message: "Failed to refresh channels.")
+                }
+            )
+            .disposed(by: disposeBag)
     }
     
-    /// 显示错误提示
+    /// Show an error alert
     private func showErrorAlert(message: String) {
-        let alert = UIAlertController(title: "错误", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "确定", style: .default))
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
 
-    // MARK: - 内存管理
+    // MARK: - Memory Management
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        print("收到内存警告 - ChannelTableViewController")
+        print("Memory warning received - ChannelTableViewController")
     }
 
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return channels.count
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-
-        // 配置单元格
-        let channel = channels[indexPath.row]
-        cell.textLabel?.text = channel.name
-        cell.accessoryType = .disclosureIndicator
-        
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        let channel = channels[indexPath.row]
-        
-        // 使用DataCenter更新当前频道
-        DataCenter.shared.currentChannel.accept(channel.id)
-        DataCenter.shared.currentChannelName.accept(channel.name)
-        
-        // 保存用户选择
-        UserDefaults.standard.set(channel.id, forKey: "LAST_PLAY_CHANNEL_ID")
-        UserDefaults.standard.set(channel.name, forKey: "LAST_PLAY_CHANNEL_NAME")
-        
-        // 发送通知表示频道已选择
-        NotificationCenter.default.post(name: Notification.Name("ChannelSelected"), object: channel)
-        
-        // 返回上一页
-        navigationController?.popViewController(animated: true)
-    }
+    // MARK: - Table view data source (Now managed by Rx)
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // 添加动画效果
+        // Add a simple animation
         cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1)
         UIView.animate(withDuration: 0.25) {
             cell.layer.transform = CATransform3DMakeScale(1, 1, 1)
