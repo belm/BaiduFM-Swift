@@ -382,9 +382,19 @@
 		A6E9411A2AD3214500C1B479 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 67F0AEB31AD9FF8C000CB588 /* BaiduFM */;
-			targetProxy = A6E941192AD3214500C1B479 /* PBXContainerItemProxy */;
+			targetProxy = A6E941A52AD3214500C1B479 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXContainerItemProxy section */
+	A6E941A52AD3214500C1B479 /* PBXContainerItemProxy */ = {
+		isa = PBXContainerItemProxy;
+		containerPortal = 67F0AEB11AD9FF8C000CB588 /* Project object */;
+		proxyType = 1;
+		remoteGlobalIDString = 67F0AEB31AD9FF8C000CB588;
+		remoteInfo = BaiduFM;
+	};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXVariantGroup section */
 		67F0AEC31AD9FF8C000CB588 /* Base */ = {
