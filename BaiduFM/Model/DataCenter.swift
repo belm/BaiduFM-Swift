@@ -43,6 +43,9 @@ class DataCenter {
     // 当前播放的歌曲信息
     let currentPlayingSong = BehaviorRelay<Song?>(value: nil)
     
+    // 喜欢的歌曲列表
+    let likedSongs = BehaviorRelay<[Song]>(value: [])
+    
     // 播放状态
     let playbackState = BehaviorRelay<PlaybackState>(value: .idle)
     
@@ -171,6 +174,12 @@ class DataCenter {
             .map { _ in () }
     }
     
+    /// 加载喜欢的歌曲列表
+    func loadLikedSongs() {
+        let songs = dbSongList.getAllLike() ?? []
+        likedSongs.accept(songs)
+    }
+    
     // MARK: - 播放控制方法
     
     /// 播放指定索引的歌曲
@@ -204,6 +213,21 @@ class DataCenter {
         // 使用AudioManager播放音频
         if let url = URL(string: songLink.songLink) {
             AudioManager.shared.play(from: url, song: song)
+        }
+    }
+    
+    /// 直接播放一个Song对象
+    func playSong(song: Song) {
+        // 检查这首歌是否在当前列表中
+        if let index = currentSongInfoList.value.firstIndex(where: { $0.id == song.sid }) {
+            // 如果在，就用现有的列表逻辑播放
+            playSong(at: index)
+        } else {
+            // 如果不在，直接播放该歌曲对象
+            currentPlayingSong.accept(song)
+            if let url = URL(string: song.song_url) {
+                AudioManager.shared.play(from: url, song: song)
+            }
         }
     }
     
@@ -283,6 +307,22 @@ class DataCenter {
         )
         
         currentPlayingSong.accept(song)
+    }
+    
+    /// 清空喜欢的歌曲列表
+    func clearLikedSongs() {
+        if dbSongList.clearLikeList() {
+            // 如果成功，重新加载以更新UI绑定的数据流
+            loadLikedSongs()
+        }
+    }
+    
+    /// 从喜欢列表中移除单个歌曲
+    func removeSongFromLikes(songId: String) {
+        if dbSongList.deleteLikeSong(songId: songId) {
+            // 如果成功，重新加载以更新UI绑定的数据流
+            loadLikedSongs()
+        }
     }
 }
 
