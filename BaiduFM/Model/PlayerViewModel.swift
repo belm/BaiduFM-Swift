@@ -33,6 +33,7 @@ class PlayerViewModel {
     let nextLyricLine: Driver<String>
     let isLikeButtonEnabled: Driver<Bool>
     let isDownloadButtonEnabled: Driver<Bool>
+    let channelName: Driver<String>
     
     init() {
         // MARK: - Aliases
@@ -79,6 +80,10 @@ class PlayerViewModel {
         lyrics = currentLrcTuple.map { $0.0 }
         nextLyricLine = currentLrcTuple.map { $0.1 }
         
+        channelName = dataCenter.currentChannel
+            .map { $0.name }
+            .asDriver(onErrorJustReturn: "Baidu FM")
+
         isLikeButtonEnabled = .just(true)
         isDownloadButtonEnabled = .just(true)
         

@@ -21,6 +21,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var songTimeLengthLabel: UILabel!
     @IBOutlet weak var songTimePlayLabel: UILabel!
     
+    // MARK: - Constants
+    private enum Constants {
+        static let playButtonImageName = "player_btn_play_normal"
+        static let pauseButtonImageName = "player_btn_pause_normal"
+    }
+    
     // MARK: - Properties
     private let viewModel = PlayerViewModel()
     private let disposeBag = DisposeBag()
@@ -41,8 +47,8 @@ class ViewController: UIViewController {
         blurView.frame = view.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         bgImageView.addSubview(blurView)
-        // 驱动导航栏标题
-        // viewModel.channelName.drive(navigationItem.rx.title).disposed(by: disposeBag)
+        // Drive the navigation bar title
+        viewModel.channelName.drive(navigationItem.rx.title).disposed(by: disposeBag)
     }
     
     // MARK: - Bindings
@@ -72,7 +78,7 @@ class ViewController: UIViewController {
             
         viewModel.isPlaying
             .drive(onNext: { [weak self] isPlaying in
-                let imageName = isPlaying ? "player_btn_pause_normal" : "player_btn_play_normal"
+                let imageName = isPlaying ? Constants.pauseButtonImageName : Constants.playButtonImageName
                 self?.playButton.setImage(UIImage(named: imageName), for: .normal)
                 isPlaying ? self?.imgView.rotation() : self?.imgView.layer.removeAllAnimations()
             })
