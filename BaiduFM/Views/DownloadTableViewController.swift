@@ -11,216 +11,110 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 
-// MARK: - 下载歌曲列表视图控制器
+// MARK: - Downloaded Songs View Controller
 class DownloadTableViewController: UITableViewController {
     
-    // MARK: - 私有属性
+    // MARK: - Properties
     private let disposeBag = DisposeBag()
-    private var downloadedSongs: [Song] = []
-    
-    // MARK: - 生命周期方法
+    private let dataCenter = DataCenter.shared
+
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupNavigationBar()
+        setupBindings()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        loadDownloadedSongs()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        dataCenter.loadDownloadedSongs()
     }
     
-    // MARK: - 私有方法
-    
-    /// 设置UI
+    // MARK: - UI Setup
     private func setupUI() {
-        title = "已下载"
-        
-        // 设置表格属性
+        title = "Downloads"
         tableView.rowHeight = 60
-        tableView.estimatedRowHeight = UITableView.automaticDimension
-        
-        // 设置空状态
-        tableView.tableFooterView = UIView()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "downloadCell")
     }
     
-    /// 设置导航栏
     private func setupNavigationBar() {
-        // 添加清空按钮
-        let clearButton = UIBarButtonItem(
-            title: "清空",
-            style: .plain,
-            target: self,
-            action: #selector(clearAllDownloads)
-        )
+        let clearButton = UIBarButtonItem(title: "Clear All", style: .plain, target: nil, action: nil)
         navigationItem.rightBarButtonItem = clearButton
     }
     
-    /// 加载下载的歌曲
-    private func loadDownloadedSongs() {
-        // 从数据库获取下载的歌曲
-        downloadedSongs = DataCenter.shared.dbSongList.getAllDownload() ?? []
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
-            self?.updateEmptyState()
-        }
+    // MARK: - Bindings
+    private func setupBindings() {
+        // Data binding
+        dataCenter.downloadedSongs
+            .asDriver(onErrorJustReturn: [])
+            .drive(tableView.rx.items(cellIdentifier: "downloadCell", cellType: UITableViewCell.self)) { (row, song, cell) in
+                self.configure(cell: cell, with: song)
+            }
+            .disposed(by: disposeBag)
+            
+        // Empty state handling
+        dataCenter.downloadedSongs
+            .map { !$0.isEmpty }
+            .asDriver(onErrorJustReturn: true)
+            .drive(onNext: { [weak self] hasSongs in
+                self?.tableView.backgroundView = hasSongs ? nil : self?.createEmptyStateView()
+            })
+            .disposed(by: disposeBag)
+            
+        // Row selection
+        tableView.rx.modelSelected(Song.self)
+            .subscribe(onNext: { [weak self] song in
+                self?.dataCenter.playSong(song: song)
+                self?.tabBarController?.selectedIndex = 0
+            })
+            .disposed(by: disposeBag)
+            
+        // Row deletion
+        tableView.rx.itemDeleted
+            .map { [dataCenter] indexPath in dataCenter.downloadedSongs.value[indexPath.row] }
+            .subscribe(onNext: { [dataCenter] song in
+                dataCenter.removeDownloadedSong(song: song)
+            })
+            .disposed(by: disposeBag)
+            
+        // Clear all button action
+        navigationItem.rightBarButtonItem?.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.showClearAllConfirmation()
+            })
+            .disposed(by: disposeBag)
     }
     
-    /// 更新空状态显示
-    private func updateEmptyState() {
-        if downloadedSongs.isEmpty {
-            showEmptyState()
-        } else {
-            hideEmptyState()
-        }
-    }
-    
-    /// 显示空状态
-    private func showEmptyState() {
-        let emptyLabel = UILabel()
-        emptyLabel.text = "暂无下载的歌曲"
-        emptyLabel.textAlignment = .center
-        emptyLabel.textColor = .gray
-        emptyLabel.font = UIFont.systemFont(ofSize: 16)
-        tableView.backgroundView = emptyLabel
-    }
-    
-    /// 隐藏空状态
-    private func hideEmptyState() {
-        tableView.backgroundView = nil
-    }
-    
-    /// 清空所有下载
-    @objc private func clearAllDownloads() {
-        let alert = UIAlertController(
-            title: "确认清空",
-            message: "确定要清空所有下载的歌曲吗？此操作不可恢复。",
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(UIAlertAction(title: "取消", style: .cancel))
-        alert.addAction(UIAlertAction(title: "确定", style: .destructive) { [weak self] _ in
-            self?.performClearAllDownloads()
-        })
-        
-        present(alert, animated: true)
-    }
-    
-    /// 执行清空操作
-    private func performClearAllDownloads() {
-        // 清理文件系统中的下载文件
-        Common.cleanAllDownloadSong()
-        
-        // 清理数据库
-        DataCenter.shared.dbSongList.cleanDownloadList()
-        
-        // 重新加载数据
-        loadDownloadedSongs()
-        
-        // 显示成功提示
-        let alert = UIAlertController(
-            title: "清空完成",
-            message: "所有下载的歌曲已清空",
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "确定", style: .default))
-        present(alert, animated: true)
-    }
-
-    // MARK: - 内存管理
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        print("收到内存警告 - DownloadTableViewController")
-    }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return downloadedSongs.count
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        
-        let song = downloadedSongs[indexPath.row]
-        
-        // 配置单元格
+    // MARK: - Private Helpers
+    private func configure(cell: UITableViewCell, with song: Song) {
         cell.textLabel?.text = song.name
         cell.detailTextLabel?.text = song.artist
-        
-        // 使用Kingfisher加载图片
-        if let imageView = cell.imageView,
-           let url = URL(string: song.pic_url) {
-            imageView.kf.setImage(
-                with: url,
-                placeholder: UIImage(named: "placeholder"),
-                options: [
-                    .transition(.fade(0.2)),
-                    .cacheOriginalImage
-                ]
-            )
+        cell.accessoryType = .disclosureIndicator
+        if let url = URL(string: song.pic_url) {
+            cell.imageView?.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
         }
-        
-        // 添加下载完成的标识
-        cell.accessoryType = .checkmark
-        
-        return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        let song = downloadedSongs[indexPath.row]
-        let songData: [String: Any] = ["song": song]
-        
-        // 发送通知播放下载的歌曲
-        NotificationCenter.default.post(
-            name: Notification.Name("OTHER_MUSIC_LIST_CLICK_NOTIFICATION"),
-            object: nil,
-            userInfo: songData
+    private func createEmptyStateView() -> UIView {
+        let label = UILabel()
+        label.text = "No downloaded songs yet."
+        label.textAlignment = .center
+        label.textColor = .gray
+        label.font = .systemFont(ofSize: 16)
+        return label
+    }
+
+    private func showClearAllConfirmation() {
+        let alert = UIAlertController(
+            title: "Confirm Clear",
+            message: "Are you sure you want to clear all downloaded songs? This action cannot be undone.",
+            preferredStyle: .alert
         )
-        
-        // 切换到播放页面
-        tabBarController?.selectedIndex = 0
-        if let mainNav = tabBarController?.viewControllers?[0] as? UINavigationController {
-            mainNav.popToRootViewController(animated: true)
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // 添加动画效果
-        cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1)
-        UIView.animate(withDuration: 0.25) {
-            cell.layer.transform = CATransform3DMakeScale(1, 1, 1)
-        }
-    }
-    
-    // MARK: - 滑动删除支持
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let song = downloadedSongs[indexPath.row]
-            
-            // 从数组中移除
-            downloadedSongs.remove(at: indexPath.row)
-            
-            // 从数据库中删除
-            DataCenter.shared.dbSongList.deleteSong(songId: song.sid)
-            
-            // 删除本地文件
-            Common.deleteDownloadedSong(song: song)
-            
-            // 更新UI
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            updateEmptyState()
-        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { [dataCenter] _ in
+            dataCenter.clearAllDownloads()
+        }))
+        present(alert, animated: true)
     }
 }

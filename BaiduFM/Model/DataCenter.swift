@@ -49,6 +49,9 @@ class DataCenter {
     // 最近播放的歌曲列表
     let recentSongs = BehaviorRelay<[Song]>(value: [])
     
+    // 已下载的歌曲列表
+    let downloadedSongs = BehaviorRelay<[Song]>(value: [])
+    
     // 播放状态
     let playbackState = BehaviorRelay<PlaybackState>(value: .idle)
     
@@ -187,6 +190,12 @@ class DataCenter {
     func loadRecentSongs() {
         let songs = dbSongList.getAllRecent() ?? []
         recentSongs.accept(songs)
+    }
+    
+    /// 加载已下载的歌曲列表
+    func loadDownloadedSongs() {
+        let songs = dbSongList.getAllDownload() ?? []
+        downloadedSongs.accept(songs)
     }
     
     // MARK: - 播放控制方法
@@ -345,6 +354,30 @@ class DataCenter {
     func removeSongFromRecents(songId: String) {
         if dbSongList.deleteRecentSong(songId: songId) {
             loadRecentSongs()
+        }
+    }
+    
+    /// 清空所有下载的歌曲
+    func clearAllDownloads() {
+        // 先获取列表用于删除文件
+        let songsToClear = downloadedSongs.value
+        
+        // 清理数据库
+        if dbSongList.cleanDownloadList() {
+            // 清理文件系统
+            for song in songsToClear {
+                let _ = Common.deleteDownloadedSong(song: song)
+            }
+            // 重新加载以更新UI
+            loadDownloadedSongs()
+        }
+    }
+    
+    /// 移除单个下载的歌曲
+    func removeDownloadedSong(song: Song) {
+        if dbSongList.updateDownloadStatus(sid: song.sid, status: 0) {
+            let _ = Common.deleteDownloadedSong(song: song)
+            loadDownloadedSongs()
         }
     }
 }
