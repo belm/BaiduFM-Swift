@@ -64,11 +64,11 @@ class PlayerViewModel {
         songProgress = audioManager.progress.asDriver()
         
         currentTimeText = audioManager.currentTime
-            .map { Common.getMinuteDisplay(seconds: $0) }
+            .map { Common.getMinuteDisplay(seconds: Int($0)) }
             .asDriver(onErrorJustReturn: "00:00")
             
         totalTimeText = audioManager.duration
-            .map { Common.getMinuteDisplay(seconds: $0) }
+            .map { Common.getMinuteDisplay(seconds: Int($0)) }
             .asDriver(onErrorJustReturn: "00:00")
             
         let currentLrcTuple = Observable.combineLatest(audioManager.currentTime, self.parsedLrc)

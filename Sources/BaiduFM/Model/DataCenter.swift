@@ -217,13 +217,13 @@ class DataCenter {
         let song = Song(
             sid: songLink.songId,
             name: songInfo.name,
+            url: songLink.songLink,
+            pic_url: songInfo.picUrl,
+            lrc_url: songLink.lrcLink,
             artist: songInfo.artistName,
             album: songInfo.albumName,
-            pic_url: songInfo.picUrl,
-            song_url: songLink.songLink,
-            lrc_url: songLink.lrcLink,
-            time: songLink.time,
-            format: songLink.format
+            format: songLink.format,
+            time: songLink.time
         )
         
         currentPlayingSong.accept(song)
@@ -237,7 +237,7 @@ class DataCenter {
     /// 直接播放一个Song对象
     func playSong(song: Song) {
         // 检查这首歌是否在当前列表中
-        if let index = currentSongInfoList.value.firstIndex(where: { $0.id == song.sid }) {
+        if let index = currentSongInfoList.value.firstIndex(where: { $0.songId == song.sid }) {
             // 如果在，就用现有的列表逻辑播放
             playSong(at: index)
         } else {
@@ -315,13 +315,13 @@ class DataCenter {
         let song = Song(
             sid: songLink.songId,
             name: songInfo.name,
+            url: songLink.songLink,
+            pic_url: songInfo.picUrl,
+            lrc_url: songLink.lrcLink,
             artist: songInfo.artistName,
             album: songInfo.albumName,
-            pic_url: songInfo.picUrl,
-            song_url: songLink.songLink,
-            lrc_url: songLink.lrcLink,
-            time: songLink.time,
-            format: songLink.format
+            format: songLink.format,
+            time: songLink.time
         )
         
         currentPlayingSong.accept(song)

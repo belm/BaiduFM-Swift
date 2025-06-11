@@ -37,6 +37,12 @@ final class DatabaseManager {
     private func createTables() {
         // 使用inDatabase方法来保证线程安全
         queue.inDatabase { db in
+            // 安全解包数据库连接
+            guard let database = db else {
+                print("无法获取数据库连接")
+                return
+            }
+            
             let sql = """
             CREATE TABLE IF NOT EXISTS tbl_song_list (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,8 +62,8 @@ final class DatabaseManager {
             );
             """
             
-            if !db.executeStatements(sql) {
-                print("创建表 tbl_song_list 失败: \(db.lastErrorMessage())")
+            if !database.executeStatements(sql) {
+                print("创建表 tbl_song_list 失败: \(database.lastErrorMessage())")
             } else {
                 print("创建/检查表 tbl_song_list 成功")
             }

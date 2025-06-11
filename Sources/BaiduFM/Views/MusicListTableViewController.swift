@@ -57,9 +57,10 @@ class MusicListTableViewController: UITableViewController {
             .disposed(by: disposeBag)
         
         // 监听当前频道变化
-        DataCenter.shared.currentChannelName
+        DataCenter.shared.currentChannel
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] channelName in
+            .subscribe(onNext: { [weak self] channel in
+                let channelName = channel?.name ?? ""
                 self?.title = channelName.isEmpty ? "歌曲列表" : channelName
             })
             .disposed(by: disposeBag)
@@ -69,8 +70,8 @@ class MusicListTableViewController: UITableViewController {
     private func loadInitialData() {
         guard !isLoading else { return }
         
-        let currentChannelId = DataCenter.shared.currentChannel.value
-        guard !currentChannelId.isEmpty else {
+        let currentChannel = DataCenter.shared.currentChannel.value
+        guard currentChannel != nil else {
             showErrorAlert(message: "请先选择一个频道")
             return
         }
@@ -79,7 +80,7 @@ class MusicListTableViewController: UITableViewController {
         refreshControl?.beginRefreshing()
         
         // 加载歌曲列表
-        DataCenter.shared.loadSongList(channelId: currentChannelId)
+        DataCenter.shared.loadSongList()
             .flatMap { _ in
                 // 然后加载歌曲详情
                 return DataCenter.shared.loadSongDetails()
@@ -124,7 +125,7 @@ class MusicListTableViewController: UITableViewController {
     @objc private func handleRefresh() {
         // 重置显示范围并重新加载
         DataCenter.shared.currentStartIndex.accept(0)
-        DataCenter.shared.currentEndIndex.accept(DataCenter.shared.pageSize)
+        DataCenter.shared.currentEndIndex.accept(20) // 直接使用默认页面大小
         loadInitialData()
     }
     
