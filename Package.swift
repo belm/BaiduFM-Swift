@@ -42,7 +42,7 @@ let package = Package(
         .package(url: "https://github.com/CoderMJLee/MJRefresh.git", from: "3.7.0"),
         
         // 文字动画效果库 - 酷炫的文字变换动画
-        .package(url: "https://github.com/lexrus/LTMorphingLabel.git", from: "0.9.0")
+        .package(name: "LTMorphingLabelPackage", url: "https://github.com/lexrus/LTMorphingLabel.git", from: "0.9.0")
     ],
     targets: [
         .target(
@@ -57,7 +57,7 @@ let package = Package(
                 .product(name: "SQLite", package: "SQLite.swift"),
                 "Async",
                 "MJRefresh",
-                "LTMorphingLabel",
+                .product(name: "LTMorphingLabel", package: "LTMorphingLabelPackage"),
                 "Cfmdb"
             ]
         ),
