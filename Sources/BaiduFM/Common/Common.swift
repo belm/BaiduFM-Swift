@@ -81,11 +81,11 @@ class Common {
     /// 获取音乐本地存储路径 - 使用现代路径API
     class func musicLocalPath(songId:String, format:String) -> String{
         
-        let musicDir = Utils.documentPath().appendingPathComponent("download")
+        let musicDir = (Utils.documentPath() as NSString).appendingPathComponent("download")
         if !FileManager.default.fileExists(atPath: musicDir){
             try? FileManager.default.createDirectory(atPath: musicDir, withIntermediateDirectories: false, attributes: nil)
         }
-        let musicPath = musicDir.appendingPathComponent(songId + "." + format)
+        let musicPath = (musicDir as NSString).appendingPathComponent(songId + "." + format)
         return musicPath
     }
     
@@ -93,7 +93,7 @@ class Common {
     class func cleanAllDownloadSong(){
        
         //删除歌曲文件夹
-        let musicDir = Utils.documentPath().appendingPathComponent("download")
+        let musicDir = (Utils.documentPath() as NSString).appendingPathComponent("download")
         try? FileManager.default.removeItem(atPath: musicDir)
         
     }
@@ -189,7 +189,7 @@ class Common {
     /// 获取数据库路径
     class func getDbPath() -> String {
         let documentsPath = Utils.documentPath()
-        let dbPath = documentsPath.appendingPathComponent("music.db")
+        let dbPath = (documentsPath as NSString).appendingPathComponent("music.db")
         return dbPath
     }
 
