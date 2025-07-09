@@ -8,9 +8,8 @@
 
 import UIKit
 import AVFoundation
-import Kingfisher
 
-@main  // 使用@main替代@UIApplicationMain
+// AppDelegate类 - 应用程序委托，处理应用生命周期事件
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
@@ -26,9 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // 初始化数据库单例，确保在应用启动时创建数据库和表
         let _ = DatabaseManager.shared
-        
-        // 配置Kingfisher图片缓存库
-        setupKingfisherConfiguration()
         
         return true
     }
@@ -88,7 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         case .remoteControlPreviousTrack:
             audioManager.playPrevious()
         case .remoteControlTogglePlayPause:
-            if audioManager.playbackState.value == .playing {
+            if audioManager.isPlaying {
                 audioManager.pause()
             } else {
                 audioManager.resume()
@@ -117,29 +113,6 @@ private extension AppDelegate {
         } catch {
             print("音频会话配置失败: \(error.localizedDescription)")
         }
-    }
-    
-    /// 配置Kingfisher图片缓存
-    func setupKingfisherConfiguration() {
-        // 获取下载器实例并配置
-        let downloader = KingfisherManager.shared.downloader
-        downloader.downloadTimeout = 15.0  // 下载超时时间
-        downloader.sessionConfiguration.timeoutIntervalForRequest = 15.0
-        
-        // 获取缓存实例并配置
-        let cache = KingfisherManager.shared.cache
-        cache.diskStorage.config.sizeLimit = 200 * 1024 * 1024  // 磁盘缓存最大200MB
-        cache.memoryStorage.config.totalCostLimit = 50 * 1024 * 1024  // 内存缓存最大50MB
-        cache.diskStorage.config.expiration = .days(7)  // 磁盘缓存过期时间7天
-        
-        // 配置图片处理器
-        let processor = DownsamplingImageProcessor(size: CGSize(width: 300, height: 300))
-        KingfisherManager.shared.defaultOptions = [
-            .processor(processor),
-            .scaleFactor(UIScreen.main.scale),
-            .transition(.fade(0.3)),
-            .cacheOriginalImage
-        ]
     }
 }
 

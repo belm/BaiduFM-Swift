@@ -10,39 +10,12 @@
       }
     },
     {
-      "identity" : "async",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/duemunk/Async.git",
-      "state" : {
-        "revision" : "a66d1a6efce6c1296ab228bdc3ec7da2b8968138",
-        "version" : "2.1.0"
-      }
-    },
-    {
       "identity" : "kingfisher",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
       "state" : {
         "revision" : "2ef543ee21d63734e1c004ad6c870255e8716c50",
         "version" : "7.12.0"
-      }
-    },
-    {
-      "identity" : "ltmorphinglabel",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/lexrus/LTMorphingLabel.git",
-      "state" : {
-        "revision" : "cbde73b207ac5cfcde289a09685ad0e62b75dc04",
-        "version" : "0.9.3"
-      }
-    },
-    {
-      "identity" : "mjrefresh",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/CoderMJLee/MJRefresh.git",
-      "state" : {
-        "revision" : "535d39c86e592d73f8b8e75f9bf1eda62ca4a4ce",
-        "version" : "3.7.9"
       }
     },
     {
@@ -61,15 +34,6 @@
       "state" : {
         "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
         "version" : "5.7.1"
-      }
-    },
-    {
-      "identity" : "sqlite.swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/stephencelis/SQLite.swift.git",
-      "state" : {
-        "revision" : "a95fc6df17d108bd99210db5e8a9bac90fe984b8",
-        "version" : "0.15.3"
       }
     },
     {
