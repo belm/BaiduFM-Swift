@@ -6,11 +6,25 @@ public enum BaiduFMApplication {
     /// Creates the root view controller stored in the package resource bundle.
     @MainActor
     public static func makeRootViewController() -> UIViewController {
+        // Restore durable transfers before the interface starts observing their state.
+        _ = DownloadManager.shared
         let storyboard = UIStoryboard(name: "Main", bundle: .module)
         guard let rootViewController = storyboard.instantiateInitialViewController() else {
             return makeConfigurationErrorViewController()
         }
         return rootViewController
+    }
+
+    /// Reconnects iOS background download events to the package-owned session.
+    @MainActor
+    public static func handleEventsForBackgroundURLSession(
+        identifier: String,
+        completionHandler: @escaping () -> Void
+    ) -> Bool {
+        DownloadManager.shared.registerBackgroundCompletionHandler(
+            identifier: identifier,
+            completionHandler: completionHandler
+        )
     }
 
     private static func makeConfigurationErrorViewController() -> UIViewController {

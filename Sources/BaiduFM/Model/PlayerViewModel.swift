@@ -16,6 +16,7 @@ final class PlayerViewModel {
     private let parsedLyrics = BehaviorRelay<[(lrc: String, time: Int)]>(value: [])
     private let initialLoadInProgress = BehaviorRelay<Bool>(value: false)
     private let errorRelay = PublishRelay<String>()
+    private let downloadErrorRelay = PublishRelay<String>()
 
     // MARK: Inputs
 
@@ -41,6 +42,7 @@ final class PlayerViewModel {
     let channelName: Driver<String>
     let isLoading: Driver<Bool>
     let errorMessage: Signal<String>
+    let downloadErrorMessage: Signal<String>
 
     init() {
         let currentSong = dataCenter.currentPlayingSong
@@ -101,6 +103,7 @@ final class PlayerViewModel {
             .asDriver(onErrorJustReturn: false)
 
         errorMessage = errorRelay.asSignal()
+        downloadErrorMessage = downloadErrorRelay.asSignal()
 
         bindInputs()
         bindLyrics()
@@ -167,17 +170,16 @@ final class PlayerViewModel {
 
         downloadButtonTapped
             .compactMap { [dataCenter] in dataCenter.currentPlayingSong.value }
-            .flatMapLatest { song in
+            .subscribe(onNext: { [weak self] song in
+                guard let self else { return }
                 DownloadManager.shared.startDownload(song: song)
-                    .ignoreElements()
-                    .andThen(.just(song))
-                    .catch { error in
-                        print("Download failed: \(error.localizedDescription)")
-                        return .empty()
-                    }
-            }
-            .subscribe(onNext: { [dataCenter] song in
-                dataCenter.markDownloaded(song: song)
+                    .subscribe(
+                        onCompleted: {},
+                        onError: { [weak self] error in
+                            self?.downloadErrorRelay.accept(error.localizedDescription)
+                        }
+                    )
+                    .disposed(by: self.disposeBag)
             })
             .disposed(by: disposeBag)
     }

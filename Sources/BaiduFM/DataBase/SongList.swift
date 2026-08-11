@@ -200,8 +200,32 @@ class SongList {
         var success = false
         queue.inDatabase { db in
             guard let database = db else { return }
-            let sql = "UPDATE tbl_song_list SET is_dl=? WHERE sid=?"
-            success = database.executeUpdate(sql, withArgumentsIn: [status, sid])
+            let sql = "UPDATE tbl_song_list SET is_dl=?, dl_file=CASE WHEN ?=0 THEN '' ELSE dl_file END WHERE sid=?"
+            success = database.executeUpdate(sql, withArgumentsIn: [status, status, sid])
+        }
+        return success
+    }
+
+    /// Records the canonical local file after a verified download finishes.
+    func markDownloaded(song: Song, localPath: String) -> Bool {
+        guard !localPath.isEmpty, upsert(song: song) else { return false }
+
+        var success = false
+        queue.inDatabase { db in
+            guard let database = db else { return }
+            let sql = "UPDATE tbl_song_list SET is_dl=1, dl_file=? WHERE sid=?"
+            success = database.executeUpdate(sql, withArgumentsIn: [localPath, song.sid])
+        }
+        return success
+    }
+
+    /// Clears both the download flag and stale local path.
+    func markDownloadRemoved(sid: String) -> Bool {
+        var success = false
+        queue.inDatabase { db in
+            guard let database = db else { return }
+            let sql = "UPDATE tbl_song_list SET is_dl=0, dl_file='' WHERE sid=?"
+            success = database.executeUpdate(sql, withArgumentsIn: [sid])
         }
         return success
     }
@@ -237,7 +261,7 @@ class SongList {
         var success = false
         queue.inDatabase { db in
             guard let database = db else { return }
-            let sql = "UPDATE tbl_song_list SET is_dl = 0"
+            let sql = "UPDATE tbl_song_list SET is_dl = 0, dl_file = ''"
             success = database.executeUpdate(sql, withArgumentsIn: [])
         }
         return success

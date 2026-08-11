@@ -124,7 +124,13 @@ final class ViewController: UIViewController {
 
         viewModel.errorMessage
             .emit(onNext: { [weak self] message in
-                self?.presentPlaybackError(message: message)
+                self?.presentError(message: message)
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.downloadErrorMessage
+            .emit(onNext: { [weak self] message in
+                self?.presentDownloadError(message: message)
             })
             .disposed(by: disposeBag)
 
@@ -149,14 +155,22 @@ final class ViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 
-    private func presentPlaybackError(message: String) {
+    private func presentError(message: String) {
         guard presentedViewController == nil else { return }
 
-        let alert = UIAlertController(title: L10n.playbackErrorTitle, message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: L10n.error, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
         alert.addAction(UIAlertAction(title: L10n.retry, style: .default) { [weak self] _ in
             self?.viewModel.retryButtonTapped.accept(())
         })
+        present(alert, animated: true)
+    }
+
+    private func presentDownloadError(message: String) {
+        guard presentedViewController == nil else { return }
+
+        let alert = UIAlertController(title: L10n.downloadErrorTitle, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: L10n.ok, style: .default))
         present(alert, animated: true)
     }
 }

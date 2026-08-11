@@ -17,6 +17,8 @@ enum NetworkError: Error, LocalizedError {
     case decodingError
     case serverError(String)
     case connectionError
+    case offline
+    case timedOut
     case insecureTransport
     
     var errorDescription: String? {
@@ -31,6 +33,10 @@ enum NetworkError: Error, LocalizedError {
             return String(format: L10n.serverErrorFormat, message)
         case .connectionError:
             return L10n.connectionFailed
+        case .offline:
+            return L10n.networkOffline
+        case .timedOut:
+            return L10n.networkTimedOut
         case .insecureTransport:
             return L10n.insecureConnectionBlocked
         }
@@ -55,9 +61,33 @@ final class NetworkManager {
         sessionConfiguration.timeoutIntervalForRequest = 30
         sessionConfiguration.timeoutIntervalForResource = 60
         sessionConfiguration.waitsForConnectivity = true
-        
-        // 创建自定义会话
-        self.session = Session(configuration: sessionConfiguration)
+        sessionConfiguration.requestCachePolicy = .useProtocolCachePolicy
+        sessionConfiguration.urlCache = URLCache(
+            memoryCapacity: 20 * 1_024 * 1_024,
+            diskCapacity: 100 * 1_024 * 1_024,
+            diskPath: "BaiduFMNetworkCache"
+        )
+
+        let retryPolicy = RetryPolicy(
+            retryLimit: UInt(ReliabilityRetryPolicy.maximumRetryCount),
+            exponentialBackoffBase: 2,
+            exponentialBackoffScale: 0.5,
+            retryableHTTPMethods: [.get],
+            retryableHTTPStatusCodes: [408, 425, 429, 500, 502, 503, 504],
+            retryableURLErrorCodes: [
+                .timedOut,
+                .cannotFindHost,
+                .cannotConnectToHost,
+                .networkConnectionLost,
+                .dnsLookupFailed,
+                .notConnectedToInternet,
+                .internationalRoamingOff,
+                .callIsActive,
+                .dataNotAllowed,
+                .resourceUnavailable,
+            ]
+        )
+        self.session = Session(configuration: sessionConfiguration, interceptor: retryPolicy)
     }
     
     // MARK: - JSON响应请求方法
@@ -93,6 +123,16 @@ final class NetworkManager {
                             observer.onError(NetworkError.serverError(String(format: L10n.clientStatusFormat, statusCode)))
                         case 500...599:
                             observer.onError(NetworkError.serverError(String(format: L10n.serverStatusFormat, statusCode)))
+                        default:
+                            observer.onError(NetworkError.connectionError)
+                        }
+                    } else if let urlError = error.underlyingError as? URLError {
+                        print("Network request failed: \(error.localizedDescription)")
+                        switch urlError.code {
+                        case .notConnectedToInternet, .dataNotAllowed, .internationalRoamingOff:
+                            observer.onError(NetworkError.offline)
+                        case .timedOut:
+                            observer.onError(NetworkError.timedOut)
                         default:
                             observer.onError(NetworkError.connectionError)
                         }
@@ -226,8 +266,10 @@ extension NetworkManager {
             .map { json -> String in
                 return json["lrcContent"].stringValue
             }
-            .catch { _ in
-                // 如果JSON解析失败，尝试直接获取文本
+            .catch { error in
+                guard case NetworkError.decodingError = error else {
+                    return .error(error)
+                }
                 return self.requestLyricsText(url: secureURL)
             }
     }
@@ -254,36 +296,6 @@ extension NetworkManager {
         }
     }
     
-    // MARK: - 下载音频文件
-    func downloadAudio(from url: String, to destination: URL) -> Observable<Float> {
-        guard let secureURL = configuration.secureContentURL(from: url) else {
-            return .error(NetworkError.insecureTransport)
-        }
-
-        return Observable.create { observer in
-            let observer = RxObserverBox(observer)
-            let destination: DownloadRequest.Destination = { _, _ in
-                return (destination, [.removePreviousFile, .createIntermediateDirectories])
-            }
-            
-            let request = self.session.download(secureURL, to: destination)
-                .downloadProgress { progress in
-                    observer.onNext(Float(progress.fractionCompleted))
-                }
-                .response { response in
-                    if response.error == nil {
-                        observer.onNext(1.0) // 下载完成
-                        observer.onCompleted()
-                    } else {
-                        observer.onError(NetworkError.connectionError)
-                    }
-                }
-            
-            return Disposables.create {
-                request.cancel()
-            }
-        }
-    }
 }
 
 // MARK: - 数据模型定义

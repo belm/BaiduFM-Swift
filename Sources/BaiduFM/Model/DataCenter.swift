@@ -210,14 +210,6 @@ class DataCenter {
         loadLikedSongs()
     }
 
-    func markDownloaded(song: Song) {
-        let songList = dbSongList
-        guard songList.upsert(song: song),
-              songList.updateDownloadStatus(sid: song.sid, status: 1) else { return }
-        song.is_dl = 1
-        loadDownloadedSongs()
-    }
-    
     // MARK: - 播放控制方法
     
     /// 播放指定索引的歌曲
@@ -248,8 +240,7 @@ class DataCenter {
         
         currentPlayingSong.accept(song)
         
-        // 使用AudioManager播放音频
-        if let url = NetworkManager.shared.secureContentURL(from: songLink.songLink) {
+        if let url = playbackURL(for: song) {
             AudioManager.shared.play(from: url, song: song)
         } else {
             AudioManager.shared.reportPlaybackFailure(L10n.insecureConnectionBlocked)
@@ -265,7 +256,7 @@ class DataCenter {
         } else {
             // 如果不在，直接播放该歌曲对象
             currentPlayingSong.accept(song)
-            if let url = NetworkManager.shared.secureContentURL(from: song.song_url) {
+            if let url = playbackURL(for: song) {
                 AudioManager.shared.play(from: url, song: song)
             } else {
                 AudioManager.shared.reportPlaybackFailure(L10n.insecureConnectionBlocked)
@@ -350,6 +341,11 @@ class DataCenter {
         
         currentPlayingSong.accept(song)
     }
+
+    private func playbackURL(for song: Song) -> URL? {
+        DownloadManager.shared.getLocalURL(for: song)
+            ?? NetworkManager.shared.secureContentURL(from: song.song_url)
+    }
     
     /// 清空喜欢的歌曲列表
     func clearLikedSongs() {
@@ -383,26 +379,24 @@ class DataCenter {
     
     /// 清空所有下载的歌曲
     func clearAllDownloads() {
-        // 先获取列表用于删除文件
-        let songsToClear = downloadedSongs.value
-        
-        // 清理数据库
-        if dbSongList.cleanDownloadList() {
-            // 清理文件系统
-            for song in songsToClear {
-                let _ = Common.deleteDownloadedSong(song: song)
-            }
-            // 重新加载以更新UI
+        do {
+            try DownloadManager.shared.removeAllDownloads()
             loadDownloadedSongs()
+        } catch {
+            print("Failed to clear downloads: \(error.localizedDescription)")
         }
     }
     
     /// 移除单个下载的歌曲
     func removeDownloadedSong(song: Song) {
-        if dbSongList.updateDownloadStatus(sid: song.sid, status: 0) {
-            let _ = Common.deleteDownloadedSong(song: song)
-            loadDownloadedSongs()
-        }
+        DownloadManager.shared.deleteDownload(taskId: song.sid)
+            .subscribe(
+                onCompleted: { [weak self] in self?.loadDownloadedSongs() },
+                onError: { error in
+                    print("Failed to remove download: \(error.localizedDescription)")
+                }
+            )
+            .disposed(by: disposeBag)
     }
 }
 

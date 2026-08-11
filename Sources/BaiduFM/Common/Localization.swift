@@ -23,6 +23,7 @@ nonisolated enum L10n {
 
     static let error = value("alert.error", defaultValue: "Error")
     static let playbackErrorTitle = value("alert.playback_error", defaultValue: "Playback Error")
+    static let downloadErrorTitle = value("alert.download_error", defaultValue: "Download Error")
     static let confirmClear = value("alert.confirm_clear", defaultValue: "Confirm Clear")
     static let clearDownloadsMessage = value(
         "alert.clear_downloads",
@@ -51,6 +52,13 @@ nonisolated enum L10n {
     static let noLyrics = value("empty.no_lyrics", defaultValue: "No lyrics")
     static let noLyricsDecorated = value("empty.no_lyrics_decorated", defaultValue: "♪ No lyrics ♪")
     static let loading = value("state.loading", defaultValue: "Loading…")
+    static let downloadWaiting = value("download.state.waiting", defaultValue: "Waiting")
+    static let downloadInProgress = value("download.state.downloading", defaultValue: "Downloading")
+    static let downloadPaused = value("download.state.paused", defaultValue: "Paused — tap to resume")
+    static let downloadCompleted = value("download.state.completed", defaultValue: "Downloaded")
+    static let downloadFailed = value("download.state.failed", defaultValue: "Failed — tap to retry")
+    static let downloadCancelledState = value("download.state.cancelled", defaultValue: "Cancelled — tap to retry")
+    static let downloadProgressFormat = value("download.state.progress", defaultValue: "%@ %ld%%")
     static let unknownError = value("error.unknown", defaultValue: "Unknown error")
 
     static let chooseChannel = value("error.choose_channel", defaultValue: "Please select a channel first.")
@@ -78,6 +86,8 @@ nonisolated enum L10n {
     static let clientStatusFormat = value("network.client_status", defaultValue: "Client error: %ld")
     static let serverStatusFormat = value("network.server_status", defaultValue: "Server error: %ld")
     static let connectionFailed = value("network.connection_failed", defaultValue: "Network connection failed.")
+    static let networkOffline = value("network.offline", defaultValue: "You appear to be offline. The request will retry when possible.")
+    static let networkTimedOut = value("network.timed_out", defaultValue: "The request timed out. Please try again.")
     static let invalidAPIConfiguration = value(
         "network.invalid_configuration",
         defaultValue: "The content service is not configured correctly."
@@ -105,6 +115,9 @@ nonisolated enum L10n {
     static let downloadTaskMissing = value("download.task_missing", defaultValue: "The download task no longer exists.")
     static let diskSpaceInsufficient = value("download.disk_space", defaultValue: "There is not enough disk space.")
     static let downloadNetworkError = value("download.network_error", defaultValue: "The download failed because of a network error.")
+    static let downloadCancelled = value("download.cancelled", defaultValue: "The download was cancelled.")
+    static let downloadFileMissing = value("download.file_missing", defaultValue: "The downloaded file is missing. Download it again.")
+    static let downloadStorageErrorFormat = value("download.storage_error", defaultValue: "The download could not be saved: %@")
 
     static let lyricsInvalid = value("lyrics.invalid", defaultValue: "Invalid lyrics format")
     static let lyricsLoadFailed = value("lyrics.load_failed", defaultValue: "Failed to load lyrics")

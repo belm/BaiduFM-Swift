@@ -15,4 +15,17 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = window
         return true
     }
+
+    func application(
+        _ application: UIApplication,
+        handleEventsForBackgroundURLSession identifier: String,
+        completionHandler: @escaping () -> Void
+    ) {
+        if !BaiduFMApplication.handleEventsForBackgroundURLSession(
+            identifier: identifier,
+            completionHandler: completionHandler
+        ) {
+            completionHandler()
+        }
+    }
 }

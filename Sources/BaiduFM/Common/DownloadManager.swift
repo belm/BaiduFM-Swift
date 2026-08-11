@@ -1,418 +1,43 @@
-//
-//  DownloadManager.swift
-//  BaiduFM
-//
-//  下载管理器 - 支持多任务下载、断点续传、下载队列管理
-//  提供完整的音频文件下载和本地存储功能
-//
-
 import Foundation
 import RxRelay
 import RxSwift
-import Alamofire
 
-// MARK: - 下载状态枚举
-enum DownloadStatus {
-    case waiting     // 等待下载
-    case downloading // 下载中
-    case paused      // 已暂停
-    case completed   // 下载完成
-    case failed      // 下载失败
-    case cancelled   // 已取消
-}
-
-// MARK: - 下载任务模型
-final class SongDownloadTask {
+@MainActor final class SongDownloadTask {
     let id: String
     let song: Song
-    let url: URL
+    let url: URL?
     let destinationURL: URL
-    
-    // 响应式属性
-    let status = BehaviorRelay<DownloadStatus>(value: .waiting)
-    let progress = BehaviorRelay<Float>(value: 0.0)
-    let downloadedSize = BehaviorRelay<Int64>(value: 0)
-    let totalSize = BehaviorRelay<Int64>(value: 0)
+
+    let status: BehaviorRelay<DownloadStatus>
+    let progress: BehaviorRelay<Float>
+    let downloadedSize: BehaviorRelay<Int64>
+    let totalSize: BehaviorRelay<Int64>
     let speed = BehaviorRelay<String>(value: "0 KB/s")
     let error = BehaviorRelay<Error?>(value: nil)
-    
-    // 内部属性
-    var downloadRequest: DownloadRequest?
-    var startTime: Date?
-    
-    init(song: Song, url: URL, destinationURL: URL) {
-        self.id = song.sid
-        self.song = song
-        self.url = url
+
+    var startedAt: Date?
+
+    init(record: DownloadRecord, destinationURL: URL) {
+        id = record.song.sid
+        song = record.song.makeSong(localPath: record.status == .completed ? destinationURL.path : "")
+        url = URL(string: record.song.songURL)
         self.destinationURL = destinationURL
+        status = BehaviorRelay(value: record.status)
+        progress = BehaviorRelay(value: record.progress)
+        downloadedSize = BehaviorRelay(value: record.downloadedBytes)
+        totalSize = BehaviorRelay(value: record.expectedBytes)
     }
 }
 
-// MARK: - 下载管理器
-class DownloadManager {
-    
-    // MARK: - 单例
-    static let shared = DownloadManager()
-    
-    // MARK: - 私有属性
-    private let disposeBag = DisposeBag()
-    private let session: Session
-    private let fileManager = FileManager.default
-    private let maxConcurrentDownloads = 3
-    
-    // MARK: - 公共响应式属性
-    let downloadTasks = BehaviorRelay<[SongDownloadTask]>(value: [])
-    let activeDownloads = BehaviorRelay<Int>(value: 0)
-    let totalDownloadsCount = BehaviorRelay<Int>(value: 0)
-    let completedDownloadsCount = BehaviorRelay<Int>(value: 0)
-    
-    // MARK: - 下载目录路径
-    lazy var downloadsDirectory: URL = {
-        let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let downloadsPath = documentsPath.appendingPathComponent("Downloads")
-        
-        // 创建下载目录
-        try? fileManager.createDirectory(at: downloadsPath, withIntermediateDirectories: true, attributes: nil)
-        
-        return downloadsPath
-    }()
-    
-    // MARK: - 初始化
-    private init() {
-        // 配置下载会话
-        let configuration = URLSessionConfiguration.background(withIdentifier: "com.baidufm.download")
-        configuration.timeoutIntervalForRequest = 30
-        configuration.timeoutIntervalForResource = 3600 // 1小时
-        configuration.allowsCellularAccess = true
-        
-        self.session = Session(configuration: configuration)
-        
-        setupBindings()
-        loadExistingDownloads()
-    }
-    
-    // MARK: - 设置数据绑定
-    private func setupBindings() {
-        // 监听下载任务变化，更新统计信息
-        downloadTasks
-            .map { tasks in tasks.filter { $0.status.value == .downloading }.count }
-            .bind(to: activeDownloads)
-            .disposed(by: disposeBag)
-        
-        downloadTasks
-            .map { $0.count }
-            .bind(to: totalDownloadsCount)
-            .disposed(by: disposeBag)
-        
-        downloadTasks
-            .map { tasks in tasks.filter { $0.status.value == .completed }.count }
-            .bind(to: completedDownloadsCount)
-            .disposed(by: disposeBag)
-    }
-    
-    // MARK: - 加载已存在的下载任务
-    private func loadExistingDownloads() {
-        // 扫描下载目录，加载已完成的下载
-        do {
-            let downloadedFiles = try fileManager.contentsOfDirectory(at: downloadsDirectory, includingPropertiesForKeys: nil)
-            
-            for fileURL in downloadedFiles {
-                if fileURL.pathExtension.lowercased() == "mp3" {
-                    // 尝试从文件名解析歌曲信息
-                    if let song = parseSongFromFilename(fileURL.lastPathComponent) {
-                        let task = SongDownloadTask(song: song, url: fileURL, destinationURL: fileURL)
-                        task.status.accept(.completed)
-                        task.progress.accept(1.0)
-                        
-                        // 获取文件大小
-                        if let fileSize = try? fileManager.attributesOfItem(atPath: fileURL.path)[.size] as? Int64 {
-                            task.totalSize.accept(fileSize)
-                            task.downloadedSize.accept(fileSize)
-                        }
-                        
-                        addTaskToList(task)
-                    }
-                }
-            }
-        } catch {
-            print("加载已存在下载失败: \(error.localizedDescription)")
-        }
-    }
-    
-    // MARK: - 开始下载
-    func startDownload(song: Song) -> Observable<Void> {
-        return Observable.create { [weak self] observer in
-            let observer = RxObserverBox(observer)
-            guard let self = self else {
-                observer.onCompleted()
-                return Disposables.create()
-            }
-            
-            // 检查是否已存在该下载任务
-            if let existingTask = self.findTask(by: song.sid) {
-                if existingTask.status.value == .completed {
-                    observer.onError(DownloadError.alreadyExists)
-                    return Disposables.create()
-                } else if existingTask.status.value == .downloading {
-                    observer.onCompleted() // 已在下载中
-                    return Disposables.create()
-                }
-            }
-            
-            // 创建下载任务
-            guard let url = URL(string: song.song_url), url.scheme?.lowercased() == "https" else {
-                observer.onError(DownloadError.invalidURL)
-                return Disposables.create()
-            }
-            
-            let filename = self.generateFilename(for: song)
-            let destinationURL = self.downloadsDirectory.appendingPathComponent(filename)
-            
-            let task = SongDownloadTask(song: song, url: url, destinationURL: destinationURL)
-            self.addTaskToList(task)
-            
-            // 开始下载
-            self.performDownload(task: task) { result in
-                switch result {
-                case .success:
-                    observer.onCompleted()
-                case .failure(let error):
-                    observer.onError(error)
-                }
-            }
-            
-            return Disposables.create {
-                if task.status.value == .waiting || task.status.value == .downloading {
-                    self.cancelDownload(taskId: task.id)
-                }
-            }
-        }
-    }
-    
-    // MARK: - 执行下载
-    private func performDownload(
-        task: SongDownloadTask,
-        completion: @escaping @Sendable (Result<Void, any Error>) -> Void
-    ) {
-        // 检查并发下载限制
-        guard activeDownloads.value < maxConcurrentDownloads else {
-            task.status.accept(.waiting)
-            return
-        }
-        
-        task.status.accept(.downloading)
-        task.startTime = Date()
-        
-        // 配置下载目标
-        let destination: DownloadRequest.Destination = { _, _ in
-            return (task.destinationURL, [.removePreviousFile, .createIntermediateDirectories])
-        }
-        
-        // 开始下载
-        let downloadRequest = session.download(task.url, to: destination)
-            .downloadProgress { [weak task] progress in
-                guard let task = task else { return }
-                
-                DispatchQueue.main.async {
-                    task.progress.accept(Float(progress.fractionCompleted))
-                    task.downloadedSize.accept(progress.completedUnitCount)
-                    task.totalSize.accept(progress.totalUnitCount)
-                    
-                    // 计算下载速度
-                    if let startTime = task.startTime {
-                        let elapsedTime = Date().timeIntervalSince(startTime)
-                        if elapsedTime > 0 {
-                            let speed = Double(progress.completedUnitCount) / elapsedTime
-                            task.speed.accept(self.formatSpeed(speed))
-                        }
-                    }
-                }
-            }
-            .response { [weak self, weak task] response in
-                guard let self = self, let task = task else { return }
-                
-                DispatchQueue.main.async {
-                    switch response.result {
-                    case .success:
-                        task.status.accept(.completed)
-                        task.progress.accept(1.0)
-                        self.saveDownloadInfo(task: task)
-                        completion(.success(()))
-                        
-                    case .failure(let error):
-                        task.status.accept(.failed)
-                        task.error.accept(error)
-                        completion(.failure(error))
-                    }
-                    
-                    // 检查队列中是否有等待的下载
-                    self.startNextWaitingDownload()
-                }
-            }
-        
-        task.downloadRequest = downloadRequest
-    }
-    
-    // MARK: - 暂停下载
-    func pauseDownload(taskId: String) {
-        guard let task = findTask(by: taskId),
-              task.status.value == .downloading else { return }
-        
-        task.downloadRequest?.suspend()
-        task.status.accept(.paused)
-    }
-    
-    // MARK: - 恢复下载
-    func resumeDownload(taskId: String) {
-        guard let task = findTask(by: taskId),
-              task.status.value == .paused else { return }
-        
-        task.downloadRequest?.resume()
-        task.status.accept(.downloading)
-    }
-    
-    // MARK: - 取消下载
-    func cancelDownload(taskId: String) {
-        guard let task = findTask(by: taskId), task.status.value != .completed else { return }
-        
-        task.downloadRequest?.cancel()
-        task.status.accept(.cancelled)
-        
-        // 删除未完成的文件
-        try? fileManager.removeItem(at: task.destinationURL)
-        
-        startNextWaitingDownload()
-    }
-    
-    // MARK: - 删除下载
-    func deleteDownload(taskId: String) -> Observable<Void> {
-        return Observable.create { [weak self] observer in
-            guard let self = self,
-                  let task = self.findTask(by: taskId) else {
-                observer.onError(DownloadError.taskNotFound)
-                return Disposables.create()
-            }
-            
-            // 如果正在下载，先取消
-            if task.status.value == .downloading {
-                self.cancelDownload(taskId: taskId)
-            }
-            
-            // 删除文件
-            do {
-                if self.fileManager.fileExists(atPath: task.destinationURL.path) {
-                    try self.fileManager.removeItem(at: task.destinationURL)
-                }
-                
-                // 从任务列表中移除
-                self.removeTaskFromList(taskId: taskId)
-                
-                observer.onCompleted()
-            } catch {
-                observer.onError(error)
-            }
-            
-            return Disposables.create()
-        }
-    }
-    
-    // MARK: - 检查文件是否已下载
-    func isDownloaded(song: Song) -> Bool {
-        guard let task = findTask(by: song.sid) else { return false }
-        return task.status.value == .completed && fileManager.fileExists(atPath: task.destinationURL.path)
-    }
-    
-    // MARK: - 获取本地文件URL
-    func getLocalURL(for song: Song) -> URL? {
-        guard let task = findTask(by: song.sid),
-              task.status.value == .completed,
-              fileManager.fileExists(atPath: task.destinationURL.path) else {
-            return nil
-        }
-        return task.destinationURL
-    }
-    
-    // MARK: - 私有辅助方法
-    
-    private func findTask(by id: String) -> SongDownloadTask? {
-        return downloadTasks.value.first { $0.id == id }
-    }
-    
-    private func addTaskToList(_ task: SongDownloadTask) {
-        var currentTasks = downloadTasks.value
-        currentTasks.append(task)
-        downloadTasks.accept(currentTasks)
-    }
-    
-    private func removeTaskFromList(taskId: String) {
-        var currentTasks = downloadTasks.value
-        currentTasks.removeAll { $0.id == taskId }
-        downloadTasks.accept(currentTasks)
-    }
-    
-    private func startNextWaitingDownload() {
-        let waitingTasks = downloadTasks.value.filter { $0.status.value == .waiting }
-        
-        if activeDownloads.value < maxConcurrentDownloads, let nextTask = waitingTasks.first {
-            performDownload(task: nextTask) { _ in }
-        }
-    }
-    
-    private func generateFilename(for song: Song) -> String {
-        let safeName = song.name.replacingOccurrences(of: "/", with: "_")
-        let safeArtist = song.artist.replacingOccurrences(of: "/", with: "_")
-        return "\(safeArtist) - \(safeName).mp3"
-    }
-    
-    private func formatSpeed(_ bytesPerSecond: Double) -> String {
-        if bytesPerSecond < 1024 {
-            return String(format: "%.0f B/s", bytesPerSecond)
-        } else if bytesPerSecond < 1024 * 1024 {
-            return String(format: "%.1f KB/s", bytesPerSecond / 1024)
-        } else {
-            return String(format: "%.1f MB/s", bytesPerSecond / (1024 * 1024))
-        }
-    }
-    
-    private func parseSongFromFilename(_ filename: String) -> Song? {
-        // 简单的文件名解析，实际项目中可能需要更复杂的逻辑
-        let nameWithoutExtension = filename.replacingOccurrences(of: ".mp3", with: "")
-        let components = nameWithoutExtension.components(separatedBy: " - ")
-        
-        if components.count >= 2 {
-            let artist = components[0]
-            let title = components[1]
-            
-            return Song(
-                sid: nameWithoutExtension.hashValue.description,
-                name: title,
-                url: "",
-                pic_url: "",
-                lrc_url: "",
-                artist: artist,
-                album: "",
-                format: "mp3",
-                time: 0
-            )
-        }
-        
-        return nil
-    }
-    
-    private func saveDownloadInfo(task: SongDownloadTask) {
-        // 保存下载信息到UserDefaults或数据库
-        // 这里可以根据需要实现持久化存储
-    }
-}
-
-// MARK: - 下载错误类型
-enum DownloadError: Error, LocalizedError {
+nonisolated enum DownloadError: Error, LocalizedError {
     case invalidURL
     case alreadyExists
     case taskNotFound
     case diskSpaceInsufficient
     case networkError
-    
+    case cancelled
+    case storageFailure(String)
+
     var errorDescription: String? {
         switch self {
         case .invalidURL:
@@ -425,43 +50,259 @@ enum DownloadError: Error, LocalizedError {
             return L10n.diskSpaceInsufficient
         case .networkError:
             return L10n.downloadNetworkError
+        case .cancelled:
+            return L10n.downloadCancelled
+        case .storageFailure(let message):
+            return String(format: L10n.downloadStorageErrorFormat, message)
         }
     }
 }
 
-// MARK: - 下载管理器扩展 - 批量操作
-extension DownloadManager {
-    
-    /// 批量下载歌曲
-    func batchDownload(songs: [Song]) -> Observable<Void> {
-        let downloadObservables = songs.map { startDownload(song: $0) }
-        return Observable.merge(downloadObservables)
+nonisolated struct DownloadStatistics: Sendable {
+    let total: Int
+    let completed: Int
+    let downloading: Int
+    let failed: Int
+    let waiting: Int
+}
+
+/// Owns one durable background download state machine for the entire application.
+@MainActor final class DownloadManager: NSObject, URLSessionDownloadDelegate, URLSessionDelegate, @unchecked Sendable {
+    static let shared = DownloadManager()
+    // Keep the legacy identifier so an app update can reconnect to transfers already owned by iOS.
+    nonisolated static let backgroundSessionIdentifier = "com.baidufm.download"
+
+    let downloadTasks = BehaviorRelay<[SongDownloadTask]>(value: [])
+    let activeDownloads = BehaviorRelay<Int>(value: 0)
+    let totalDownloadsCount = BehaviorRelay<Int>(value: 0)
+    let completedDownloadsCount = BehaviorRelay<Int>(value: 0)
+
+    nonisolated let downloadsDirectory: URL
+
+    private let maxConcurrentDownloads = 3
+    private let fileManager: FileManager
+    private let manifestStore: DownloadManifestStore
+    private var records: [String: DownloadRecord] = [:]
+    private var systemTasks: [String: URLSessionDownloadTask] = [:]
+    private var observers: [String: [UUID: RxObserverBox<Void>]] = [:]
+    private var retryJobs: [String: Task<Void, Never>] = [:]
+    private var backgroundCompletionHandler: (() -> Void)?
+
+    private lazy var session: URLSession = {
+        let configuration = URLSessionConfiguration.background(
+            withIdentifier: Self.backgroundSessionIdentifier
+        )
+        configuration.timeoutIntervalForRequest = 60
+        configuration.timeoutIntervalForResource = 60 * 60 * 6
+        configuration.waitsForConnectivity = true
+        configuration.sessionSendsLaunchEvents = true
+        configuration.isDiscretionary = false
+        configuration.allowsCellularAccess = true
+        configuration.httpMaximumConnectionsPerHost = maxConcurrentDownloads
+        return URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+    }()
+
+    private override init() {
+        let fileManager = FileManager.default
+        let applicationSupport = fileManager.urls(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask
+        ).first ?? fileManager.temporaryDirectory
+        let rootDirectory = applicationSupport.appendingPathComponent("BaiduFM", isDirectory: true)
+        let downloadsDirectory = rootDirectory.appendingPathComponent("Downloads", isDirectory: true)
+
+        self.fileManager = fileManager
+        self.downloadsDirectory = downloadsDirectory
+        manifestStore = DownloadManifestStore(
+            fileURL: rootDirectory.appendingPathComponent("download-manifest.json")
+        )
+        super.init()
+
+        prepareStorage()
+        restoreManifest()
+        restoreSystemTasks()
     }
-    
-    /// 暂停所有下载
-    func pauseAllDownloads() {
-        let activeTasks = downloadTasks.value.filter { $0.status.value == .downloading }
-        activeTasks.forEach { pauseDownload(taskId: $0.id) }
-    }
-    
-    /// 恢复所有暂停的下载
-    func resumeAllDownloads() {
-        let pausedTasks = downloadTasks.value.filter { $0.status.value == .paused }
-        pausedTasks.forEach { resumeDownload(taskId: $0.id) }
-    }
-    
-    /// 清理失败的下载
-    func cleanupFailedDownloads() {
-        let failedTasks = downloadTasks.value.filter { $0.status.value == .failed }
-        failedTasks.forEach { 
-            try? fileManager.removeItem(at: $0.destinationURL)
-            removeTaskFromList(taskId: $0.id)
+
+    /// Enqueues a download. Disposing the Rx subscription only detaches its observer;
+    /// it never cancels the durable background transfer.
+    func startDownload(song: Song) -> Observable<Void> {
+        Observable.create { [weak self] observer in
+            let observerID = UUID()
+            let observerBox = RxObserverBox(observer)
+
+            Task { @MainActor [weak self] in
+                self?.enqueue(song: song, observerID: observerID, observer: observerBox)
+            }
+
+            return Disposables.create {
+                Task { @MainActor [weak self] in
+                    self?.removeObserver(observerID, songID: song.sid)
+                }
+            }
         }
     }
-    
-    /// 获取下载统计信息
+
+    func pauseDownload(taskId: String) {
+        guard var record = records[taskId], record.status == .downloading else { return }
+
+        record.status = .paused
+        record.updatedAt = Date()
+        records[taskId] = record
+        updateTaskView(for: record)
+        persistManifest()
+
+        let task = systemTasks.removeValue(forKey: taskId)
+        task?.cancel { [weak self] resumeData in
+            Task { @MainActor [weak self] in
+                guard let self, var pausedRecord = self.records[taskId], pausedRecord.status == .paused else {
+                    return
+                }
+                pausedRecord.resumeData = resumeData
+                pausedRecord.taskIdentifier = nil
+                pausedRecord.updatedAt = Date()
+                self.records[taskId] = pausedRecord
+                self.persistManifest()
+            }
+        }
+        beginWaitingDownloads()
+    }
+
+    func resumeDownload(taskId: String) {
+        guard var record = records[taskId], [.paused, .failed, .cancelled].contains(record.status) else {
+            return
+        }
+        record.status = .waiting
+        record.lastError = nil
+        record.retryCount = 0
+        record.updatedAt = Date()
+        records[taskId] = record
+        updateTaskView(for: record)
+        persistManifest()
+        beginWaitingDownloads()
+    }
+
+    func cancelDownload(taskId: String) {
+        guard var record = records[taskId], record.status != .completed else { return }
+
+        retryJobs.removeValue(forKey: taskId)?.cancel()
+        systemTasks.removeValue(forKey: taskId)?.cancel()
+        record.status = .cancelled
+        record.resumeData = nil
+        record.taskIdentifier = nil
+        record.lastError = DownloadError.cancelled.localizedDescription
+        record.updatedAt = Date()
+        records[taskId] = record
+        try? fileManager.removeItem(at: destinationURL(for: record))
+        updateTaskView(for: record)
+        persistManifest()
+        finishObservers(for: taskId, result: .failure(DownloadError.cancelled))
+        beginWaitingDownloads()
+    }
+
+    func deleteDownload(taskId: String) -> Observable<Void> {
+        Observable.create { [weak self] observer in
+            let observerBox = RxObserverBox(observer)
+            Task { @MainActor [weak self] in
+                guard let self else {
+                    observerBox.onError(DownloadError.taskNotFound)
+                    return
+                }
+                do {
+                    try self.removeDownload(taskId: taskId)
+                    observerBox.onCompleted()
+                } catch {
+                    observerBox.onError(error)
+                }
+            }
+            return Disposables.create()
+        }
+    }
+
+    func removeAllDownloads() throws {
+        retryJobs.values.forEach { $0.cancel() }
+        systemTasks.values.forEach { $0.cancel() }
+        retryJobs.removeAll()
+        systemTasks.removeAll()
+
+        var removedIDs: [String] = []
+        var firstError: Error?
+        for (songID, record) in records {
+            let fileURL = destinationURL(for: record)
+            do {
+                if fileManager.fileExists(atPath: fileURL.path) {
+                    try fileManager.removeItem(at: fileURL)
+                }
+                removedIDs.append(songID)
+            } catch {
+                firstError = firstError ?? error
+                var failedRecord = record
+                failedRecord.status = .failed
+                failedRecord.taskIdentifier = nil
+                failedRecord.lastError = error.localizedDescription
+                failedRecord.updatedAt = Date()
+                records[songID] = failedRecord
+                updateTaskView(for: failedRecord, error: error)
+                finishObservers(for: songID, result: .failure(error))
+            }
+        }
+
+        for songID in removedIDs {
+            records.removeValue(forKey: songID)
+            observers.removeValue(forKey: songID)?.values.forEach {
+                $0.onError(DownloadError.cancelled)
+            }
+        }
+        downloadTasks.accept(downloadTasks.value.filter { !removedIDs.contains($0.id) })
+        publishCounts()
+        persistManifest()
+        synchronizeDatabaseForRemoved(songIDs: removedIDs)
+
+        if let firstError {
+            throw DownloadError.storageFailure(firstError.localizedDescription)
+        }
+    }
+
+    func isDownloaded(song: Song) -> Bool {
+        getLocalURL(for: song) != nil
+    }
+
+    func getLocalURL(for song: Song) -> URL? {
+        guard let record = records[song.sid], record.status == .completed else {
+            if !song.dl_file.isEmpty, fileManager.fileExists(atPath: song.dl_file) {
+                return URL(fileURLWithPath: song.dl_file)
+            }
+            return nil
+        }
+        let url = destinationURL(for: record)
+        guard fileManager.fileExists(atPath: url.path) else { return nil }
+        return url
+    }
+
+    func batchDownload(songs: [Song]) -> Observable<Void> {
+        Observable.merge(songs.map(startDownload))
+    }
+
+    func pauseAllDownloads() {
+        records.values
+            .filter { $0.status == .downloading }
+            .forEach { pauseDownload(taskId: $0.song.sid) }
+    }
+
+    func resumeAllDownloads() {
+        records.values
+            .filter { $0.status == .paused }
+            .forEach { resumeDownload(taskId: $0.song.sid) }
+    }
+
+    func cleanupFailedDownloads() {
+        let failedIDs = records.values
+            .filter { $0.status == .failed || $0.status == .cancelled }
+            .map(\.song.sid)
+        failedIDs.forEach { try? removeDownload(taskId: $0) }
+    }
+
     var downloadStatistics: Observable<DownloadStatistics> {
-        return downloadTasks.map { tasks in
+        downloadTasks.map { tasks in
             DownloadStatistics(
                 total: tasks.count,
                 completed: tasks.filter { $0.status.value == .completed }.count,
@@ -471,13 +312,635 @@ extension DownloadManager {
             )
         }
     }
-}
 
-// MARK: - 下载统计信息
-struct DownloadStatistics {
-    let total: Int
-    let completed: Int
-    let downloading: Int
-    let failed: Int
-    let waiting: Int
+    func registerBackgroundCompletionHandler(
+        identifier: String,
+        completionHandler: @escaping () -> Void
+    ) -> Bool {
+        guard identifier == Self.backgroundSessionIdentifier else { return false }
+        backgroundCompletionHandler = completionHandler
+        _ = session
+        return true
+    }
+
+    // MARK: URLSession delegates
+
+    nonisolated func urlSession(
+        _ session: URLSession,
+        downloadTask: URLSessionDownloadTask,
+        didWriteData bytesWritten: Int64,
+        totalBytesWritten: Int64,
+        totalBytesExpectedToWrite: Int64
+    ) {
+        guard let fileName = downloadTask.taskDescription else { return }
+        Task { @MainActor [weak self] in
+            self?.handleProgress(
+                fileName: fileName,
+                downloadedBytes: totalBytesWritten,
+                expectedBytes: totalBytesExpectedToWrite
+            )
+        }
+    }
+
+    nonisolated func urlSession(
+        _ session: URLSession,
+        downloadTask: URLSessionDownloadTask,
+        didFinishDownloadingTo location: URL
+    ) {
+        guard let fileName = downloadTask.taskDescription else { return }
+
+        if let response = downloadTask.response as? HTTPURLResponse,
+           !(200..<300).contains(response.statusCode) {
+            Task { @MainActor [weak self] in
+                self?.handleHTTPFailure(fileName: fileName, statusCode: response.statusCode)
+            }
+            return
+        }
+
+        let destinationURL = downloadsDirectory.appendingPathComponent(fileName)
+        do {
+            let fileManager = FileManager.default
+            try fileManager.createDirectory(
+                at: downloadsDirectory,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
+            if fileManager.fileExists(atPath: destinationURL.path) {
+                try fileManager.removeItem(at: destinationURL)
+            }
+            try fileManager.moveItem(at: location, to: destinationURL)
+            let attributes = try fileManager.attributesOfItem(atPath: destinationURL.path)
+            let size = (attributes[.size] as? NSNumber)?.int64Value ?? 0
+            guard size > 0 else {
+                try? fileManager.removeItem(at: destinationURL)
+                throw DownloadError.storageFailure("The downloaded file is empty.")
+            }
+            Task { @MainActor [weak self] in
+                self?.handleCompletedFile(fileName: fileName, fileSize: size)
+            }
+        } catch {
+            let message = error.localizedDescription
+            Task { @MainActor [weak self] in
+                self?.handleStorageFailure(fileName: fileName, message: message)
+            }
+        }
+    }
+
+    nonisolated func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        didCompleteWithError error: Error?
+    ) {
+        guard let error, let fileName = task.taskDescription else { return }
+        let nsError = error as NSError
+        let resumeData = nsError.userInfo[NSURLSessionDownloadTaskResumeData] as? Data
+        Task { @MainActor [weak self] in
+            self?.handleTransferFailure(
+                fileName: fileName,
+                errorDomain: nsError.domain,
+                errorCode: nsError.code,
+                message: nsError.localizedDescription,
+                resumeData: resumeData
+            )
+        }
+    }
+
+    nonisolated func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+        Task { @MainActor [weak self] in
+            guard let self, let completionHandler = self.backgroundCompletionHandler else { return }
+            self.backgroundCompletionHandler = nil
+            completionHandler()
+        }
+    }
+
+    // MARK: State machine
+
+    private func enqueue(song: Song, observerID: UUID, observer: RxObserverBox<Void>) {
+        if let existing = records[song.sid] {
+            switch existing.status {
+            case .completed:
+                observer.onError(DownloadError.alreadyExists)
+                return
+            case .waiting, .downloading:
+                observers[song.sid, default: [:]][observerID] = observer
+                return
+            case .paused, .failed, .cancelled:
+                var resumed = existing
+                resumed.song = DownloadSongSnapshot(song: song)
+                resumed.status = .waiting
+                resumed.lastError = nil
+                resumed.retryCount = 0
+                resumed.updatedAt = Date()
+                records[song.sid] = resumed
+                observers[song.sid, default: [:]][observerID] = observer
+                updateTaskView(for: resumed)
+                persistManifest()
+                beginWaitingDownloads()
+                return
+            }
+        }
+
+        guard let url = URL(string: song.song_url), url.scheme?.lowercased() == "https" else {
+            observer.onError(DownloadError.invalidURL)
+            return
+        }
+
+        let availableCapacity = try? downloadsDirectory.resourceValues(
+            forKeys: [.volumeAvailableCapacityForImportantUsageKey]
+        ).volumeAvailableCapacityForImportantUsage
+        if let availableCapacity, availableCapacity < 20 * 1_024 * 1_024 {
+            observer.onError(DownloadError.diskSpaceInsufficient)
+            return
+        }
+
+        let snapshot = DownloadSongSnapshot(song: song)
+        let record = DownloadRecord(
+            song: snapshot,
+            status: .waiting,
+            fileName: DownloadPathPolicy.fileName(songID: song.sid, format: song.format),
+            downloadedBytes: 0,
+            expectedBytes: 0,
+            taskIdentifier: nil,
+            resumeData: nil,
+            retryCount: 0,
+            lastError: nil,
+            updatedAt: Date()
+        )
+        records[song.sid] = record
+        observers[song.sid, default: [:]][observerID] = observer
+        appendTaskView(for: record)
+        persistManifest()
+        beginWaitingDownloads()
+    }
+
+    private func beginWaitingDownloads() {
+        var availableSlots = maxConcurrentDownloads - systemTasks.count
+        guard availableSlots > 0 else { return }
+
+        let waitingRecords = records.values
+            .filter { $0.status == .waiting }
+            .sorted { $0.updatedAt < $1.updatedAt }
+
+        for waitingRecord in waitingRecords where availableSlots > 0 {
+            guard let url = URL(string: waitingRecord.song.songURL), url.scheme?.lowercased() == "https" else {
+                markFailed(songID: waitingRecord.song.sid, error: DownloadError.invalidURL)
+                continue
+            }
+
+            var record = waitingRecord
+            let task: URLSessionDownloadTask
+            if let resumeData = record.resumeData {
+                task = session.downloadTask(withResumeData: resumeData)
+            } else {
+                task = session.downloadTask(with: url)
+            }
+            task.taskDescription = record.fileName
+            task.priority = URLSessionTask.highPriority
+
+            record.status = .downloading
+            record.taskIdentifier = task.taskIdentifier
+            record.resumeData = nil
+            record.updatedAt = Date()
+            records[record.song.sid] = record
+            systemTasks[record.song.sid] = task
+            updateTaskView(for: record, resetStartTime: true)
+            task.resume()
+            availableSlots -= 1
+        }
+        persistManifest()
+    }
+
+    private func handleProgress(fileName: String, downloadedBytes: Int64, expectedBytes: Int64) {
+        guard let songID = songID(forFileName: fileName), var record = records[songID] else { return }
+        guard record.status == .downloading else { return }
+
+        let previousPercentage = Int(record.progress * 100)
+        record.downloadedBytes = max(downloadedBytes, 0)
+        record.expectedBytes = max(expectedBytes, 0)
+        record.updatedAt = Date()
+        records[songID] = record
+        updateTaskView(for: record, publishList: Int(record.progress * 100) != previousPercentage)
+
+        // Persist coarse progress checkpoints instead of writing on every callback.
+        if record.downloadedBytes == record.expectedBytes || record.downloadedBytes % (2 * 1_024 * 1_024) < 128 * 1_024 {
+            persistManifest()
+        }
+    }
+
+    private func handleCompletedFile(fileName: String, fileSize: Int64) {
+        guard let songID = songID(forFileName: fileName), var record = records[songID] else { return }
+
+        retryJobs.removeValue(forKey: songID)?.cancel()
+        systemTasks.removeValue(forKey: songID)
+        record.status = .completed
+        record.downloadedBytes = fileSize
+        record.expectedBytes = fileSize
+        record.taskIdentifier = nil
+        record.resumeData = nil
+        record.retryCount = 0
+        record.lastError = nil
+        record.updatedAt = Date()
+        records[songID] = record
+        updateTaskView(for: record)
+        persistManifest()
+        synchronizeDatabaseForCompleted(record)
+        finishObservers(for: songID, result: .success(()))
+        beginWaitingDownloads()
+    }
+
+    private func handleHTTPFailure(fileName: String, statusCode: Int) {
+        guard let songID = songID(forFileName: fileName) else { return }
+        systemTasks.removeValue(forKey: songID)
+        let error = DownloadError.networkError
+
+        if var record = records[songID],
+           ReliabilityRetryPolicy.shouldRetry(statusCode: statusCode, attempt: record.retryCount) {
+            record.retryCount += 1
+            scheduleRetry(record: record)
+        } else {
+            markFailed(songID: songID, error: error)
+        }
+    }
+
+    private func handleStorageFailure(fileName: String, message: String) {
+        guard let songID = songID(forFileName: fileName) else { return }
+        systemTasks.removeValue(forKey: songID)
+        markFailed(songID: songID, error: DownloadError.storageFailure(message))
+    }
+
+    private func handleTransferFailure(
+        fileName: String,
+        errorDomain: String,
+        errorCode: Int,
+        message: String,
+        resumeData: Data?
+    ) {
+        guard let songID = songID(forFileName: fileName), var record = records[songID] else { return }
+        systemTasks.removeValue(forKey: songID)
+
+        if record.status == .paused || record.status == .cancelled || record.status == .completed {
+            if record.status == .paused, let resumeData {
+                record.resumeData = resumeData
+                record.taskIdentifier = nil
+                record.updatedAt = Date()
+                records[songID] = record
+                persistManifest()
+            }
+            beginWaitingDownloads()
+            return
+        }
+
+        let urlErrorCode = errorDomain == NSURLErrorDomain ? errorCode : nil
+        if ReliabilityRetryPolicy.shouldRetry(urlErrorCode: urlErrorCode, attempt: record.retryCount) {
+            record.retryCount += 1
+            record.resumeData = resumeData
+            scheduleRetry(record: record)
+        } else {
+            record.resumeData = resumeData
+            records[songID] = record
+            print("Download transfer failed for \(songID): \(message)")
+            markFailed(songID: songID, error: DownloadError.networkError)
+        }
+    }
+
+    private func scheduleRetry(record: DownloadRecord) {
+        var queuedRecord = record
+        queuedRecord.status = .waiting
+        queuedRecord.taskIdentifier = nil
+        queuedRecord.lastError = nil
+        queuedRecord.updatedAt = Date()
+        records[record.song.sid] = queuedRecord
+        updateTaskView(for: queuedRecord)
+        persistManifest()
+
+        let delay = ReliabilityRetryPolicy.delay(forAttempt: max(queuedRecord.retryCount - 1, 0))
+        retryJobs[record.song.sid]?.cancel()
+        retryJobs[record.song.sid] = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+            guard !Task.isCancelled else { return }
+            self?.retryJobs.removeValue(forKey: record.song.sid)
+            self?.beginWaitingDownloads()
+        }
+    }
+
+    private func markFailed(songID: String, error: Error) {
+        guard var record = records[songID] else { return }
+        retryJobs.removeValue(forKey: songID)?.cancel()
+        systemTasks.removeValue(forKey: songID)
+        record.status = .failed
+        record.taskIdentifier = nil
+        record.lastError = error.localizedDescription
+        record.updatedAt = Date()
+        records[songID] = record
+        updateTaskView(for: record, error: error)
+        persistManifest()
+        finishObservers(for: songID, result: .failure(error))
+        beginWaitingDownloads()
+    }
+
+    // MARK: Restoration and migration
+
+    private func prepareStorage() {
+        do {
+            try fileManager.createDirectory(
+                at: downloadsDirectory,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
+            var resourceValues = URLResourceValues()
+            resourceValues.isExcludedFromBackup = true
+            var mutableDirectory = downloadsDirectory
+            try? mutableDirectory.setResourceValues(resourceValues)
+        } catch {
+            print("Download storage setup failed: \(error.localizedDescription)")
+        }
+    }
+
+    private func restoreManifest() {
+        var restoredRecords = manifestStore.load().records
+        var missingCompletedSongIDs: [String] = []
+
+        #if canImport(UIKit)
+        migrateLegacyDownloads(into: &restoredRecords)
+        #endif
+
+        for var record in restoredRecords {
+            let destination = destinationURL(for: record)
+            let fileSize = ((try? fileManager.attributesOfItem(atPath: destination.path)[.size]) as? NSNumber)?.int64Value ?? 0
+            if fileSize > 0 {
+                // A canonical file only appears after URLSession finishes moving its temporary file.
+                // Promoting it here closes the crash window between the move and manifest/database updates.
+                record.status = .completed
+                record.downloadedBytes = fileSize
+                record.expectedBytes = fileSize
+                record.taskIdentifier = nil
+                record.resumeData = nil
+                record.retryCount = 0
+                record.lastError = nil
+            } else if record.status == .completed {
+                record.status = .failed
+                record.lastError = L10n.downloadFileMissing
+                record.downloadedBytes = 0
+                record.expectedBytes = 0
+                missingCompletedSongIDs.append(record.song.sid)
+            } else if record.status == .downloading {
+                record.status = .waiting
+                record.taskIdentifier = nil
+            }
+            records[record.song.sid] = record
+        }
+
+        let restoredTasks = records.values
+            .sorted { $0.updatedAt < $1.updatedAt }
+            .map { SongDownloadTask(record: $0, destinationURL: destinationURL(for: $0)) }
+        downloadTasks.accept(restoredTasks)
+        publishCounts()
+        persistManifest()
+        synchronizeDatabaseAfterRestoration(missingSongIDs: missingCompletedSongIDs)
+    }
+
+    private func restoreSystemTasks() {
+        session.getAllTasks { [weak self] tasks in
+            let downloads = tasks.compactMap { $0 as? URLSessionDownloadTask }
+            Task { @MainActor [weak self] in
+                self?.adoptSystemTasks(downloads)
+            }
+        }
+    }
+
+    private func adoptSystemTasks(_ tasks: [URLSessionDownloadTask]) {
+        var adoptedFileNames = Set<String>()
+        for task in tasks {
+            guard let fileName = task.taskDescription,
+                  let songID = songID(forFileName: fileName),
+                  var record = records[songID] else {
+                task.cancel()
+                continue
+            }
+            adoptedFileNames.insert(fileName)
+            record.status = task.state == .suspended ? .paused : .downloading
+            record.taskIdentifier = task.taskIdentifier
+            record.updatedAt = Date()
+            records[songID] = record
+            systemTasks[songID] = task
+            updateTaskView(for: record, resetStartTime: true)
+        }
+
+        for (songID, var record) in records where record.status == .downloading && !adoptedFileNames.contains(record.fileName) {
+            record.status = .waiting
+            record.taskIdentifier = nil
+            records[songID] = record
+            updateTaskView(for: record)
+        }
+        persistManifest()
+        beginWaitingDownloads()
+    }
+
+    #if canImport(UIKit)
+    private func migrateLegacyDownloads(into restoredRecords: inout [DownloadRecord]) {
+        let songList = SongList()
+        let databaseSongs = songList.getAllDownload() ?? []
+        guard !databaseSongs.isEmpty else { return }
+
+        let documents = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+        for song in databaseSongs {
+            let fileName = DownloadPathPolicy.fileName(songID: song.sid, format: song.format)
+            let destination = downloadsDirectory.appendingPathComponent(fileName)
+            let oldManagerName = "\(song.artist.replacingOccurrences(of: "/", with: "_")) - \(song.name.replacingOccurrences(of: "/", with: "_")).mp3"
+            let candidates = [
+                song.dl_file.isEmpty ? nil : URL(fileURLWithPath: song.dl_file),
+                documents?.appendingPathComponent("download").appendingPathComponent("\(song.sid).\(song.format)"),
+                documents?.appendingPathComponent("Downloads").appendingPathComponent(oldManagerName),
+            ].compactMap { $0 }
+
+            if !fileManager.fileExists(atPath: destination.path),
+               let source = candidates.first(where: { fileManager.fileExists(atPath: $0.path) }) {
+                do {
+                    try fileManager.createDirectory(at: downloadsDirectory, withIntermediateDirectories: true)
+                    try fileManager.moveItem(at: source, to: destination)
+                } catch {
+                    do {
+                        try fileManager.copyItem(at: source, to: destination)
+                    } catch {
+                        print("Legacy download migration failed for \(song.sid): \(error.localizedDescription)")
+                    }
+                }
+            }
+
+            guard fileManager.fileExists(atPath: destination.path) else {
+                _ = songList.markDownloadRemoved(sid: song.sid)
+                continue
+            }
+            let fileSize = ((try? fileManager.attributesOfItem(atPath: destination.path)[.size]) as? NSNumber)?.int64Value ?? 0
+            let snapshot = DownloadSongSnapshot(song: song)
+            let record = DownloadRecord(
+                song: snapshot,
+                status: .completed,
+                fileName: fileName,
+                downloadedBytes: fileSize,
+                expectedBytes: fileSize,
+                taskIdentifier: nil,
+                resumeData: nil,
+                retryCount: 0,
+                lastError: nil,
+                updatedAt: Date()
+            )
+            restoredRecords.removeAll { $0.song.sid == song.sid }
+            restoredRecords.append(record)
+            _ = songList.markDownloaded(song: song, localPath: destination.path)
+        }
+    }
+    #endif
+
+    // MARK: Persistence and view synchronization
+
+    private func persistManifest() {
+        do {
+            let manifest = DownloadManifest(
+                records: records.values.sorted { $0.updatedAt < $1.updatedAt }
+            )
+            try manifestStore.save(manifest)
+        } catch {
+            print("Download state persistence failed: \(error.localizedDescription)")
+        }
+    }
+
+    private func appendTaskView(for record: DownloadRecord) {
+        var tasks = downloadTasks.value
+        tasks.append(SongDownloadTask(record: record, destinationURL: destinationURL(for: record)))
+        downloadTasks.accept(tasks)
+        publishCounts()
+    }
+
+    private func updateTaskView(
+        for record: DownloadRecord,
+        error: Error? = nil,
+        resetStartTime: Bool = false,
+        publishList: Bool = true
+    ) {
+        guard let task = downloadTasks.value.first(where: { $0.id == record.song.sid }) else {
+            appendTaskView(for: record)
+            return
+        }
+        task.status.accept(record.status)
+        task.progress.accept(record.progress)
+        task.downloadedSize.accept(record.downloadedBytes)
+        task.totalSize.accept(record.expectedBytes)
+        task.error.accept(error)
+        if resetStartTime {
+            task.startedAt = Date()
+        }
+        if let startedAt = task.startedAt, record.status == .downloading {
+            let elapsed = max(Date().timeIntervalSince(startedAt), 0.001)
+            task.speed.accept(formatSpeed(Double(record.downloadedBytes) / elapsed))
+        }
+        if publishList {
+            downloadTasks.accept(downloadTasks.value)
+            publishCounts()
+        }
+    }
+
+    private func publishCounts() {
+        let tasks = downloadTasks.value
+        activeDownloads.accept(tasks.filter { $0.status.value == .downloading }.count)
+        totalDownloadsCount.accept(tasks.count)
+        completedDownloadsCount.accept(tasks.filter { $0.status.value == .completed }.count)
+    }
+
+    private func removeDownload(taskId: String) throws {
+        guard let record = records[taskId] else { throw DownloadError.taskNotFound }
+        retryJobs.removeValue(forKey: taskId)?.cancel()
+        systemTasks.removeValue(forKey: taskId)?.cancel()
+
+        let fileURL = destinationURL(for: record)
+        if fileManager.fileExists(atPath: fileURL.path) {
+            try fileManager.removeItem(at: fileURL)
+        }
+        records.removeValue(forKey: taskId)
+        observers.removeValue(forKey: taskId)?.values.forEach {
+            $0.onError(DownloadError.cancelled)
+        }
+        downloadTasks.accept(downloadTasks.value.filter { $0.id != taskId })
+        publishCounts()
+        persistManifest()
+        synchronizeDatabaseForRemoved(songID: taskId)
+        beginWaitingDownloads()
+    }
+
+    private func destinationURL(for record: DownloadRecord) -> URL {
+        downloadsDirectory.appendingPathComponent(record.fileName)
+    }
+
+    private func songID(forFileName fileName: String) -> String? {
+        records.values.first(where: { $0.fileName == fileName })?.song.sid
+    }
+
+    private func removeObserver(_ observerID: UUID, songID: String) {
+        observers[songID]?.removeValue(forKey: observerID)
+        if observers[songID]?.isEmpty == true {
+            observers.removeValue(forKey: songID)
+        }
+    }
+
+    private func finishObservers(for songID: String, result: Result<Void, Error>) {
+        guard let pendingObservers = observers.removeValue(forKey: songID) else { return }
+        for observer in pendingObservers.values {
+            switch result {
+            case .success:
+                observer.onCompleted()
+            case .failure(let error):
+                observer.onError(error)
+            }
+        }
+    }
+
+    private func formatSpeed(_ bytesPerSecond: Double) -> String {
+        if bytesPerSecond < 1_024 {
+            return String(format: "%.0f B/s", bytesPerSecond)
+        }
+        if bytesPerSecond < 1_024 * 1_024 {
+            return String(format: "%.1f KB/s", bytesPerSecond / 1_024)
+        }
+        return String(format: "%.1f MB/s", bytesPerSecond / (1_024 * 1_024))
+    }
+
+    private func synchronizeDatabaseForCompleted(_ record: DownloadRecord) {
+        #if canImport(UIKit)
+        let path = destinationURL(for: record).path
+        let song = record.song.makeSong(localPath: path)
+        guard SongList().markDownloaded(song: song, localPath: path) else { return }
+        DataCenter.shared.loadDownloadedSongs()
+        #endif
+    }
+
+    private func synchronizeDatabaseForRemoved(songID: String) {
+        #if canImport(UIKit)
+        guard SongList().markDownloadRemoved(sid: songID) else { return }
+        DataCenter.shared.loadDownloadedSongs()
+        #endif
+    }
+
+    private func synchronizeDatabaseForRemoved(songIDs: [String]) {
+        #if canImport(UIKit)
+        let songList = SongList()
+        for songID in songIDs {
+            _ = songList.markDownloadRemoved(sid: songID)
+        }
+        DataCenter.shared.loadDownloadedSongs()
+        #endif
+    }
+
+    private func synchronizeDatabaseAfterRestoration(missingSongIDs: [String]) {
+        #if canImport(UIKit)
+        let songList = SongList()
+        for record in records.values where record.status == .completed {
+            let path = destinationURL(for: record).path
+            _ = songList.markDownloaded(song: record.song.makeSong(localPath: path), localPath: path)
+        }
+        for songID in missingSongIDs {
+            _ = songList.markDownloadRemoved(sid: songID)
+        }
+        DataCenter.shared.loadDownloadedSongs()
+        #endif
+    }
 }

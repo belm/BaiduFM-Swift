@@ -36,6 +36,7 @@ final class AudioManager: NSObject {
     private var itemStatusObservation: NSKeyValueObservation?
     private var timeControlStatusObservation: NSKeyValueObservation?
     private var artworkTask: Task<Void, Never>?
+    private var stallRecoveryTask: Task<Void, Never>?
     private var intendsToPlay = false
 
     private override init() {
@@ -47,6 +48,8 @@ final class AudioManager: NSObject {
 
     func play(from url: URL, song: Song) {
         stop(resetNowPlayingInfo: false)
+        stallRecoveryTask?.cancel()
+        stallRecoveryTask = nil
         currentSong = song
         guard url.isFileURL || url.scheme?.lowercased() == "https" else {
             reportPlaybackFailure(L10n.insecureConnectionBlocked)
@@ -118,6 +121,8 @@ final class AudioManager: NSObject {
     private func stop(resetNowPlayingInfo: Bool) {
         artworkTask?.cancel()
         artworkTask = nil
+        stallRecoveryTask?.cancel()
+        stallRecoveryTask = nil
         intendsToPlay = false
         removePlayerObservers()
         player?.pause()
@@ -177,7 +182,7 @@ final class AudioManager: NSObject {
             Task { @MainActor in
                 guard let self, self.intendsToPlay else { return }
                 self.playbackState.accept(.loading)
-                self.player?.play()
+                self.scheduleStallRecovery()
             }
         }
     }
@@ -228,11 +233,33 @@ final class AudioManager: NSObject {
         case AVPlayer.TimeControlStatus.waitingToPlayAtSpecifiedRate.rawValue:
             playbackState.accept(.loading)
         case AVPlayer.TimeControlStatus.playing.rawValue:
+            stallRecoveryTask?.cancel()
+            stallRecoveryTask = nil
             playbackState.accept(.playing)
         default:
             playbackState.accept(.loading)
         }
         updateNowPlayingInfo()
+    }
+
+    private func scheduleStallRecovery() {
+        guard stallRecoveryTask == nil else { return }
+
+        stallRecoveryTask = Task { [weak self] in
+            for _ in 0..<2 {
+                try? await Task.sleep(nanoseconds: 1_500_000_000)
+                guard !Task.isCancelled, let self, self.intendsToPlay else { return }
+                if self.player?.timeControlStatus == .playing {
+                    self.stallRecoveryTask = nil
+                    return
+                }
+                self.player?.playImmediately(atRate: 1)
+            }
+
+            guard !Task.isCancelled, let self, self.intendsToPlay else { return }
+            self.stallRecoveryTask = nil
+            self.reportPlaybackFailure(L10n.playbackFailed)
+        }
     }
 
     private func removePlayerObservers() {

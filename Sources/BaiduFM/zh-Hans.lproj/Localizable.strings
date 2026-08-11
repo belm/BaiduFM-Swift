@@ -20,6 +20,7 @@
 
 "alert.error" = "错误";
 "alert.playback_error" = "播放错误";
+"alert.download_error" = "下载错误";
 "alert.confirm_clear" = "确认清除";
 "alert.clear_downloads" = "确定要清除全部已下载歌曲吗？此操作无法撤销。";
 "alert.clear_likes" = "确定要清除全部收藏歌曲吗？此操作无法撤销。";
@@ -33,6 +34,13 @@
 "empty.no_lyrics" = "暂无歌词";
 "empty.no_lyrics_decorated" = "♪ 暂无歌词 ♪";
 "state.loading" = "加载中…";
+"download.state.waiting" = "等待下载";
+"download.state.downloading" = "正在下载";
+"download.state.paused" = "已暂停 — 点击继续";
+"download.state.completed" = "已下载";
+"download.state.failed" = "下载失败 — 点击重试";
+"download.state.cancelled" = "已取消 — 点击重试";
+"download.state.progress" = "%@ %ld%%";
 "error.unknown" = "未知错误";
 
 "error.choose_channel" = "请先选择一个频道。";
@@ -48,6 +56,8 @@
 "network.client_status" = "客户端错误：%ld";
 "network.server_status" = "服务器错误：%ld";
 "network.connection_failed" = "网络连接失败。";
+"network.offline" = "当前似乎处于离线状态，系统会在条件允许时重试。";
+"network.timed_out" = "请求超时，请重试。";
 "network.invalid_configuration" = "内容服务配置不正确。";
 "network.insecure_transport" = "已阻止不安全的内容链接，请配置 HTTPS 内容服务。";
 
@@ -60,6 +70,9 @@
 "download.task_missing" = "下载任务不存在。";
 "download.disk_space" = "磁盘空间不足。";
 "download.network_error" = "网络错误导致下载失败。";
+"download.cancelled" = "下载已取消。";
+"download.file_missing" = "已下载文件缺失，请重新下载。";
+"download.storage_error" = "无法保存下载文件：%@";
 
 "lyrics.invalid" = "歌词格式无效";
 "lyrics.load_failed" = "歌词加载失败";

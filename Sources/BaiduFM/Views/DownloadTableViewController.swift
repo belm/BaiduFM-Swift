@@ -18,6 +18,7 @@ class DownloadTableViewController: UITableViewController {
     // MARK: - Properties
     private let disposeBag = DisposeBag()
     private let dataCenter = DataCenter.shared
+    private let downloadManager = DownloadManager.shared
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -46,16 +47,14 @@ class DownloadTableViewController: UITableViewController {
     
     // MARK: - Bindings
     private func setupBindings() {
-        // Data binding
-        dataCenter.downloadedSongs
+        downloadManager.downloadTasks
             .asDriver(onErrorJustReturn: [])
-            .drive(tableView.rx.items(cellIdentifier: "cell", cellType: UITableViewCell.self)) { [weak self] _, song, cell in
-                self?.configure(cell: cell, with: song)
+            .drive(tableView.rx.items(cellIdentifier: "cell", cellType: UITableViewCell.self)) { [weak self] _, task, cell in
+                self?.configure(cell: cell, with: task)
             }
             .disposed(by: disposeBag)
-            
-        // Empty state handling
-        dataCenter.downloadedSongs
+
+        downloadManager.downloadTasks
             .map { !$0.isEmpty }
             .asDriver(onErrorJustReturn: true)
             .drive(onNext: { [weak self] hasSongs in
@@ -63,19 +62,29 @@ class DownloadTableViewController: UITableViewController {
             })
             .disposed(by: disposeBag)
             
-        // Row selection
-        tableView.rx.modelSelected(Song.self)
-            .subscribe(onNext: { [weak self] song in
-                self?.dataCenter.playSong(song: song)
-                self?.tabBarController?.selectedIndex = 0
+        tableView.rx.modelSelected(SongDownloadTask.self)
+            .subscribe(onNext: { [weak self] task in
+                guard let self else { return }
+                switch task.status.value {
+                case .completed:
+                    dataCenter.playSong(song: task.song)
+                    tabBarController?.selectedIndex = 0
+                case .paused, .failed, .cancelled:
+                    downloadManager.resumeDownload(taskId: task.id)
+                case .waiting, .downloading:
+                    break
+                }
             })
             .disposed(by: disposeBag)
-            
-        // Row deletion
-        tableView.rx.itemDeleted
-            .map { [dataCenter] indexPath in dataCenter.downloadedSongs.value[indexPath.row] }
-            .subscribe(onNext: { [dataCenter] song in
-                dataCenter.removeDownloadedSong(song: song)
+
+        tableView.rx.modelDeleted(SongDownloadTask.self)
+            .subscribe(onNext: { [weak self, downloadManager] task in
+                guard let self else { return }
+                downloadManager.deleteDownload(taskId: task.id)
+                    .subscribe(onError: { error in
+                        print("Failed to remove download: \(error.localizedDescription)")
+                    })
+                    .disposed(by: self.disposeBag)
             })
             .disposed(by: disposeBag)
             
@@ -88,12 +97,39 @@ class DownloadTableViewController: UITableViewController {
     }
     
     // MARK: - Private Helpers
-    private func configure(cell: UITableViewCell, with song: Song) {
-        cell.textLabel?.text = song.name
-        cell.detailTextLabel?.text = song.artist
-        cell.accessoryType = .disclosureIndicator
-        if let url = URL(string: song.pic_url) {
+    private func configure(cell: UITableViewCell, with task: SongDownloadTask) {
+        cell.textLabel?.text = task.song.name
+        let status = statusText(for: task)
+        cell.detailTextLabel?.text = [task.song.artist, status]
+            .filter { !$0.isEmpty }
+            .joined(separator: " • ")
+        cell.accessoryType = task.status.value == .completed ? .disclosureIndicator : .none
+        cell.selectionStyle = [.completed, .paused, .failed, .cancelled].contains(task.status.value)
+            ? .default
+            : .none
+        if let url = NetworkManager.shared.secureContentURL(from: task.song.pic_url) {
             cell.imageView?.kf.setImage(with: url, placeholder: Asset.image(named: "placeholder"))
+        }
+    }
+
+    private func statusText(for task: SongDownloadTask) -> String {
+        switch task.status.value {
+        case .waiting:
+            return L10n.downloadWaiting
+        case .downloading:
+            return String(
+                format: L10n.downloadProgressFormat,
+                L10n.downloadInProgress,
+                Int(task.progress.value * 100)
+            )
+        case .paused:
+            return L10n.downloadPaused
+        case .completed:
+            return L10n.downloadCompleted
+        case .failed:
+            return L10n.downloadFailed
+        case .cancelled:
+            return L10n.downloadCancelledState
         }
     }
     

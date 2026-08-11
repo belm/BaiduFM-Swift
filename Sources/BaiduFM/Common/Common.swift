@@ -78,38 +78,6 @@ class Common {
         return FileManager.default.fileExists(atPath: filePath)
     }
     
-    /// 获取音乐本地存储路径 - 使用现代路径API
-    class func musicLocalPath(songId:String, format:String) -> String{
-        
-        let musicDir = (Utils.documentPath() as NSString).appendingPathComponent("download")
-        if !FileManager.default.fileExists(atPath: musicDir){
-            try? FileManager.default.createDirectory(atPath: musicDir, withIntermediateDirectories: false, attributes: nil)
-        }
-        let musicPath = (musicDir as NSString).appendingPathComponent(songId + "." + format)
-        return musicPath
-    }
-    
-    /// 清理所有下载的歌曲 - 删除整个下载文件夹
-    class func cleanAllDownloadSong(){
-       
-        //删除歌曲文件夹
-        let musicDir = (Utils.documentPath() as NSString).appendingPathComponent("download")
-        try? FileManager.default.removeItem(atPath: musicDir)
-        
-    }
-    
-    /// 删除指定歌曲文件 - 删除单个歌曲文件
-    class func deleteSong(songId:String, format:String)->Bool{
-        //删除本地歌曲
-        let musicPath = self.musicLocalPath(songId: songId, format: format)
-        do {
-            try FileManager.default.removeItem(atPath: musicPath)
-            return true
-        } catch {
-            return false
-        }
-    }
-    
     class func matchesForRegexInText(_ regex: String, text: String) -> [String] {
         guard let regex = try? NSRegularExpression(pattern: regex, options: []) else { return [] }
         let nsString = text as NSString
@@ -171,19 +139,6 @@ class Common {
             }
         }
         return ("", "")
-    }
-    
-    // MARK: - 现代化的文件管理方法
-    
-    /// 删除下载的歌曲文件
-    class func deleteDownloadedSong(song: Song) -> Bool {
-        let musicPath = musicLocalPath(songId: song.sid, format: song.format)
-        do {
-            try FileManager.default.removeItem(atPath: musicPath)
-            return true
-        } catch {
-            return false
-        }
     }
     
     /// 获取数据库路径
