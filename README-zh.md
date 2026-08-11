@@ -3,19 +3,25 @@
 **语言**: [English](./README.md) | [中文](#)
 
 [![](http://img.shields.io/badge/build-passing-4BC51D.svg)]()
-[![](http://img.shields.io/badge/OS%20X-10.10.3-blue.svg)]() 
-[![](http://img.shields.io/badge/xcode-6.3-blue.svg)]()
-[![](http://img.shields.io/badge/iOS-8.0%2B-blue.svg)]() 
-[![](http://img.shields.io/badge/Swift-1.2-blue.svg)]() 
+[![](https://img.shields.io/badge/Swift-6.2-orange.svg)]()
+[![](https://img.shields.io/badge/iOS-15.0%2B-blue.svg)]()
+[![](https://img.shields.io/badge/SPM-supported-brightgreen.svg)]()
 
-百度FM 客户端，使用 Swift 语言实现，基于最新的 Xcode 6.3 + Swift 1.2 开发。项目初期主要专注于功能实现，代码可能在某些地方比较粗糙，后续有时间会进行重构和优化。
+百度 FM 客户端，现已更新到 Swift 6.2、Swift Package Manager 和 iOS 15 以上版本。界面支持英语和简体中文，英语为开发语言及默认回退语言。
+
+## 编译方式
+
+1. 安装包含 Swift 6.2 或更高版本的 Xcode。
+2. 使用 Xcode 打开 `Package.swift`，选择 `BaiduFM` Scheme。
+3. 选择任意可用的 iOS 模拟器进行编译或测试。
+
+也可以使用 `swift build` 验证跨平台核心代码。完整 iOS 编译需要 Xcode，因为项目使用了 UIKit、AVFoundation、Storyboard 和 Asset Catalog。
 
 ## API 接口声明
 - 本 APP 使用百度 FM 非公开 API，音乐版权归百度所有。
 
 ## 功能特性
 
-- 支持 Apple Watch（歌词同步显示）
 - 下载歌曲到本地存储（支持删除功能）
 - 收藏音乐管理（添加/取消收藏）
 - 最近播放历史记录（支持清空功能）
@@ -54,10 +60,9 @@
 - [Alamofire](https://github.com/Alamofire/Alamofire) - 网络请求库
 - [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) - JSON 解析库
 - [FMDB](https://github.com/ccgus/fmdb) - SQLite 数据库封装
-- [Async](https://github.com/duemunk/Async) - 异步编程库
-- [MJRefresh](https://github.com/CoderMJLee/MJRefresh) - 下拉刷新组件
-- [LTMorphingLabel](https://github.com/lexrus/LTMorphingLabel) - 文字动画效果
 - [Kingfisher](https://github.com/onevcat/Kingfisher) - 图片缓存和下载
+- [RxSwift](https://github.com/ReactiveX/RxSwift) - 响应式界面与状态绑定
+- [SnapKit](https://github.com/SnapKit/SnapKit) - Auto Layout DSL
 
 ## 使用的 Swift 技术点
 - 网络请求处理
@@ -69,16 +74,15 @@
 - 歌词滚动显示（UITextView）
 - 闭包（Closures）
 - 属性观察器（get、set、didSet）
-- 使用 MPMoviePlayerController 在线播放网络 MP3
-- NSNotificationCenter 数据传递
+- 使用 AVPlayer 播放网络音频
+- 使用类型化的 NotificationCenter 名称传递事件
 
 ## 待完成功能
 
-- 使用 AVAudioPlayer 替换音乐播放
-- 增强 Apple Watch 支持
+- 提升百度非公开 API 发生变化时的兼容性
 
 ## 联系方式
 - [QQ 邮箱](mailto:belm@vip.qq.com)
 - [微博](http://weibo.com/belmeng)
 
-[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source") 
+[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")

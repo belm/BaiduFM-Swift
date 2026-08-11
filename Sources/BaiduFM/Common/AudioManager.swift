@@ -1,328 +1,282 @@
-//
-//  AudioManager.swift
-//  BaiduFM
-//
-//  音频播放管理器 - 使用AVAudioPlayer替代已废弃的MPMoviePlayerController
-//  支持后台播放、远程控制、播放进度控制等功能
-//
-
-import Foundation
+#if canImport(UIKit)
 import AVFoundation
+import Foundation
 import MediaPlayer
-import RxSwift
-import RxCocoa
+import RxRelay
+import UIKit
 
-// MARK: - 播放状态枚举
-enum PlaybackState {
-    case idle       // 空闲状态
-    case loading    // 加载中
-    case playing    // 播放中
-    case paused     // 暂停
-    case stopped    // 停止
-    case error      // 错误
+enum PlaybackState: Equatable {
+    case idle
+    case loading
+    case playing
+    case paused
+    case stopped
+    case error
 }
 
-// MARK: - 音频管理器
-class AudioManager: NSObject {
-    
-    // MARK: - 单例模式
+final class AudioManager: NSObject {
     static let shared = AudioManager()
-    
-    // MARK: - 私有属性
-    private var audioPlayer: AVAudioPlayer?
-    private var currentSong: Song?
-    private var playbackTimer: Timer?
-    private let disposeBag = DisposeBag()
-    
-    // MARK: - 公共属性 - 使用RxSwift进行响应式编程
+
     let playbackState = BehaviorRelay<PlaybackState>(value: .idle)
-    let currentTime = BehaviorRelay<TimeInterval>(value: 0.0)
-    let duration = BehaviorRelay<TimeInterval>(value: 0.0)
-    let progress = BehaviorRelay<Float>(value: 0.0)
-    
-    // MARK: - 初始化
+    let currentTime = BehaviorRelay<TimeInterval>(value: 0)
+    let duration = BehaviorRelay<TimeInterval>(value: 0)
+    let progress = BehaviorRelay<Float>(value: 0)
+
+    var isPlaying: Bool {
+        playbackState.value == .playing && player?.rate != 0
+    }
+
+    private var player: AVPlayer?
+    private var currentSong: Song?
+    private var periodicTimeObserver: Any?
+    private var playbackEndObserver: NSObjectProtocol?
+    private var artworkTask: Task<Void, Never>?
+
     private override init() {
         super.init()
-        setupAudioSession()
-        setupRemoteControlEvents()
-        setupNotifications()
+        configureAudioSession()
+        configureRemoteCommands()
+        observeAudioSession()
     }
-    
-    // MARK: - 音频会话配置
-    private func setupAudioSession() {
+
+    func play(from url: URL, song: Song) {
+        stop(resetNowPlayingInfo: false)
+        playbackState.accept(.loading)
+        currentSong = song
+        duration.accept(TimeInterval(song.time))
+
+        let item = AVPlayerItem(url: url)
+        let player = AVPlayer(playerItem: item)
+        self.player = player
+        installPeriodicTimeObserver(on: player)
+        observePlaybackEnd(for: item)
+
+        player.play()
+        playbackState.accept(.playing)
+        updateNowPlayingInfo()
+        loadArtworkIfNeeded(for: song)
+    }
+
+    func pause() {
+        player?.pause()
+        playbackState.accept(.paused)
+        updateNowPlayingInfo()
+    }
+
+    func resume() {
+        guard player != nil else { return }
+        player?.play()
+        playbackState.accept(.playing)
+        updateNowPlayingInfo()
+    }
+
+    func stop() {
+        stop(resetNowPlayingInfo: true)
+    }
+
+    func seek(to time: TimeInterval) {
+        guard time.isFinite else { return }
+        player?.seek(to: CMTime(seconds: max(0, time), preferredTimescale: 600))
+        updatePlaybackTime(time)
+        updateNowPlayingInfo()
+    }
+
+    func playNext() {
+        NotificationCenter.default.post(name: .audioManagerPlayNext, object: nil)
+    }
+
+    func playPrevious() {
+        NotificationCenter.default.post(name: .audioManagerPlayPrevious, object: nil)
+    }
+
+    private func stop(resetNowPlayingInfo: Bool) {
+        artworkTask?.cancel()
+        artworkTask = nil
+        removePlayerObservers()
+        player?.pause()
+        player = nil
+        currentTime.accept(0)
+        duration.accept(0)
+        progress.accept(0)
+        playbackState.accept(.stopped)
+
+        if resetNowPlayingInfo {
+            currentSong = nil
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        }
+    }
+
+    private func installPeriodicTimeObserver(on player: AVPlayer) {
+        periodicTimeObserver = player.addPeriodicTimeObserver(
+            forInterval: CMTime(seconds: 0.25, preferredTimescale: 600),
+            queue: .main
+        ) { [weak self] time in
+            Task { @MainActor in
+                self?.updatePlaybackTime(time.seconds)
+            }
+        }
+    }
+
+    private func observePlaybackEnd(for item: AVPlayerItem) {
+        playbackEndObserver = NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemDidPlayToEndTime,
+            object: item,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.playNext()
+            }
+        }
+    }
+
+    private func removePlayerObservers() {
+        if let periodicTimeObserver, let player {
+            player.removeTimeObserver(periodicTimeObserver)
+        }
+        periodicTimeObserver = nil
+
+        if let playbackEndObserver {
+            NotificationCenter.default.removeObserver(playbackEndObserver)
+        }
+        playbackEndObserver = nil
+    }
+
+    private func updatePlaybackTime(_ time: TimeInterval) {
+        guard time.isFinite else { return }
+        currentTime.accept(time)
+
+        if let itemDuration = player?.currentItem?.duration.seconds,
+           itemDuration.isFinite,
+           itemDuration > 0 {
+            duration.accept(itemDuration)
+        }
+
+        let total = duration.value
+        progress.accept(total > 0 ? Float(min(max(time / total, 0), 1)) : 0)
+    }
+
+    private func updateNowPlayingInfo(artwork: MPMediaItemArtwork? = nil) {
+        guard let song = currentSong else {
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+            return
+        }
+
+        var info: [String: Any] = [
+            MPMediaItemPropertyTitle: song.name,
+            MPMediaItemPropertyArtist: song.artist,
+            MPMediaItemPropertyAlbumTitle: song.album,
+            MPMediaItemPropertyPlaybackDuration: duration.value,
+            MPNowPlayingInfoPropertyElapsedPlaybackTime: currentTime.value,
+            MPNowPlayingInfoPropertyPlaybackRate: isPlaying ? 1.0 : 0.0,
+        ]
+        if let artwork {
+            info[MPMediaItemPropertyArtwork] = artwork
+        } else if let existingArtwork = MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyArtwork] {
+            info[MPMediaItemPropertyArtwork] = existingArtwork
+        }
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+    }
+
+    private func loadArtworkIfNeeded(for song: Song) {
+        guard let url = URL(string: song.pic_url) else { return }
+
+        artworkTask = Task { [weak self] in
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                try Task.checkCancellation()
+                guard let image = UIImage(data: data) else { return }
+                let artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
+                self?.updateNowPlayingInfo(artwork: artwork)
+            } catch is CancellationError {
+                return
+            } catch {
+                print("Artwork loading failed: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func configureAudioSession() {
         do {
-            // 配置音频会话支持后台播放
-            try AVAudioSession.sharedInstance().setCategory(
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(
                 .playback,
                 mode: .default,
-                options: [.allowAirPlay, .allowBluetooth]
+                options: [.allowAirPlay, .allowBluetoothA2DP, .allowBluetoothHFP]
             )
-            try AVAudioSession.sharedInstance().setActive(true)
+            try session.setActive(true)
         } catch {
-            print("音频会话配置失败: \(error.localizedDescription)")
+            print("Audio session configuration failed: \(error.localizedDescription)")
         }
     }
-    
-    // MARK: - 远程控制事件配置
-    private func setupRemoteControlEvents() {
+
+    private func configureRemoteCommands() {
         let commandCenter = MPRemoteCommandCenter.shared()
-        
-        // 播放命令
         commandCenter.playCommand.addTarget { [weak self] _ in
-            self?.resume()
+            Task { @MainActor in self?.resume() }
             return .success
         }
-        
-        // 暂停命令
         commandCenter.pauseCommand.addTarget { [weak self] _ in
-            self?.pause()
+            Task { @MainActor in self?.pause() }
             return .success
         }
-        
-        // 下一首命令
         commandCenter.nextTrackCommand.addTarget { [weak self] _ in
-            self?.playNext()
+            Task { @MainActor in self?.playNext() }
             return .success
         }
-        
-        // 上一首命令
         commandCenter.previousTrackCommand.addTarget { [weak self] _ in
-            self?.playPrevious()
+            Task { @MainActor in self?.playPrevious() }
             return .success
         }
-        
-        // 进度控制命令
         commandCenter.changePlaybackPositionCommand.addTarget { [weak self] event in
-            if let positionEvent = event as? MPChangePlaybackPositionCommandEvent {
-                self?.seek(to: positionEvent.positionTime)
-                return .success
+            guard let event = event as? MPChangePlaybackPositionCommandEvent else {
+                return .commandFailed
             }
-            return .commandFailed
+            Task { @MainActor in self?.seek(to: event.positionTime) }
+            return .success
         }
     }
-    
-    // MARK: - 通知配置
-    private func setupNotifications() {
+
+    private func observeAudioSession() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(audioSessionInterruption),
+            selector: #selector(audioSessionInterrupted),
             name: AVAudioSession.interruptionNotification,
             object: nil
         )
-        
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(audioSessionRouteChange),
+            selector: #selector(audioRouteChanged),
             name: AVAudioSession.routeChangeNotification,
             object: nil
         )
     }
-    
-    // MARK: - 音频中断处理
-    @objc private func audioSessionInterruption(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
-              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
-            return
-        }
-        
+
+    @objc private func audioSessionInterrupted(_ notification: Notification) {
+        guard let typeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
+
         switch type {
         case .began:
-            // 中断开始 - 暂停播放
             pause()
         case .ended:
-            // 中断结束 - 根据选项决定是否恢复播放
-            if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
-                let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
-                if options.contains(.shouldResume) {
-                    resume()
-                }
+            let rawOptions = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt ?? 0
+            if AVAudioSession.InterruptionOptions(rawValue: rawOptions).contains(.shouldResume) {
+                resume()
             }
         @unknown default:
             break
         }
     }
-    
-    // MARK: - 音频路由变化处理
-    @objc private func audioSessionRouteChange(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
-              let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else {
-            return
-        }
-        
-        switch reason {
-        case .oldDeviceUnavailable:
-            // 设备断开连接（如耳机拔出）- 暂停播放
-            pause()
-        default:
-            break
-        }
+
+    @objc private func audioRouteChanged(_ notification: Notification) {
+        guard let rawReason = notification.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt,
+              AVAudioSession.RouteChangeReason(rawValue: rawReason) == .oldDeviceUnavailable else { return }
+        pause()
     }
-    
-    // MARK: - 播放音频文件
-    func play(from url: URL, song: Song) {
-        currentSong = song
-        playbackState.accept(.loading)
-        
-        // 异步加载音频数据
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            do {
-                let audioData = try Data(contentsOf: url)
-                let player = try AVAudioPlayer(data: audioData)
-                player.delegate = self
-                player.enableRate = true
-                
-                DispatchQueue.main.async {
-                    self?.audioPlayer = player
-                    self?.duration.accept(player.duration)
-                    self?.updateNowPlayingInfo()
-                    
-                    if player.play() {
-                        self?.playbackState.accept(.playing)
-                        self?.startPlaybackTimer()
-                    } else {
-                        self?.playbackState.accept(.error)
-                    }
-                }
-                
-            } catch {
-                DispatchQueue.main.async {
-                    self?.playbackState.accept(.error)
-                    print("音频播放失败: \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-    
-    // MARK: - 播放控制方法
-    func pause() {
-        audioPlayer?.pause()
-        playbackState.accept(.paused)
-        stopPlaybackTimer()
-        updateNowPlayingInfo()
-    }
-    
-    func resume() {
-        if audioPlayer?.play() == true {
-            playbackState.accept(.playing)
-            startPlaybackTimer()
-            updateNowPlayingInfo()
-        }
-    }
-    
-    func stop() {
-        audioPlayer?.stop()
-        audioPlayer = nil
-        playbackState.accept(.stopped)
-        stopPlaybackTimer()
-        currentTime.accept(0.0)
-        progress.accept(0.0)
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
-    }
-    
-    func seek(to time: TimeInterval) {
-        audioPlayer?.currentTime = time
-        currentTime.accept(time)
-        updateProgress()
-        updateNowPlayingInfo()
-    }
-    
-    // MARK: - 播放列表控制（需要与DataCenter配合）
-    func playNext() {
-        // 通知DataCenter播放下一首
-        NotificationCenter.default.post(name: NSNotification.Name("AudioManagerPlayNext"), object: nil)
-    }
-    
-    func playPrevious() {
-        // 通知DataCenter播放上一首  
-        NotificationCenter.default.post(name: NSNotification.Name("AudioManagerPlayPrevious"), object: nil)
-    }
-    
-    // MARK: - 播放计时器
-    private func startPlaybackTimer() {
-        stopPlaybackTimer()
-        playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
-            self?.updatePlaybackTime()
-        }
-    }
-    
-    private func stopPlaybackTimer() {
-        playbackTimer?.invalidate()
-        playbackTimer = nil
-    }
-    
-    private func updatePlaybackTime() {
-        guard let player = audioPlayer else { return }
-        let time = player.currentTime
-        currentTime.accept(time)
-        updateProgress()
-        updateNowPlayingInfo()
-    }
-    
-    private func updateProgress() {
-        let current = currentTime.value
-        let total = duration.value
-        progress.accept(total > 0 ? Float(current / total) : 0.0)
-    }
-    
-    // MARK: - 锁屏信息更新
-    private func updateNowPlayingInfo() {
-        guard let song = currentSong,
-              let player = audioPlayer else {
-            MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
-            return
-        }
-        
-        var nowPlayingInfo: [String: Any] = [
-            MPMediaItemPropertyTitle: song.name,
-            MPMediaItemPropertyArtist: song.artist,
-            MPMediaItemPropertyAlbumTitle: song.album,
-            MPMediaItemPropertyPlaybackDuration: player.duration,
-            MPNowPlayingInfoPropertyElapsedPlaybackTime: player.currentTime,
-            MPNowPlayingInfoPropertyPlaybackRate: playbackState.value == .playing ? 1.0 : 0.0
-        ]
-        
-        // 异步加载专辑封面
-        if let imageURL = URL(string: song.pic_url) {
-            DispatchQueue.global(qos: .background).async {
-                if let imageData = try? Data(contentsOf: imageURL),
-                   let image = UIImage(data: imageData) {
-                    let artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
-                    DispatchQueue.main.async {
-                        nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
-                        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-                    }
-                }
-            }
-        }
-        
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-    }
-    
-    // MARK: - 清理资源
+
     deinit {
-        stop()
         NotificationCenter.default.removeObserver(self)
     }
 }
 
-// MARK: - AVAudioPlayerDelegate
-extension AudioManager: AVAudioPlayerDelegate {
-    
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        if flag {
-            // 播放完成，自动播放下一首
-            playNext()
-        } else {
-            playbackState.accept(.error)
-        }
-    }
-    
-    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        playbackState.accept(.error)
-        if let error = error {
-            print("音频解码错误: \(error.localizedDescription)")
-        }
-    }
-} 
+#endif

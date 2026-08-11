@@ -143,6 +143,46 @@ class SongList {
         }
         return success
     }
+
+    /// Inserts a playable song or refreshes its metadata when it already exists.
+    func upsert(song: Song) -> Bool {
+        var success = false
+        queue.inDatabase { db in
+            guard let database = db else { return }
+            let sql = """
+            INSERT INTO tbl_song_list (
+                sid, name, artist, album, song_url, pic_url, lrc_url, time,
+                is_dl, dl_file, is_like, is_recent, format
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(sid) DO UPDATE SET
+                name = excluded.name,
+                artist = excluded.artist,
+                album = excluded.album,
+                song_url = excluded.song_url,
+                pic_url = excluded.pic_url,
+                lrc_url = excluded.lrc_url,
+                time = excluded.time,
+                format = excluded.format
+            """
+            let arguments: [Any] = [
+                song.sid,
+                song.name,
+                song.artist,
+                song.album,
+                song.song_url,
+                song.pic_url,
+                song.lrc_url,
+                song.time,
+                song.is_dl,
+                song.dl_file,
+                song.is_like,
+                song.is_recent,
+                song.format,
+            ]
+            success = database.executeUpdate(sql, withArgumentsIn: arguments)
+        }
+        return success
+    }
     
     /// 根据歌曲ID删除歌曲
     func delete(sid: String) -> Bool {

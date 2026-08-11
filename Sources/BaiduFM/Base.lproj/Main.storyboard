@@ -27,19 +27,19 @@
                                     <constraint firstAttribute="width" constant="150" id="QwZ-Ly-a8f"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="歌名" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d5T-oP-9VV">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d5T-oP-9VV">
                                 <rect key="frame" x="281" y="69" width="38" height="23"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="歌手" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LUT-8n-Cc1">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LUT-8n-Cc1">
                                 <rect key="frame" x="284" y="97" width="32" height="20"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="专辑" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TgU-op-uaU">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Album" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TgU-op-uaU">
                                 <rect key="frame" x="0.0" y="0.0" width="36" height="22"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -70,9 +70,6 @@
                                     <constraint firstAttribute="height" constant="45" id="yW3-fg-yGD"/>
                                 </constraints>
                                 <state key="normal" title="play" image="player_btn_pause_normal"/>
-                                <connections>
-                                    <action selector="changePlayStatus:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tpK-nj-aUz"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p9J-6j-7ga">
                                 <rect key="frame" x="183" y="317" width="45" height="45"/>
@@ -83,9 +80,6 @@
                                 <state key="normal" image="player_btn_pre_normal">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <action selector="prevSong:" destination="BYZ-38-t0r" eventType="touchUpInside" id="O74-L4-l8K"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2pu-Bg-AiJ">
                                 <rect key="frame" x="373" y="317" width="45" height="45"/>
@@ -96,9 +90,6 @@
                                 <state key="normal" image="player_btn_next_normal">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <action selector="nextSong:" destination="BYZ-38-t0r" eventType="touchUpInside" id="d4p-h6-DEt"/>
-                                </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.5" contentMode="scaleToFill" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="bry-i1-d0x">
                                 <rect key="frame" x="150" y="372" width="300" height="280"/>
@@ -120,9 +111,6 @@
                                 <state key="normal" title="Button" image="Download">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <action selector="downloadSong:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cJL-rF-iCP"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2gq-Qa-iNN">
                                 <rect key="frame" x="385" y="214" width="35" height="35"/>
@@ -133,9 +121,6 @@
                                 <state key="normal" title="Button" image="Unlike">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <action selector="likeSong:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cWR-RZ-Sth"/>
-                                </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Nz0-Rb-D3r" customClass="RoundImageView" customModule="BaiduFM" customModuleProvider="target">
                                 <rect key="frame" x="275" y="177" width="50" height="50"/>
@@ -206,13 +191,13 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="首页" id="N6c-EB-q1B">
-                        <barButtonItem key="backBarButtonItem" title="首页" id="ZMJ-NI-n1l"/>
+                    <navigationItem key="navigationItem" title="Home" id="N6c-EB-q1B">
+                        <barButtonItem key="backBarButtonItem" title="Home" id="ZMJ-NI-n1l"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="QAz-Vh-fwy">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="IX6-YY-iou">
                                 <rect key="frame" x="173" y="385" width="60" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="分类列表">
+                                <state key="normal" title="Channels">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -276,8 +261,8 @@
                             <outlet property="delegate" destination="HqT-00-5WN" id="WLj-H9-ANF"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="歌曲分类" id="ygV-8V-Wxx">
-                        <barButtonItem key="backBarButtonItem" title="分类" id="Th9-iq-aiv"/>
+                    <navigationItem key="navigationItem" title="Channels" id="ygV-8V-Wxx">
+                        <barButtonItem key="backBarButtonItem" title="Channels" id="Th9-iq-aiv"/>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="djV-pG-BtG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -319,8 +304,8 @@
                             <outlet property="delegate" destination="Smv-ph-KFk" id="lc7-pv-3hN"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="歌曲列表" id="f3d-ws-dYg">
-                        <barButtonItem key="backBarButtonItem" title="列表" id="vxu-bX-1iG"/>
+                    <navigationItem key="navigationItem" title="Songs" id="f3d-ws-dYg">
+                        <barButtonItem key="backBarButtonItem" title="Songs" id="vxu-bX-1iG"/>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rqp-sO-B1N" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -381,13 +366,7 @@
                             <outlet property="delegate" destination="5G2-De-H6U" id="NaS-zm-K6r"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="下载列表" id="uId-9w-RdI">
-                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="GEG-2R-Q3f">
-                            <connections>
-                                <action selector="delAllSong:" destination="5G2-De-H6U" id="dP2-Re-Rrb"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Downloads" id="uId-9w-RdI"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uf5-Tn-8LR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -428,13 +407,7 @@
                             <outlet property="delegate" destination="izT-zR-8R6" id="CGS-dY-MSu"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="收藏列表" id="W7d-DW-2vw">
-                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="l2V-se-prD">
-                            <connections>
-                                <action selector="delAllSong:" destination="izT-zR-8R6" id="QqX-f5-O4G"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="My Likes" id="W7d-DW-2vw"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x6c-ni-hGF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -475,13 +448,7 @@
                             <outlet property="delegate" destination="cq6-po-zvS" id="jbT-V3-9OJ"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="最近播放" id="rZL-84-edu">
-                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="G9G-bj-Xmp">
-                            <connections>
-                                <action selector="deleteAllSong:" destination="cq6-po-zvS" id="jVe-83-Gnl"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Recently Played" id="rZL-84-edu"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Psv-ad-bat" userLabel="First Responder" sceneMemberID="firstResponder"/>

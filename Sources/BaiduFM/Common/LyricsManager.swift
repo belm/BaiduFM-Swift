@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 //
 //  LyricsManager.swift
 //  BaiduFM
@@ -7,8 +8,8 @@
 //
 
 import Foundation
+import RxRelay
 import RxSwift
-import RxCocoa
 
 // MARK: - 歌词行数据模型
 struct LyricLine {
@@ -26,11 +27,11 @@ enum LyricsError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidFormat:
-            return "歌词格式无效"
+            return L10n.lyricsInvalid
         case .noLyrics:
-            return "暂无歌词"
+            return L10n.noLyrics
         case .networkError:
-            return "歌词加载失败"
+            return L10n.lyricsLoadFailed
         }
     }
 }
@@ -196,7 +197,7 @@ class LyricsManager {
         )
         .map { (lyrics, index) -> String in
             guard index >= 0 && index < lyrics.count else {
-                return "♪ 暂无歌词 ♪"
+                return L10n.noLyricsDecorated
             }
             return lyrics[index].text
         }
@@ -280,10 +281,12 @@ enum LyricsQuality {
     
     var description: String {
         switch self {
-        case .none: return "无歌词"
-        case .poor: return "歌词较少"
-        case .basic: return "基本歌词" 
-        case .good: return "完整歌词"
+        case .none: return L10n.lyricsQualityNone
+        case .poor: return L10n.lyricsQualityPoor
+        case .basic: return L10n.lyricsQualityBasic
+        case .good: return L10n.lyricsQualityGood
         }
     }
-} 
+}
+
+#endif

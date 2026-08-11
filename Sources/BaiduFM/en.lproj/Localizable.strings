@@ -1,0 +1,56 @@
+"app.name" = "Baidu FM";
+"screen.channels" = "Channels";
+"screen.song_list" = "Songs";
+"screen.downloads" = "Downloads";
+"screen.likes" = "My Likes";
+"screen.recents" = "Recently Played";
+
+"action.clear_all" = "Clear All";
+"action.cancel" = "Cancel";
+"action.confirm" = "Confirm";
+"action.ok" = "OK";
+"action.refresh" = "Refresh";
+"action.retry" = "Retry";
+
+"alert.error" = "Error";
+"alert.confirm_clear" = "Confirm Clear";
+"alert.clear_downloads" = "Are you sure you want to clear all downloaded songs? This action cannot be undone.";
+"alert.clear_likes" = "Are you sure you want to clear all liked songs? This action cannot be undone.";
+"alert.clear_recents" = "Are you sure you want to clear all recently played songs? This action cannot be undone.";
+
+"empty.downloads" = "No downloaded songs yet.";
+"empty.likes" = "You haven't liked any songs yet.\nTap the heart icon on the player screen to add one.";
+"empty.recents" = "No recently played songs.\nStart listening to see your history here.";
+"empty.no_data" = "No data";
+"empty.no_song" = "No song selected";
+"empty.no_lyrics" = "No lyrics";
+"empty.no_lyrics_decorated" = "♪ No lyrics ♪";
+"state.loading" = "Loading…";
+"error.unknown" = "Unknown error";
+
+"error.choose_channel" = "Please select a channel first.";
+"error.load_channels" = "Failed to load channels. Please check your network connection.";
+"error.refresh_channels" = "Failed to refresh channels.";
+"error.load_songs" = "Failed to load songs. Please check your network connection.";
+"error.load_more_songs" = "Failed to load more songs.";
+
+"network.invalid_url" = "Invalid URL";
+"network.no_data" = "The server returned no data.";
+"network.decoding_failed" = "Unable to read the server response.";
+"network.server_error" = "Server error: %@";
+"network.client_status" = "Client error: %ld";
+"network.server_status" = "Server error: %ld";
+"network.connection_failed" = "Network connection failed.";
+
+"download.invalid_url" = "The download URL is invalid.";
+"download.already_exists" = "This song is already downloaded.";
+"download.task_missing" = "The download task no longer exists.";
+"download.disk_space" = "There is not enough disk space.";
+"download.network_error" = "The download failed because of a network error.";
+
+"lyrics.invalid" = "Invalid lyrics format";
+"lyrics.load_failed" = "Failed to load lyrics";
+"lyrics.quality.none" = "No lyrics";
+"lyrics.quality.poor" = "Few lyric lines";
+"lyrics.quality.basic" = "Basic lyrics";
+"lyrics.quality.good" = "Complete lyrics";

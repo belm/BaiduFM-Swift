@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 //
 //  AppDelegate.swift
 //  BaiduFM
@@ -9,35 +10,14 @@
 import UIKit
 import AVFoundation
 
-// AppDelegate类 - 应用程序委托，处理应用生命周期事件
-class AppDelegate: UIResponder, UIApplicationDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // 应用启动后的自定义配置
-        
-        // 配置音频会话支持后台播放
         setupAudioSession()
-        
-        // 启用远程控制事件接收
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        
-        // 初始化数据库单例，确保在应用启动时创建数据库和表
-        let _ = DatabaseManager.shared
-        
+        _ = DatabaseManager.shared
         return true
-    }
-
-    // MARK: - UISceneSession Lifecycle（iOS 13+支持）
-    @available(iOS 13.0, *)
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-    }
-
-    @available(iOS 13.0, *)
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // 场景会话被丢弃时的清理工作
     }
 
     // MARK: - 应用生命周期方法
@@ -106,13 +86,14 @@ private extension AppDelegate {
             try audioSession.setCategory(
                 .playback,
                 mode: .default,
-                options: [.allowAirPlay, .allowBluetooth, .allowBluetoothA2DP]
+                options: [.allowAirPlay, .allowBluetoothA2DP, .allowBluetoothHFP]
             )
             // 激活音频会话
             try audioSession.setActive(true)
         } catch {
-            print("音频会话配置失败: \(error.localizedDescription)")
+            print("Audio session configuration failed: \(error.localizedDescription)")
         }
     }
 }
 
+#endif

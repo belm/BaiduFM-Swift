@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 //
 //  RecentTableViewController.swift
 //  BaiduFM
@@ -35,13 +36,13 @@ class RecentTableViewController: UITableViewController {
     // MARK: - UI Setup
     
     private func setupUI() {
-        title = "Recently Played"
+        title = L10n.recents
         tableView.rowHeight = 60
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "recentCell")
+        tableView.dataSource = nil
     }
     
     private func setupNavigationBar() {
-        let clearButton = UIBarButtonItem(title: "Clear All", style: .plain, target: nil, action: nil)
+        let clearButton = UIBarButtonItem(title: L10n.clearAll, style: .plain, target: nil, action: nil)
         navigationItem.rightBarButtonItem = clearButton
     }
     
@@ -50,8 +51,8 @@ class RecentTableViewController: UITableViewController {
         // Data binding
         dataCenter.recentSongs
             .asDriver(onErrorJustReturn: [])
-            .drive(tableView.rx.items(cellIdentifier: "recentCell", cellType: UITableViewCell.self)) { (row, song, cell) in
-                self.configure(cell: cell, with: song)
+            .drive(tableView.rx.items(cellIdentifier: "cell", cellType: UITableViewCell.self)) { [weak self] _, song, cell in
+                self?.configure(cell: cell, with: song)
             }
             .disposed(by: disposeBag)
             
@@ -94,13 +95,13 @@ class RecentTableViewController: UITableViewController {
         cell.textLabel?.text = song.name
         cell.detailTextLabel?.text = song.artist
         if let url = URL(string: song.pic_url) {
-            cell.imageView?.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
+            cell.imageView?.kf.setImage(with: url, placeholder: Asset.image(named: "placeholder"))
         }
     }
     
     private func createEmptyStateView() -> UIView {
         let label = UILabel()
-        label.text = "No recently played songs.\nStart listening to see your history here."
+        label.text = L10n.noRecents
         label.textAlignment = .center
         label.textColor = .gray
         label.font = .systemFont(ofSize: 16)
@@ -110,14 +111,16 @@ class RecentTableViewController: UITableViewController {
 
     private func showClearAllConfirmation() {
         let alert = UIAlertController(
-            title: "Confirm Clear",
-            message: "Are you sure you want to clear all recently played songs? This action cannot be undone.",
+            title: L10n.confirmClear,
+            message: L10n.clearRecentsMessage,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { [dataCenter] _ in
+        alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: L10n.confirm, style: .destructive, handler: { [dataCenter] _ in
             dataCenter.clearRecentSongs()
         }))
         present(alert, animated: true)
     }
 }
+
+#endif

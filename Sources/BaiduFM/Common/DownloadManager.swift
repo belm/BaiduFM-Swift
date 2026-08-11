@@ -7,8 +7,8 @@
 //
 
 import Foundation
+import RxRelay
 import RxSwift
-import RxCocoa
 import Alamofire
 
 // MARK: - 下载状态枚举
@@ -22,7 +22,7 @@ enum DownloadStatus {
 }
 
 // MARK: - 下载任务模型
-class DownloadTask {
+final class SongDownloadTask {
     let id: String
     let song: Song
     let url: URL
@@ -61,7 +61,7 @@ class DownloadManager {
     private let maxConcurrentDownloads = 3
     
     // MARK: - 公共响应式属性
-    let downloadTasks = BehaviorRelay<[DownloadTask]>(value: [])
+    let downloadTasks = BehaviorRelay<[SongDownloadTask]>(value: [])
     let activeDownloads = BehaviorRelay<Int>(value: 0)
     let totalDownloadsCount = BehaviorRelay<Int>(value: 0)
     let completedDownloadsCount = BehaviorRelay<Int>(value: 0)
@@ -120,7 +120,7 @@ class DownloadManager {
                 if fileURL.pathExtension.lowercased() == "mp3" {
                     // 尝试从文件名解析歌曲信息
                     if let song = parseSongFromFilename(fileURL.lastPathComponent) {
-                        let task = DownloadTask(song: song, url: URL(string: song.song_url)!, destinationURL: fileURL)
+                        let task = SongDownloadTask(song: song, url: URL(string: song.song_url)!, destinationURL: fileURL)
                         task.status.accept(.completed)
                         task.progress.accept(1.0)
                         
@@ -142,6 +142,7 @@ class DownloadManager {
     // MARK: - 开始下载
     func startDownload(song: Song) -> Observable<Void> {
         return Observable.create { [weak self] observer in
+            let observer = RxObserverBox(observer)
             guard let self = self else {
                 observer.onCompleted()
                 return Disposables.create()
@@ -167,7 +168,7 @@ class DownloadManager {
             let filename = self.generateFilename(for: song)
             let destinationURL = self.downloadsDirectory.appendingPathComponent(filename)
             
-            let task = DownloadTask(song: song, url: url, destinationURL: destinationURL)
+            let task = SongDownloadTask(song: song, url: url, destinationURL: destinationURL)
             self.addTaskToList(task)
             
             // 开始下载
@@ -181,14 +182,18 @@ class DownloadManager {
             }
             
             return Disposables.create {
-                // 取消下载
-                self.cancelDownload(taskId: task.id)
+                if task.status.value == .waiting || task.status.value == .downloading {
+                    self.cancelDownload(taskId: task.id)
+                }
             }
         }
     }
     
     // MARK: - 执行下载
-    private func performDownload(task: DownloadTask, completion: @escaping (Result<Void, Error>) -> Void) {
+    private func performDownload(
+        task: SongDownloadTask,
+        completion: @escaping @Sendable (Result<Void, any Error>) -> Void
+    ) {
         // 检查并发下载限制
         guard activeDownloads.value < maxConcurrentDownloads else {
             task.status.accept(.waiting)
@@ -268,15 +273,13 @@ class DownloadManager {
     
     // MARK: - 取消下载
     func cancelDownload(taskId: String) {
-        guard let task = findTask(by: taskId) else { return }
+        guard let task = findTask(by: taskId), task.status.value != .completed else { return }
         
         task.downloadRequest?.cancel()
         task.status.accept(.cancelled)
         
         // 删除未完成的文件
-        if task.status.value != .completed {
-            try? fileManager.removeItem(at: task.destinationURL)
-        }
+        try? fileManager.removeItem(at: task.destinationURL)
         
         startNextWaitingDownload()
     }
@@ -331,11 +334,11 @@ class DownloadManager {
     
     // MARK: - 私有辅助方法
     
-    private func findTask(by id: String) -> DownloadTask? {
+    private func findTask(by id: String) -> SongDownloadTask? {
         return downloadTasks.value.first { $0.id == id }
     }
     
-    private func addTaskToList(_ task: DownloadTask) {
+    private func addTaskToList(_ task: SongDownloadTask) {
         var currentTasks = downloadTasks.value
         currentTasks.append(task)
         downloadTasks.accept(currentTasks)
@@ -396,7 +399,7 @@ class DownloadManager {
         return nil
     }
     
-    private func saveDownloadInfo(task: DownloadTask) {
+    private func saveDownloadInfo(task: SongDownloadTask) {
         // 保存下载信息到UserDefaults或数据库
         // 这里可以根据需要实现持久化存储
     }
@@ -413,15 +416,15 @@ enum DownloadError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidURL:
-            return "下载链接无效"
+            return L10n.invalidDownloadURL
         case .alreadyExists:
-            return "文件已存在"
+            return L10n.downloadExists
         case .taskNotFound:
-            return "下载任务不存在"
+            return L10n.downloadTaskMissing
         case .diskSpaceInsufficient:
-            return "磁盘空间不足"
+            return L10n.diskSpaceInsufficient
         case .networkError:
-            return "网络连接错误"
+            return L10n.downloadNetworkError
         }
     }
 }
@@ -477,4 +480,4 @@ struct DownloadStatistics {
     let downloading: Int
     let failed: Int
     let waiting: Int
-} 
+}

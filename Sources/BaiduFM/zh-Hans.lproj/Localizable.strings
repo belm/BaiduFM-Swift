@@ -1,0 +1,56 @@
+"app.name" = "百度 FM";
+"screen.channels" = "频道";
+"screen.song_list" = "歌曲列表";
+"screen.downloads" = "下载列表";
+"screen.likes" = "我的收藏";
+"screen.recents" = "最近播放";
+
+"action.clear_all" = "全部清除";
+"action.cancel" = "取消";
+"action.confirm" = "确定";
+"action.ok" = "确定";
+"action.refresh" = "刷新";
+"action.retry" = "重试";
+
+"alert.error" = "错误";
+"alert.confirm_clear" = "确认清除";
+"alert.clear_downloads" = "确定要清除全部已下载歌曲吗？此操作无法撤销。";
+"alert.clear_likes" = "确定要清除全部收藏歌曲吗？此操作无法撤销。";
+"alert.clear_recents" = "确定要清除全部最近播放记录吗？此操作无法撤销。";
+
+"empty.downloads" = "还没有已下载的歌曲。";
+"empty.likes" = "还没有收藏歌曲。\n可在播放页点击心形图标添加收藏。";
+"empty.recents" = "还没有最近播放记录。\n开始播放后会在这里显示历史记录。";
+"empty.no_data" = "暂无数据";
+"empty.no_song" = "暂无歌曲";
+"empty.no_lyrics" = "暂无歌词";
+"empty.no_lyrics_decorated" = "♪ 暂无歌词 ♪";
+"state.loading" = "加载中…";
+"error.unknown" = "未知错误";
+
+"error.choose_channel" = "请先选择一个频道。";
+"error.load_channels" = "频道加载失败，请检查网络连接。";
+"error.refresh_channels" = "频道刷新失败。";
+"error.load_songs" = "歌曲列表加载失败，请检查网络连接。";
+"error.load_more_songs" = "加载更多歌曲失败。";
+
+"network.invalid_url" = "无效的 URL 地址";
+"network.no_data" = "服务器没有返回数据。";
+"network.decoding_failed" = "无法解析服务器数据。";
+"network.server_error" = "服务器错误：%@";
+"network.client_status" = "客户端错误：%ld";
+"network.server_status" = "服务器错误：%ld";
+"network.connection_failed" = "网络连接失败。";
+
+"download.invalid_url" = "下载链接无效。";
+"download.already_exists" = "该歌曲已下载。";
+"download.task_missing" = "下载任务不存在。";
+"download.disk_space" = "磁盘空间不足。";
+"download.network_error" = "网络错误导致下载失败。";
+
+"lyrics.invalid" = "歌词格式无效";
+"lyrics.load_failed" = "歌词加载失败";
+"lyrics.quality.none" = "无歌词";
+"lyrics.quality.poor" = "歌词较少";
+"lyrics.quality.basic" = "基本歌词";
+"lyrics.quality.good" = "完整歌词";

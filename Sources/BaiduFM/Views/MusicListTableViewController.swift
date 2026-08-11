@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 //
 //  MusicListTableViewController.swift
 //  BaiduFM
@@ -32,7 +33,7 @@ class MusicListTableViewController: UITableViewController {
     
     /// 设置UI
     private func setupUI() {
-        title = "歌曲列表"
+        title = L10n.songList
         
         // 设置下拉刷新
         refreshControl = UIRefreshControl()
@@ -61,7 +62,7 @@ class MusicListTableViewController: UITableViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] channel in
                 let channelName = channel?.name ?? ""
-                self?.title = channelName.isEmpty ? "歌曲列表" : channelName
+                self?.title = channelName.isEmpty ? L10n.songList : channelName
             })
             .disposed(by: disposeBag)
     }
@@ -72,7 +73,7 @@ class MusicListTableViewController: UITableViewController {
         
         let currentChannel = DataCenter.shared.currentChannel.value
         guard currentChannel != nil else {
-            showErrorAlert(message: "请先选择一个频道")
+            showErrorAlert(message: L10n.chooseChannel)
             return
         }
         
@@ -94,7 +95,7 @@ class MusicListTableViewController: UITableViewController {
                     print("歌曲列表加载失败: \(error.localizedDescription)")
                     self?.refreshControl?.endRefreshing()
                     self?.isLoading = false
-                    self?.showErrorAlert(message: "加载歌曲列表失败，请检查网络连接")
+                    self?.showErrorAlert(message: L10n.loadSongsFailed)
                 }
             )
             .disposed(by: disposeBag)
@@ -115,7 +116,7 @@ class MusicListTableViewController: UITableViewController {
                 onError: { [weak self] error in
                     print("加载更多歌曲失败: \(error.localizedDescription)")
                     self?.isLoading = false
-                    self?.showErrorAlert(message: "加载更多歌曲失败")
+                    self?.showErrorAlert(message: L10n.loadMoreSongsFailed)
                 }
             )
             .disposed(by: disposeBag)
@@ -131,8 +132,8 @@ class MusicListTableViewController: UITableViewController {
     
     /// 显示错误提示
     private func showErrorAlert(message: String) {
-        let alert = UIAlertController(title: "错误", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "确定", style: .default))
+        let alert = UIAlertController(title: L10n.error, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: L10n.ok, style: .default))
         present(alert, animated: true)
     }
 
@@ -166,7 +167,7 @@ class MusicListTableViewController: UITableViewController {
            let url = URL(string: songInfo.picUrl) {
             imageView.kf.setImage(
                 with: url,
-                placeholder: UIImage(named: "placeholder"),
+                placeholder: Asset.image(named: "placeholder"),
                 options: [
                     .transition(.fade(0.2)),
                     .cacheOriginalImage
@@ -185,7 +186,7 @@ class MusicListTableViewController: UITableViewController {
         
         // 发送通知
         NotificationCenter.default.post(
-            name: Notification.Name("CHANNEL_MUSIC_LIST_CLICK_NOTIFICATION"),
+            name: .channelMusicListClick,
             object: nil
         )
         
@@ -206,3 +207,5 @@ class MusicListTableViewController: UITableViewController {
         }
     }
 }
+
+#endif

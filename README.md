@@ -3,19 +3,25 @@
 **Language**: [English](#) | [中文](./README-zh.md)
 
 [![](http://img.shields.io/badge/build-passing-4BC51D.svg)]()
-[![](http://img.shields.io/badge/OS%20X-10.10.3-blue.svg)]() 
-[![](http://img.shields.io/badge/xcode-6.3-blue.svg)]()
-[![](http://img.shields.io/badge/iOS-8.0%2B-blue.svg)]() 
-[![](http://img.shields.io/badge/Swift-1.2-blue.svg)]() 
+[![](https://img.shields.io/badge/Swift-6.2-orange.svg)]()
+[![](https://img.shields.io/badge/iOS-15.0%2B-blue.svg)]()
+[![](https://img.shields.io/badge/SPM-supported-brightgreen.svg)]()
 
-A Baidu FM client implemented in Swift, based on the latest Xcode 6.3 + Swift 1.2. This project was initially focused on implementing basic functionality, and the code may be rough in some areas. I plan to refactor and optimize it when time permits.
+A Baidu FM client modernized for Swift 6.2, Swift Package Manager, and iOS 15 or later. The UI supports English and Simplified Chinese; English is the development and fallback language.
+
+## Build
+
+1. Install an Xcode release that includes Swift 6.2 or later.
+2. Open `Package.swift` in Xcode and select the `BaiduFM` scheme.
+3. Build or test with an iOS Simulator destination.
+
+Command-line core validation is also available with `swift build`. A complete iOS build requires Xcode because the app uses UIKit, AVFoundation, storyboards, and asset catalogs.
 
 ## API Disclaimer
 - This app uses Baidu FM's non-public API. All music copyrights belong to Baidu.
 
 ## Features
 
-- Apple Watch support (synchronized lyrics display)
 - Download songs to local storage (with delete functionality)
 - Favorite music management (add/remove favorites)
 - Recently played music history (with clear functionality)
@@ -54,10 +60,9 @@ A Baidu FM client implemented in Swift, based on the latest Xcode 6.3 + Swift 1.
 - [Alamofire](https://github.com/Alamofire/Alamofire) - Networking library
 - [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) - JSON parsing
 - [FMDB](https://github.com/ccgus/fmdb) - SQLite database wrapper
-- [Async](https://github.com/duemunk/Async) - Asynchronous programming
-- [MJRefresh](https://github.com/CoderMJLee/MJRefresh) - Pull-to-refresh
-- [LTMorphingLabel](https://github.com/lexrus/LTMorphingLabel) - Text animation effects
 - [Kingfisher](https://github.com/onevcat/Kingfisher) - Image caching and downloading
+- [RxSwift](https://github.com/ReactiveX/RxSwift) - Reactive UI and state binding
+- [SnapKit](https://github.com/SnapKit/SnapKit) - Auto Layout DSL
 
 ## Swift Concepts Used
 - Network requests
@@ -69,13 +74,12 @@ A Baidu FM client implemented in Swift, based on the latest Xcode 6.3 + Swift 1.
 - Lyrics scrolling with UITextView
 - Closures
 - Property observers (get, set, didSet)
-- Online MP3 playback using MPMoviePlayerController
-- NSNotificationCenter for data passing
+- Streaming audio playback using AVPlayer
+- Typed NotificationCenter names for data passing
 
 ## TODO Features
 
-- Replace music playback with AVAudioPlayer
-- Enhanced Apple Watch support
+- Improve API resilience when Baidu changes its private endpoints
 
 ## Contact
 - [QQ Email](mailto:belm@vip.qq.com)

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Channel {
+struct Channel: Sendable {
     var id:String
     var name:String
     var order:Int

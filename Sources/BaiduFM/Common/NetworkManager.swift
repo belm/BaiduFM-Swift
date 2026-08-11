@@ -22,21 +22,21 @@ enum NetworkError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidURL:
-            return "无效的URL地址"
+            return L10n.invalidURL
         case .noData:
-            return "没有返回数据"
+            return L10n.noResponseData
         case .decodingError:
-            return "数据解析失败"
+            return L10n.decodingFailed
         case .serverError(let message):
-            return "服务器错误: \(message)"
+            return String(format: L10n.serverErrorFormat, message)
         case .connectionError:
-            return "网络连接失败"
+            return L10n.connectionFailed
         }
     }
 }
 
 // MARK: - API响应模型
-struct APIResponse<T> {
+struct APIResponse<T: Sendable>: Sendable {
     let data: T?
     let message: String?
     let code: Int
@@ -64,7 +64,7 @@ class NetworkManager {
     }
     
     // MARK: - 通用请求方法
-    private func request<T: Decodable>(
+    private func request<T: Decodable & Sendable>(
         url: String,
         method: HTTPMethod = .get,
         parameters: Parameters? = nil,
@@ -73,6 +73,7 @@ class NetworkManager {
     ) -> Observable<T> {
         
         return Observable.create { observer in
+            let observer = RxObserverBox(observer)
             let request = self.session.request(
                 url,
                 method: method,
@@ -93,13 +94,13 @@ class NetworkManager {
                         observer.onError(NetworkError.decodingError)
                     }
                     
-                case .failure(let error):
+                case .failure:
                     if let statusCode = response.response?.statusCode {
                         switch statusCode {
                         case 400...499:
-                            observer.onError(NetworkError.serverError("客户端错误: \(statusCode)"))
+                            observer.onError(NetworkError.serverError(String(format: L10n.clientStatusFormat, statusCode)))
                         case 500...599:
-                            observer.onError(NetworkError.serverError("服务器错误: \(statusCode)"))
+                            observer.onError(NetworkError.serverError(String(format: L10n.serverStatusFormat, statusCode)))
                         default:
                             observer.onError(NetworkError.connectionError)
                         }
@@ -123,19 +124,23 @@ class NetworkManager {
     ) -> Observable<JSON> {
         
         return Observable.create { observer in
+            let observer = RxObserverBox(observer)
             let request = self.session.request(
                 url,
                 method: method,
                 parameters: parameters
             )
             .validate()
-            .responseJSON { response in
+            .responseData { response in
                 
                 switch response.result {
-                case .success(let value):
-                    let json = JSON(value)
-                    observer.onNext(json)
-                    observer.onCompleted()
+                case .success(let data):
+                    do {
+                        observer.onNext(try JSON(data: data))
+                        observer.onCompleted()
+                    } catch {
+                        observer.onError(NetworkError.decodingError)
+                    }
                     
                 case .failure(let error):
                     print("网络请求失败: \(error.localizedDescription)")
@@ -240,6 +245,7 @@ extension NetworkManager {
     // MARK: - 直接获取歌词文本
     private func requestLyricsText(url: String) -> Observable<String> {
         return Observable.create { observer in
+            let observer = RxObserverBox(observer)
             let request = self.session.request(url)
                 .responseString { response in
                     switch response.result {
@@ -261,6 +267,7 @@ extension NetworkManager {
     // MARK: - 下载音频文件
     func downloadAudio(from url: String, to destination: URL) -> Observable<Float> {
         return Observable.create { observer in
+            let observer = RxObserverBox(observer)
             let destination: DownloadRequest.Destination = { _, _ in
                 return (destination, [.removePreviousFile, .createIntermediateDirectories])
             }
@@ -286,7 +293,7 @@ extension NetworkManager {
 }
 
 // MARK: - 数据模型定义
-struct SongInfo {
+struct SongInfo: Sendable {
     let songId: String
     let name: String
     let artistName: String
@@ -294,10 +301,10 @@ struct SongInfo {
     let picUrl: String
 }
 
-struct SongLink {
+struct SongLink: Sendable {
     let songId: String
     let songLink: String
     let lrcLink: String
     let time: Int
     let format: String
-} 
+}

@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 //
 //  RoundImageView.swift
 //  BaiduFM
@@ -41,3 +42,5 @@ class RoundImageView: UIImageView {
     }
 
 }
+
+#endif

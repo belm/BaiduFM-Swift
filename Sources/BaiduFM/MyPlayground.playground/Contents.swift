@@ -1,86 +1,47 @@
-//: Playground - noun: a place where people can play
-
+import PlaygroundSupport
 import UIKit
-import XCPlayground
-var str:String = "Hello, playground"
 
-//xcode6.3 & swift1.2
+let greeting = "Hello, playground"
 
-//1. 可选绑定if let的语法优化
-//2. 类型转化as用法的变化
-//3. 新增原生set(集合)类型
-//4. 常量延迟初始化
-//5. 与OC的互动和桥接
-//6. 迁移助手  Edit=>Convert=>To Latest Swift Syntax
+// Optional binding and Boolean conditions use commas in modern Swift.
+let weather: String? = "rain"
+let cityWeather: String? = "sun"
+let temperature: Int? = 20
 
-//1.可选绑定if let的语法优化
-var wea:String? = "rain"
-var sh:String? = "sun"
-var tmp:Int? = 20
-
-if let weather = wea where "rain".isEmpty, let shanghai = sh, let temp=tmp{
-    //update ui
-    print("update UI")
+if let weather,
+   weather == "rain",
+   let cityWeather,
+   let temperature {
+    print("Weather: \(weather), city: \(cityWeather), temperature: \(temperature)°")
 }
 
-//2. 类型转化as用法的变化 NSObject=>UIView=>UITableView
+// Native Set operations.
+var people: Set<String> = ["hair", "nose", "ears"]
+let dog: Set<String> = ["nose", "ears", "tail"]
 
-// 向上转换 UITableView=> NSObject    直接as
-// 向下转换 NSObject=>UITableView  确定 as!(强制转换)   不确定as?(安全转换)
-
-//3. 新增原生set(集合)类型
-
-var people:Set = ["头发","鼻子","耳朵","头发"]
-var dog:Set = ["鼻子","耳朵","尾巴"]
-
-//插入元素
-people.insert("脚")
-
-//删除元素
-people.remove("脚")
-
-people
-
-//交集
-people.intersect(dog)
-
-//差集
-people.subtract(dog)
-
-//并集
+people.insert("feet")
+people.remove("feet")
+people.intersection(dog)
+people.subtracting(dog)
 people.union(dog)
+people.symmetricDifference(dog)
 
-//补集
-people.exclusiveOr(dog)
-
-//4. 常量延迟初始化 only for class or struct
-struct Point{
-    var x:Int
-    var y:Int
-}
-//lazy var players:Point = Point(x: 10, y: 5)
-
-XCPSetExecutionShouldContinueIndefinitely(continueIndefinitely: true)
-
-class Test {
-    init(){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "update:", name: "update", object: nil)
-    }
-    
-    func update(note:NSNotification){
-        var str = note.object as! String
-        print("update UI")
-    }
+struct Point {
+    var x: Int
+    var y: Int
 }
 
-var t = Test()
-NSNotificationCenter.defaultCenter().postNotificationName("update", object: "hello")
+// Closure-based notification observation avoids obsolete selector strings.
+let updateNotification = Notification.Name("playground.update")
+let observer = NotificationCenter.default.addObserver(
+    forName: updateNotification,
+    object: nil,
+    queue: .main
+) { notification in
+    guard let message = notification.object as? String else { return }
+    print("Update UI: \(message)")
+}
 
-
-
-
-
-
-
-
-
+NotificationCenter.default.post(name: updateNotification, object: "hello")
+NotificationCenter.default.removeObserver(observer)
+PlaygroundPage.current.needsIndefiniteExecution = false

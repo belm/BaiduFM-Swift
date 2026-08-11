@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 //
 //  ChannelTableViewController.swift
 //  BaiduFM
@@ -30,14 +31,13 @@ class ChannelTableViewController: UITableViewController {
     
     /// Setup the basic UI elements
     private func setupUI() {
-        title = "Channels"
+        title = L10n.channels
         
         // Setup pull-to-refresh
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        tableView.dataSource = nil
         
-        // Register cell
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "channelCell")
     }
     
     /// Bind ViewModel data to UI
@@ -45,7 +45,7 @@ class ChannelTableViewController: UITableViewController {
         // Bind channel list data directly to the table view
         dataCenter.channelListInfo
             .asDriver()
-            .drive(tableView.rx.items(cellIdentifier: "channelCell", cellType: UITableViewCell.self)) { (row, channel, cell) in
+            .drive(tableView.rx.items(cellIdentifier: "cell", cellType: UITableViewCell.self)) { _, channel, cell in
                 cell.textLabel?.text = channel.name
                 cell.accessoryType = .disclosureIndicator
             }
@@ -84,7 +84,7 @@ class ChannelTableViewController: UITableViewController {
             .subscribe(
                 onError: { [weak self] error in
                     print("Failed to load channels: \(error.localizedDescription)")
-                    self?.showErrorAlert(message: "Failed to load channels. Please check your network connection.")
+                    self?.showErrorAlert(message: L10n.loadChannelsFailed)
                 }
             )
             .disposed(by: disposeBag)
@@ -97,7 +97,7 @@ class ChannelTableViewController: UITableViewController {
             .subscribe(
                 onError: { [weak self] error in
                     print("Failed to refresh channels: \(error.localizedDescription)")
-                    self?.showErrorAlert(message: "Failed to refresh channels.")
+                    self?.showErrorAlert(message: L10n.refreshChannelsFailed)
                 }
             )
             .disposed(by: disposeBag)
@@ -105,8 +105,8 @@ class ChannelTableViewController: UITableViewController {
     
     /// Show an error alert
     private func showErrorAlert(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        let alert = UIAlertController(title: L10n.error, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: L10n.ok, style: .default))
         present(alert, animated: true)
     }
 
@@ -126,3 +126,5 @@ class ChannelTableViewController: UITableViewController {
         }
     }
 }
+
+#endif

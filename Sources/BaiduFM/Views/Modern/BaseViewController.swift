@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 //
 //  BaseViewController.swift
 //  BaiduFM
@@ -12,7 +13,7 @@ import RxCocoa
 import SnapKit
 
 // MARK: - UI状态枚举
-enum ViewState {
+enum ViewState: Equatable {
     case loading    // 加载中
     case content    // 显示内容
     case empty      // 空状态
@@ -115,7 +116,7 @@ class BaseViewController: UIViewController {
             .filter { $0 != nil }
             .subscribe(onNext: { [weak self] message in
                 self?.viewState.accept(.error)
-                self?.errorView.configure(message: message ?? "未知错误")
+                self?.errorView.configure(message: message ?? L10n.unknownError)
             })
             .disposed(by: disposeBag)
         
@@ -174,7 +175,7 @@ class BaseViewController: UIViewController {
     }
     
     /// 显示空状态
-    func showEmpty(message: String = "暂无数据", icon: String = "music.note.list") {
+    func showEmpty(message: String = L10n.noData, icon: String = "music.note.list") {
         emptyStateView.configure(message: message, icon: icon)
         viewState.accept(.empty)
     }
@@ -212,12 +213,12 @@ class BaseViewController: UIViewController {
     // MARK: - 可重写方法
     
     /// 重试按钮点击事件 - 子类可重写
-    @objc open func onRetryTapped() {
+    @objc func onRetryTapped() {
         // 子类实现具体的重试逻辑
     }
     
     /// 空状态视图点击事件 - 子类可重写
-    @objc open func onEmptyStateTapped() {
+    @objc func onEmptyStateTapped() {
         // 子类实现具体的处理逻辑
     }
 }
@@ -246,7 +247,7 @@ class LoadingView: UIView {
         
         activityIndicator.color = UIColor.systemBlue
         
-        messageLabel.text = "加载中..."
+        messageLabel.text = L10n.loading
         messageLabel.font = UIFont.systemFont(ofSize: 14)
         messageLabel.textColor = UIColor.secondaryLabel
         messageLabel.textAlignment = .center
@@ -306,7 +307,7 @@ class EmptyStateView: UIView {
         messageLabel.textAlignment = .center
         messageLabel.numberOfLines = 0
         
-        actionButton.setTitle("刷新", for: .normal)
+        actionButton.setTitle(L10n.refresh, for: .normal)
         actionButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         actionButton.backgroundColor = UIColor.systemBlue
         actionButton.setTitleColor(UIColor.white, for: .normal)
@@ -382,7 +383,7 @@ class ErrorView: UIView {
         messageLabel.textAlignment = .center
         messageLabel.numberOfLines = 0
         
-        retryButton.setTitle("重试", for: .normal)
+        retryButton.setTitle(L10n.retry, for: .normal)
         retryButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         retryButton.backgroundColor = UIColor.systemBlue
         retryButton.setTitleColor(UIColor.white, for: .normal)
@@ -507,4 +508,6 @@ class ToastView: UIView {
             self.removeFromSuperview()
         }
     }
-} 
+}
+
+#endif

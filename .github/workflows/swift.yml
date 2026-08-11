@@ -1,22 +1,53 @@
-# This workflow will build a Swift project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
-
 name: Swift
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [master]
   pull_request:
-    branches: [ "master" ]
+    branches: [master]
 
 jobs:
-  build:
-
+  build-and-test:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: xcodebuild -scheme BaiduFM -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' build
-    - name: Run tests
-      run: xcodebuild -scheme BaiduFM -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' test
+      - uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: |
+          xcodebuild -version
+          swift --version
+
+      - name: Resolve packages
+        run: swift package resolve
+
+      - name: Build for iOS Simulator
+        run: >-
+          xcodebuild
+          -scheme BaiduFM
+          -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO
+          build
+
+      - name: Select an available iPhone simulator
+        id: simulator
+        run: |
+          simulator_id="$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          devices = json.load(sys.stdin)["devices"]
+          for runtime in sorted(devices, reverse=True):
+              for device in devices[runtime]:
+                  if device.get("isAvailable") and device["name"].startswith("iPhone"):
+                      print(device["udid"])
+                      raise SystemExit
+          raise SystemExit("No available iPhone simulator found")
+          ')"
+          echo "id=$simulator_id" >> "$GITHUB_OUTPUT"
+
+      - name: Run tests
+        run: >-
+          xcodebuild
+          -scheme BaiduFM
+          -destination 'platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}'
+          CODE_SIGNING_ALLOWED=NO
+          test

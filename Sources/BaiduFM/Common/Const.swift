@@ -8,10 +8,12 @@
 
 import Foundation
 
-// MARK: - 通知
-let CHANNEL_MUSIC_LIST_CLICK_NOTIFICATION = "CHANNEL_MUSIC_LIST_CLICK_NOTIFICATION" //某类别歌曲列表点击通知
-
-let OTHER_MUSIC_LIST_CLICK_NOTIFICATION = "OTHER_MUSIC_LIST_CLICK_NOTIFICATION" //下载，喜欢，最近播放列表点击通知
+extension Notification.Name {
+    static let channelMusicListClick = Notification.Name("CHANNEL_MUSIC_LIST_CLICK_NOTIFICATION")
+    static let otherMusicListClick = Notification.Name("OTHER_MUSIC_LIST_CLICK_NOTIFICATION")
+    static let audioManagerPlayNext = Notification.Name("AudioManagerPlayNext")
+    static let audioManagerPlayPrevious = Notification.Name("AudioManagerPlayPrevious")
+}
 
 // MARK: - 常量
 
@@ -29,4 +31,3 @@ let http_song_link = "http://fm.baidu.com/data/music/songlink"
 
 //获取歌词 http://fm.baidu.com/data2/lrc/14881153/14881153.lrc
 let http_song_lrc = "http://fm.baidu.com"
-

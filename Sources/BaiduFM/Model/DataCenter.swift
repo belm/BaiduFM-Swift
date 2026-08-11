@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 //
 //  DataCenter.swift
 //  BaiduFM
@@ -9,6 +10,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import RxRelay
 
 // MARK: - 现代化的数据中心管理类
 class DataCenter {
@@ -196,6 +198,24 @@ class DataCenter {
     func loadDownloadedSongs() {
         let songs = dbSongList.getAllDownload() ?? []
         downloadedSongs.accept(songs)
+    }
+
+    func toggleLike(song: Song) {
+        let songList = dbSongList
+        guard songList.upsert(song: song) else { return }
+
+        let newStatus = song.is_like == 1 ? 0 : 1
+        guard songList.updateLikeStatus(sid: song.sid, status: newStatus) else { return }
+        song.is_like = newStatus
+        loadLikedSongs()
+    }
+
+    func markDownloaded(song: Song) {
+        let songList = dbSongList
+        guard songList.upsert(song: song),
+              songList.updateDownloadStatus(sid: song.sid, status: 1) else { return }
+        song.is_dl = 1
+        loadDownloadedSongs()
     }
     
     // MARK: - 播放控制方法
@@ -390,3 +410,5 @@ extension DataCenter {
         return SongList()
     }
 }
+
+#endif
