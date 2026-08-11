@@ -38,6 +38,7 @@ final class AudioManager: NSObject {
     private var artworkTask: Task<Void, Never>?
     private var stallRecoveryTask: Task<Void, Never>?
     private var intendsToPlay = false
+    private var lastPersistedCheckpoint = -1
 
     private override init() {
         super.init()
@@ -47,17 +48,27 @@ final class AudioManager: NSObject {
     }
 
     func play(from url: URL, song: Song) {
+        configurePlayer(from: url, song: song, position: 0, autoplay: true)
+    }
+
+    /// Restores a playable item without surprising the user with cold-launch autoplay.
+    func prepare(from url: URL, song: Song, position: TimeInterval = 0) {
+        configurePlayer(from: url, song: song, position: position, autoplay: false)
+    }
+
+    private func configurePlayer(from url: URL, song: Song, position: TimeInterval, autoplay: Bool) {
         stop(resetNowPlayingInfo: false)
         stallRecoveryTask?.cancel()
         stallRecoveryTask = nil
+        lastPersistedCheckpoint = -1
         currentSong = song
         guard url.isFileURL || url.scheme?.lowercased() == "https" else {
             reportPlaybackFailure(L10n.insecureConnectionBlocked)
             return
         }
 
-        intendsToPlay = true
-        playbackState.accept(.loading)
+        intendsToPlay = autoplay
+        playbackState.accept(autoplay ? .loading : .paused)
         duration.accept(TimeInterval(song.time))
 
         let item = AVPlayerItem(url: url)
@@ -67,9 +78,24 @@ final class AudioManager: NSObject {
         observePlaybackNotifications(for: item)
         observePlaybackState(player: player, item: item)
 
-        player.play()
+        let knownDuration = max(TimeInterval(song.time), 0)
+        let restoredPosition = knownDuration > 0
+            ? min(max(position, 0), knownDuration)
+            : max(position, 0)
+        if restoredPosition > 0 {
+            player.seek(
+                to: CMTime(seconds: restoredPosition, preferredTimescale: 600),
+                toleranceBefore: .zero,
+                toleranceAfter: .zero
+            )
+            updatePlaybackTime(restoredPosition)
+        }
+        if autoplay {
+            player.play()
+        }
         updateNowPlayingInfo()
         loadArtworkIfNeeded(for: song)
+        persistPlaybackSession()
     }
 
     func pause() {
@@ -78,6 +104,7 @@ final class AudioManager: NSObject {
         player.pause()
         playbackState.accept(.paused)
         updateNowPlayingInfo()
+        persistPlaybackSession()
     }
 
     func resume() {
@@ -105,9 +132,11 @@ final class AudioManager: NSObject {
 
     func seek(to time: TimeInterval) {
         guard time.isFinite else { return }
-        player?.seek(to: CMTime(seconds: max(0, time), preferredTimescale: 600))
-        updatePlaybackTime(time)
+        let boundedTime = min(max(0, time), max(duration.value, 0))
+        player?.seek(to: CMTime(seconds: boundedTime, preferredTimescale: 600))
+        updatePlaybackTime(boundedTime)
         updateNowPlayingInfo()
+        persistPlaybackSession()
     }
 
     func playNext() {
@@ -135,6 +164,7 @@ final class AudioManager: NSObject {
         if resetNowPlayingInfo {
             currentSong = nil
             MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+            PlaybackSessionStore.shared.clear()
         }
     }
 
@@ -291,7 +321,8 @@ final class AudioManager: NSObject {
 
     private func updatePlaybackTime(_ time: TimeInterval) {
         guard time.isFinite else { return }
-        currentTime.accept(time)
+        let safeTime = max(time, 0)
+        currentTime.accept(safeTime)
 
         if let itemDuration = player?.currentItem?.duration.seconds,
            itemDuration.isFinite,
@@ -300,7 +331,18 @@ final class AudioManager: NSObject {
         }
 
         let total = duration.value
-        progress.accept(total > 0 ? Float(min(max(time / total, 0), 1)) : 0)
+        progress.accept(total > 0 ? Float(min(max(safeTime / total, 0), 1)) : 0)
+
+        let checkpoint = Int(safeTime) / 5
+        if checkpoint != lastPersistedCheckpoint {
+            lastPersistedCheckpoint = checkpoint
+            persistPlaybackSession()
+        }
+    }
+
+    private func persistPlaybackSession() {
+        guard let currentSong else { return }
+        PlaybackSessionStore.shared.save(song: currentSong, position: currentTime.value)
     }
 
     private func updateNowPlayingInfo(artwork: MPMediaItemArtwork? = nil) {

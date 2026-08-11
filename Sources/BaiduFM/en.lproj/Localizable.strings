@@ -17,6 +17,19 @@
 "action.next_track" = "Next track";
 "action.download" = "Download";
 "action.like" = "Like";
+"action.liked" = "Liked";
+"action.resume" = "Resume";
+"action.downloaded" = "Downloaded";
+
+"accessibility.choose_channel_hint" = "Opens the channel picker.";
+"accessibility.play_pause_hint" = "Starts or pauses the current track.";
+"accessibility.playback_position" = "Playback position";
+"accessibility.playback_position_hint" = "Adjust to seek through the current track.";
+"accessibility.lyrics" = "Lyrics";
+"accessibility.selected" = "Selected";
+"accessibility.not_selected" = "Not selected";
+"accessibility.available" = "Available";
+"accessibility.download_completed" = "Download completed.";
 
 "alert.error" = "Error";
 "alert.playback_error" = "Playback Error";

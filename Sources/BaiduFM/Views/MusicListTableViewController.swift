@@ -12,15 +12,15 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 
-// MARK: - 音乐列表视图控制器
+// MARK: - Music List View Controller
 class MusicListTableViewController: UITableViewController {
     
-    // MARK: - 私有属性
+    // MARK: - Properties
     private let disposeBag = DisposeBag()
     private var songs: [SongInfo] = []
     private var isLoading = false
     
-    // MARK: - 生命周期方法
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,24 +29,17 @@ class MusicListTableViewController: UITableViewController {
         loadInitialData()
     }
     
-    // MARK: - 私有方法
+    // MARK: - Private Methods
     
-    /// 设置UI
     private func setupUI() {
         title = L10n.songList
-        
-        // 设置下拉刷新
+        ExperienceTheme.styleList(tableView)
+
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-        
-        // 设置表格属性
-        tableView.rowHeight = 60
-        tableView.estimatedRowHeight = UITableView.automaticDimension
     }
     
-    /// 绑定数据
     private func bindData() {
-        // 监听歌曲信息列表变化
         DataCenter.shared.currentSongInfoList
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] songInfoList in
@@ -54,10 +47,12 @@ class MusicListTableViewController: UITableViewController {
                 self?.tableView.reloadData()
                 self?.refreshControl?.endRefreshing()
                 self?.isLoading = false
+                self?.tableView.backgroundView = songInfoList.isEmpty
+                    ? ExperienceEmptyStateView(message: L10n.noData, systemImage: "music.note.list")
+                    : nil
             })
             .disposed(by: disposeBag)
         
-        // 监听当前频道变化
         DataCenter.shared.currentChannel
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] channel in
@@ -67,7 +62,6 @@ class MusicListTableViewController: UITableViewController {
             .disposed(by: disposeBag)
     }
     
-    /// 加载初始数据
     private func loadInitialData() {
         guard !isLoading else { return }
         
@@ -80,19 +74,17 @@ class MusicListTableViewController: UITableViewController {
         isLoading = true
         refreshControl?.beginRefreshing()
         
-        // 加载歌曲列表
         DataCenter.shared.loadSongList()
             .flatMap { _ in
-                // 然后加载歌曲详情
                 return DataCenter.shared.loadSongDetails()
             }
             .observe(on: MainScheduler.instance)
             .subscribe(
                 onNext: { [weak self] in
-                    print("歌曲列表加载成功")
+                    print("Song list loaded successfully")
                 },
                 onError: { [weak self] error in
-                    print("歌曲列表加载失败: \(error.localizedDescription)")
+                    print("Failed to load songs: \(error.localizedDescription)")
                     self?.refreshControl?.endRefreshing()
                     self?.isLoading = false
                     self?.showErrorAlert(message: L10n.loadSongsFailed)
@@ -101,7 +93,6 @@ class MusicListTableViewController: UITableViewController {
             .disposed(by: disposeBag)
     }
     
-    /// 加载更多歌曲
     private func loadMoreSongs() {
         guard !isLoading else { return }
         
@@ -111,10 +102,10 @@ class MusicListTableViewController: UITableViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(
                 onNext: { [weak self] in
-                    print("加载更多歌曲成功")
+                    print("Loaded more songs successfully")
                 },
                 onError: { [weak self] error in
-                    print("加载更多歌曲失败: \(error.localizedDescription)")
+                    print("Failed to load more songs: \(error.localizedDescription)")
                     self?.isLoading = false
                     self?.showErrorAlert(message: L10n.loadMoreSongsFailed)
                 }
@@ -122,25 +113,22 @@ class MusicListTableViewController: UITableViewController {
             .disposed(by: disposeBag)
     }
     
-    /// 处理下拉刷新
     @objc private func handleRefresh() {
-        // 重置显示范围并重新加载
         DataCenter.shared.currentStartIndex.accept(0)
-        DataCenter.shared.currentEndIndex.accept(20) // 直接使用默认页面大小
+        DataCenter.shared.currentEndIndex.accept(20)
         loadInitialData()
     }
     
-    /// 显示错误提示
     private func showErrorAlert(message: String) {
         let alert = UIAlertController(title: L10n.error, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: L10n.ok, style: .default))
         present(alert, animated: true)
     }
 
-    // MARK: - 内存管理
+    // MARK: - Memory Management
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        print("收到内存警告 - MusicListTableViewController")
+        print("Memory warning received - MusicListTableViewController")
     }
 
     // MARK: - Table view data source
@@ -158,13 +146,12 @@ class MusicListTableViewController: UITableViewController {
         
         let songInfo = songs[indexPath.row]
         
-        // 配置单元格
+        ExperienceTheme.styleListCell(cell)
         cell.textLabel?.text = songInfo.name
         cell.detailTextLabel?.text = songInfo.artistName
-        
-        // 使用Kingfisher加载图片
+
         if let imageView = cell.imageView,
-           let url = URL(string: songInfo.picUrl) {
+           let url = NetworkManager.shared.secureContentURL(from: songInfo.picUrl) {
             imageView.kf.setImage(
                 with: url,
                 placeholder: Asset.image(named: "placeholder"),
@@ -174,6 +161,10 @@ class MusicListTableViewController: UITableViewController {
                 ]
             )
         }
+        cell.accessoryType = .disclosureIndicator
+        cell.accessibilityLabel = [songInfo.name, songInfo.artistName]
+            .filter { !$0.isEmpty }
+            .joined(separator: ", ")
         
         return cell
     }
@@ -181,28 +172,21 @@ class MusicListTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        // 播放选中的歌曲
+        ExperienceFeedback.selection()
         DataCenter.shared.playSong(at: indexPath.row)
-        
-        // 发送通知
+
         NotificationCenter.default.post(
             name: .channelMusicListClick,
             object: nil
         )
         
-        // 返回上一页
         navigationController?.popToRootViewController(animated: true)
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // 添加动画效果
-        cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1)
-        UIView.animate(withDuration: 0.25) {
-            cell.layer.transform = CATransform3DMakeScale(1, 1, 1)
-        }
-        
-        // 检查是否需要加载更多
-        if indexPath.row == songs.count - 3 { // 提前3行开始加载
+        ExperienceMotion.reveal(cell: cell)
+
+        if songs.count >= 3, indexPath.row == songs.count - 3 {
             loadMoreSongs()
         }
     }

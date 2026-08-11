@@ -21,6 +21,7 @@ class DataCenter {
     // MARK: - 私有属性
     private let disposeBag = DisposeBag()
     private let userDefaults = UserDefaults.standard
+    private var lastRecordedRecentSongID: String?
     
     // MARK: - 响应式属性
     
@@ -80,22 +81,20 @@ class DataCenter {
             })
             .disposed(by: disposeBag)
         
-        // 监听播放索引变化，自动更新当前播放歌曲
-        Observable.combineLatest(
-            currentPlayIndex,
-            currentSongInfoList,
-            currentSongLinkList
-        )
-        .subscribe(onNext: { [weak self] (index, infoList, linkList) in
-            self?.updateCurrentPlayingSong(index: index, infoList: infoList, linkList: linkList)
-        })
-        .disposed(by: disposeBag)
-        
         // 监听AudioManager的播放控制事件
         NotificationCenter.default.rx
             .notification(Notification.Name("AudioManagerPlayNext"))
             .subscribe(onNext: { [weak self] _ in
                 self?.playNext()
+            })
+            .disposed(by: disposeBag)
+
+        AudioManager.shared.playbackState
+            .distinctUntilChanged()
+            .filter { $0 == .playing }
+            .subscribe(onNext: { [weak self] _ in
+                guard let self, let song = self.currentPlayingSong.value else { return }
+                self.recordRecentPlayback(song: song)
             })
             .disposed(by: disposeBag)
         
@@ -112,7 +111,15 @@ class DataCenter {
         // 加载上次播放的频道ID，后续在频道列表加载后会用此ID来设置currentChannel
         if let savedChannelId = userDefaults.string(forKey: "LAST_PLAY_CHANNEL_ID") {
             // 临时存储，等待频道列表加载
-            let initialChannel = Channel(id: savedChannelId, name: "Loading...", order: 0, cate_id: "", cate: "", cate_order: 0, pv_order: 0)
+            let initialChannel = Channel(
+                id: savedChannelId,
+                name: L10n.loading,
+                order: 0,
+                cate_id: "",
+                cate: "",
+                cate_order: 0,
+                pv_order: 0
+            )
             currentChannel.accept(initialChannel)
         }
     }
@@ -204,40 +211,19 @@ class DataCenter {
         let songList = dbSongList
         guard songList.upsert(song: song) else { return }
 
-        let newStatus = song.is_like == 1 ? 0 : 1
+        let newStatus = songList.get(sid: song.sid)?.is_like == 1 ? 0 : 1
         guard songList.updateLikeStatus(sid: song.sid, status: newStatus) else { return }
         song.is_like = newStatus
         loadLikedSongs()
+        currentPlayingSong.accept(song)
     }
 
     // MARK: - 播放控制方法
     
     /// 播放指定索引的歌曲
     func playSong(at index: Int) {
-        guard index >= 0,
-              index < currentSongInfoList.value.count,
-              index < currentSongLinkList.value.count else {
-            return
-        }
-        
+        guard let song = song(at: index) else { return }
         currentPlayIndex.accept(index)
-        
-        let songInfo = currentSongInfoList.value[index]
-        let songLink = currentSongLinkList.value[index]
-        
-        // 创建Song对象
-        let song = Song(
-            sid: songLink.songId,
-            name: songInfo.name,
-            url: songLink.songLink,
-            pic_url: songInfo.picUrl,
-            lrc_url: songLink.lrcLink,
-            artist: songInfo.artistName,
-            album: songInfo.albumName,
-            format: songLink.format,
-            time: songLink.time
-        )
-        
         currentPlayingSong.accept(song)
         
         if let url = playbackURL(for: song) {
@@ -245,6 +231,39 @@ class DataCenter {
         } else {
             AudioManager.shared.reportPlaybackFailure(L10n.insecureConnectionBlocked)
         }
+    }
+
+    /// Prepares a song for an explicit play action without starting audio.
+    func prepareSong(at index: Int) {
+        guard let song = song(at: index), let url = playbackURL(for: song) else { return }
+        currentPlayIndex.accept(index)
+        currentPlayingSong.accept(song)
+        AudioManager.shared.prepare(from: url, song: song)
+    }
+
+    /// Restores the last session paused so launch never causes unexpected audio.
+    func restorePlaybackSession() -> Bool {
+        guard let snapshot = PlaybackSessionStore.shared.load() else { return false }
+        let song = hydrateStoredState(for: snapshot.song.makeSong())
+        guard let url = playbackURL(for: song) else {
+            PlaybackSessionStore.shared.clear()
+            return false
+        }
+
+        if let index = currentSongInfoList.value.firstIndex(where: { $0.songId == song.sid }) {
+            currentPlayIndex.accept(index)
+        }
+        currentPlayingSong.accept(song)
+        let safePosition = PlaybackRestorePolicy.safePosition(snapshot.position, duration: song.time)
+        AudioManager.shared.prepare(from: url, song: song, position: safePosition)
+        return true
+    }
+
+    /// Aligns next and previous navigation after the catalog finishes loading.
+    func alignCurrentPlayingSongWithLoadedList() {
+        guard let songID = currentPlayingSong.value?.sid else { return }
+        let index = currentSongInfoList.value.firstIndex(where: { $0.songId == songID }) ?? -1
+        currentPlayIndex.accept(index)
     }
     
     /// 直接播放一个Song对象
@@ -315,36 +334,46 @@ class DataCenter {
     
     // MARK: - 私有方法
     
-    /// 更新当前播放歌曲信息
-    private func updateCurrentPlayingSong(index: Int, infoList: [SongInfo], linkList: [SongLink]) {
-        guard index >= 0,
-              index < infoList.count,
-              index < linkList.count else {
-            currentPlayingSong.accept(nil)
-            return
-        }
-        
-        let songInfo = infoList[index]
-        let songLink = linkList[index]
-        
-        let song = Song(
-            sid: songLink.songId,
-            name: songInfo.name,
-            url: songLink.songLink,
-            pic_url: songInfo.picUrl,
-            lrc_url: songLink.lrcLink,
-            artist: songInfo.artistName,
-            album: songInfo.albumName,
-            format: songLink.format,
-            time: songLink.time
-        )
-        
-        currentPlayingSong.accept(song)
-    }
-
     private func playbackURL(for song: Song) -> URL? {
         DownloadManager.shared.getLocalURL(for: song)
             ?? NetworkManager.shared.secureContentURL(from: song.song_url)
+    }
+
+    private func song(at index: Int) -> Song? {
+        guard index >= 0,
+              index < currentSongInfoList.value.count,
+              index < currentSongLinkList.value.count else { return nil }
+        let info = currentSongInfoList.value[index]
+        let link = currentSongLinkList.value[index]
+        return hydrateStoredState(for: Song(
+            sid: link.songId,
+            name: info.name,
+            url: link.songLink,
+            pic_url: info.picUrl,
+            lrc_url: link.lrcLink,
+            artist: info.artistName,
+            album: info.albumName,
+            format: link.format,
+            time: link.time
+        ))
+    }
+
+    private func hydrateStoredState(for song: Song) -> Song {
+        guard let storedSong = dbSongList.get(sid: song.sid) else { return song }
+        song.is_like = storedSong.is_like
+        song.is_dl = storedSong.is_dl
+        song.dl_file = storedSong.dl_file
+        song.is_recent = storedSong.is_recent
+        return song
+    }
+
+    private func recordRecentPlayback(song: Song) {
+        guard lastRecordedRecentSongID != song.sid else { return }
+        let songList = dbSongList
+        guard songList.upsert(song: song), songList.addRecentSong(songId: song.sid) else { return }
+        lastRecordedRecentSongID = song.sid
+        song.is_recent = 1
+        loadRecentSongs()
     }
     
     /// 清空喜欢的歌曲列表

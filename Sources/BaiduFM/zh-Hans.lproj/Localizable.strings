@@ -17,6 +17,19 @@
 "action.next_track" = "下一首";
 "action.download" = "下载";
 "action.like" = "收藏";
+"action.liked" = "已收藏";
+"action.resume" = "继续";
+"action.downloaded" = "已下载";
+
+"accessibility.choose_channel_hint" = "打开频道选择列表。";
+"accessibility.play_pause_hint" = "播放或暂停当前歌曲。";
+"accessibility.playback_position" = "播放进度";
+"accessibility.playback_position_hint" = "调整以跳转到当前歌曲中的位置。";
+"accessibility.lyrics" = "歌词";
+"accessibility.selected" = "已选中";
+"accessibility.not_selected" = "未选中";
+"accessibility.available" = "可用";
+"accessibility.download_completed" = "下载已完成。";
 
 "alert.error" = "错误";
 "alert.playback_error" = "播放错误";

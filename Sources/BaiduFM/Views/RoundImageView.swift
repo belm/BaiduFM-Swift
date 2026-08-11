@@ -1,46 +1,45 @@
 #if canImport(UIKit)
-//
-//  RoundImageView.swift
-//  BaiduFM
-//
-//  Created by lumeng on 15/4/21.
-//  Copyright (c) 2015年 lumeng. All rights reserved.
-//
-
 import UIKit
 
-class RoundImageView: UIImageView {
-
-    /*
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
-        // Drawing code
-    }
-    */
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)!
-        
-        //设置圆角
-        self.clipsToBounds = true
-        self.layer.cornerRadius = self.frame.size.width/2
-        
-        //边框
-        self.layer.borderWidth = 4
-        self.layer.borderColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.7).cgColor
-    }
-    
-    func rotation(){
-        
-        let animation = CABasicAnimation(keyPath: "transform.rotation")
-        animation.fromValue = 0.0
-        animation.toValue = Double.pi * 2.0
-        animation.duration = 20
-        animation.repeatCount = 1000
-        self.layer.add(animation, forKey: nil)
+final class RoundImageView: UIImageView {
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        configure()
     }
 
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configure()
+    }
+
+    private func configure() {
+        clipsToBounds = true
+        contentMode = .scaleAspectFill
+        backgroundColor = .secondarySystemBackground
+    }
+
+    func setPlaybackActive(_ isActive: Bool) {
+        layer.removeAllAnimations()
+
+        let targetTransform = isActive
+            ? CGAffineTransform.identity
+            : CGAffineTransform(scaleX: 0.97, y: 0.97)
+        guard !UIAccessibility.isReduceMotionEnabled else {
+            transform = targetTransform
+            return
+        }
+
+        UIView.animate(
+            withDuration: 0.36,
+            delay: 0,
+            usingSpringWithDamping: 0.82,
+            initialSpringVelocity: 0.2,
+            options: [.allowUserInteraction, .beginFromCurrentState],
+            animations: { [weak self] in
+                self?.transform = targetTransform
+            }
+        )
+    }
 }
 
 #endif

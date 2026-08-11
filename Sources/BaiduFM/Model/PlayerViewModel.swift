@@ -4,6 +4,15 @@ import RxCocoa
 import RxRelay
 import RxSwift
 
+enum PlayerDownloadState: Equatable {
+    case available
+    case waiting
+    case downloading(Int)
+    case paused
+    case completed
+    case failed
+}
+
 final class PlayerViewModel {
     private enum InitialLoadResult {
         case success
@@ -17,6 +26,8 @@ final class PlayerViewModel {
     private let initialLoadInProgress = BehaviorRelay<Bool>(value: false)
     private let errorRelay = PublishRelay<String>()
     private let downloadErrorRelay = PublishRelay<String>()
+    private var didAttemptLaunchRestore = false
+    private var restoredSessionOnLaunch = false
 
     // MARK: Inputs
 
@@ -27,6 +38,7 @@ final class PlayerViewModel {
     let likeButtonTapped = PublishRelay<Void>()
     let downloadButtonTapped = PublishRelay<Void>()
     let retryButtonTapped = PublishRelay<Void>()
+    let seekRequested = PublishRelay<Float>()
 
     // MARK: Outputs
 
@@ -35,7 +47,10 @@ final class PlayerViewModel {
     let albumName: Driver<String>
     let artworkURL: Driver<URL?>
     let isPlaying: Driver<Bool>
+    let isLiked: Driver<Bool>
+    let downloadState: Driver<PlayerDownloadState>
     let songProgress: Driver<Float>
+    let durationSeconds: Driver<TimeInterval>
     let currentTimeText: Driver<String>
     let totalTimeText: Driver<String>
     let lyrics: Driver<String>
@@ -74,7 +89,41 @@ final class PlayerViewModel {
             .map { $0 == .playing }
             .asDriver(onErrorJustReturn: false)
 
+        isLiked = Observable.combineLatest(
+            dataCenter.currentPlayingSong,
+            dataCenter.likedSongs
+        ) { song, likedSongs in
+            guard let song else { return false }
+            return likedSongs.contains { $0.sid == song.sid }
+        }
+        .distinctUntilChanged()
+        .asDriver(onErrorJustReturn: false)
+
+        downloadState = Observable.combineLatest(
+            dataCenter.currentPlayingSong,
+            DownloadManager.shared.downloadTasks
+        ) { song, tasks -> PlayerDownloadState in
+            guard let song, let task = tasks.first(where: { $0.id == song.sid }) else {
+                return .available
+            }
+            switch task.status.value {
+            case .waiting:
+                return .waiting
+            case .downloading:
+                return .downloading(Int(task.progress.value * 100))
+            case .paused:
+                return .paused
+            case .completed:
+                return .completed
+            case .failed, .cancelled:
+                return .failed
+            }
+        }
+        .distinctUntilChanged()
+        .asDriver(onErrorJustReturn: .available)
+
         songProgress = audioManager.progress.asDriver()
+        durationSeconds = audioManager.duration.asDriver()
 
         currentTimeText = audioManager.currentTime
             .map { Common.getMinuteDisplay(seconds: Int($0)) }
@@ -97,8 +146,11 @@ final class PlayerViewModel {
 
         isLoading = Observable.combineLatest(
             initialLoadInProgress,
-            audioManager.playbackState.map { $0 == .loading }
-        ) { $0 || $1 }
+            audioManager.playbackState.map { $0 == .loading },
+            dataCenter.currentPlayingSong
+        ) { isCatalogLoading, isPlayerLoading, song in
+            isPlayerLoading || (isCatalogLoading && song == nil)
+        }
             .distinctUntilChanged()
             .asDriver(onErrorJustReturn: false)
 
@@ -111,7 +163,15 @@ final class PlayerViewModel {
 
     private func bindInputs() {
         Observable.merge(viewDidLoad.asObservable(), retryButtonTapped.asObservable())
-            .do(onNext: { [initialLoadInProgress] in initialLoadInProgress.accept(true) })
+            .do(onNext: { [weak self, dataCenter, initialLoadInProgress] in
+                dataCenter.loadLikedSongs()
+                if let self, !self.didAttemptLaunchRestore {
+                    self.didAttemptLaunchRestore = true
+                    self.restoredSessionOnLaunch = dataCenter.currentPlayingSong.value != nil
+                        || dataCenter.restorePlaybackSession()
+                }
+                initialLoadInProgress.accept(true)
+            })
             .flatMapLatest { [dataCenter] _ -> Observable<InitialLoadResult> in
                 let channelLoad: Observable<Void> = dataCenter.channelListInfo.value.isEmpty
                     ? dataCenter.loadChannelList()
@@ -126,7 +186,7 @@ final class PlayerViewModel {
                     }
             }
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [dataCenter, initialLoadInProgress, errorRelay] result in
+            .subscribe(onNext: { [weak self, dataCenter, initialLoadInProgress, errorRelay] result in
                 initialLoadInProgress.accept(false)
                 switch result {
                 case .success:
@@ -134,9 +194,15 @@ final class PlayerViewModel {
                         errorRelay.accept(L10n.noData)
                         return
                     }
-                    dataCenter.playSong(at: 0)
+                    if self?.restoredSessionOnLaunch == true {
+                        dataCenter.alignCurrentPlayingSongWithLoadedList()
+                    } else {
+                        dataCenter.prepareSong(at: 0)
+                    }
                 case .failure(let message):
-                    errorRelay.accept(message.isEmpty ? L10n.loadSongsFailed : message)
+                    if dataCenter.currentPlayingSong.value == nil {
+                        errorRelay.accept(message.isEmpty ? L10n.loadSongsFailed : message)
+                    }
                 }
             })
             .disposed(by: disposeBag)
@@ -146,10 +212,24 @@ final class PlayerViewModel {
             .disposed(by: disposeBag)
 
         playPauseButtonTapped
-            .subscribe(onNext: { [audioManager] in
-                audioManager.playbackState.value == .playing
-                    ? audioManager.pause()
-                    : audioManager.resume()
+            .subscribe(onNext: { [audioManager, dataCenter] in
+                switch audioManager.playbackState.value {
+                case .playing:
+                    audioManager.pause()
+                case .error, .idle, .stopped:
+                    if let song = dataCenter.currentPlayingSong.value {
+                        dataCenter.playSong(song: song)
+                    }
+                case .loading, .paused:
+                    audioManager.resume()
+                }
+            })
+            .disposed(by: disposeBag)
+
+        seekRequested
+            .subscribe(onNext: { [audioManager] progress in
+                let clampedProgress = min(max(progress, 0), 1)
+                audioManager.seek(to: audioManager.duration.value * Double(clampedProgress))
             })
             .disposed(by: disposeBag)
 
@@ -172,6 +252,7 @@ final class PlayerViewModel {
             .compactMap { [dataCenter] in dataCenter.currentPlayingSong.value }
             .subscribe(onNext: { [weak self] song in
                 guard let self else { return }
+                guard !DownloadManager.shared.isDownloaded(song: song) else { return }
                 DownloadManager.shared.startDownload(song: song)
                     .subscribe(
                         onError: { [weak self] error in

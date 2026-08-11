@@ -36,7 +36,7 @@ class DownloadTableViewController: UITableViewController {
     // MARK: - UI Setup
     private func setupUI() {
         title = L10n.downloads
-        tableView.rowHeight = 60
+        ExperienceTheme.styleList(tableView)
         tableView.dataSource = nil
     }
     
@@ -65,6 +65,7 @@ class DownloadTableViewController: UITableViewController {
         tableView.rx.modelSelected(SongDownloadTask.self)
             .subscribe(onNext: { [weak self] task in
                 guard let self else { return }
+                ExperienceFeedback.selection()
                 switch task.status.value {
                 case .completed:
                     dataCenter.playSong(song: task.song)
@@ -75,6 +76,12 @@ class DownloadTableViewController: UITableViewController {
                     break
                 }
             })
+            .disposed(by: disposeBag)
+
+        downloadManager.downloadTasks
+            .map { !$0.isEmpty }
+            .asDriver(onErrorJustReturn: false)
+            .drive(navigationItem.rightBarButtonItem!.rx.isEnabled)
             .disposed(by: disposeBag)
 
         tableView.rx.modelDeleted(SongDownloadTask.self)
@@ -98,6 +105,7 @@ class DownloadTableViewController: UITableViewController {
     
     // MARK: - Private Helpers
     private func configure(cell: UITableViewCell, with task: SongDownloadTask) {
+        ExperienceTheme.styleListCell(cell)
         cell.textLabel?.text = task.song.name
         let status = statusText(for: task)
         cell.detailTextLabel?.text = [task.song.artist, status]
@@ -107,6 +115,9 @@ class DownloadTableViewController: UITableViewController {
         cell.selectionStyle = [.completed, .paused, .failed, .cancelled].contains(task.status.value)
             ? .default
             : .none
+        cell.accessibilityLabel = [task.song.name, task.song.artist, status]
+            .filter { !$0.isEmpty }
+            .joined(separator: ", ")
         if let url = NetworkManager.shared.secureContentURL(from: task.song.pic_url) {
             cell.imageView?.kf.setImage(with: url, placeholder: Asset.image(named: "placeholder"))
         }
@@ -134,12 +145,7 @@ class DownloadTableViewController: UITableViewController {
     }
     
     private func createEmptyStateView() -> UIView {
-        let label = UILabel()
-        label.text = L10n.noDownloads
-        label.textAlignment = .center
-        label.textColor = .gray
-        label.font = .systemFont(ofSize: 16)
-        return label
+        ExperienceEmptyStateView(message: L10n.noDownloads, systemImage: "arrow.down.circle")
     }
 
     private func showClearAllConfirmation() {
@@ -150,9 +156,14 @@ class DownloadTableViewController: UITableViewController {
         )
         alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
         alert.addAction(UIAlertAction(title: L10n.confirm, style: .destructive, handler: { [dataCenter] _ in
+            ExperienceFeedback.selection()
             dataCenter.clearAllDownloads()
         }))
         present(alert, animated: true)
+    }
+
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        ExperienceMotion.reveal(cell: cell)
     }
 }
 

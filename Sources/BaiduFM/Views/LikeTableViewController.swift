@@ -37,7 +37,7 @@ class LikeTableViewController: UITableViewController {
     
     private func setupUI() {
         title = L10n.likes
-        tableView.rowHeight = 60
+        ExperienceTheme.styleList(tableView)
         tableView.dataSource = nil
     }
     
@@ -68,9 +68,16 @@ class LikeTableViewController: UITableViewController {
         // Row selection
         tableView.rx.modelSelected(Song.self)
             .subscribe(onNext: { [weak self] song in
-                self?.dataCenter.playSong(song: song) // Assuming a method to play a specific song object
+                ExperienceFeedback.selection()
+                self?.dataCenter.playSong(song: song)
                 self?.tabBarController?.selectedIndex = 0
             })
+            .disposed(by: disposeBag)
+
+        dataCenter.likedSongs
+            .map { !$0.isEmpty }
+            .asDriver(onErrorJustReturn: false)
+            .drive(navigationItem.rightBarButtonItem!.rx.isEnabled)
             .disposed(by: disposeBag)
             
         // Row deletion
@@ -92,21 +99,18 @@ class LikeTableViewController: UITableViewController {
     // MARK: - Private Helpers
 
     private func configure(cell: UITableViewCell, with song: Song) {
+        ExperienceTheme.styleListCell(cell)
         cell.textLabel?.text = song.name
         cell.detailTextLabel?.text = song.artist
-        if let url = URL(string: song.pic_url) {
+        cell.accessoryType = .disclosureIndicator
+        cell.accessibilityLabel = [song.name, song.artist].filter { !$0.isEmpty }.joined(separator: ", ")
+        if let url = NetworkManager.shared.secureContentURL(from: song.pic_url) {
             cell.imageView?.kf.setImage(with: url, placeholder: Asset.image(named: "placeholder"))
         }
     }
     
     private func createEmptyStateView() -> UIView {
-        let label = UILabel()
-        label.text = L10n.noLikes
-        label.textAlignment = .center
-        label.textColor = .gray
-        label.font = .systemFont(ofSize: 16)
-        label.numberOfLines = 0
-        return label
+        ExperienceEmptyStateView(message: L10n.noLikes, systemImage: "heart")
     }
 
     private func showClearAllConfirmation() {
@@ -117,9 +121,14 @@ class LikeTableViewController: UITableViewController {
         )
         alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
         alert.addAction(UIAlertAction(title: L10n.confirm, style: .destructive, handler: { [dataCenter] _ in
+            ExperienceFeedback.selection()
             dataCenter.clearLikedSongs()
         }))
         present(alert, animated: true)
+    }
+
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        ExperienceMotion.reveal(cell: cell)
     }
 }
 

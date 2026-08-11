@@ -72,12 +72,12 @@ class SongList {
         return songs
     }
     
-    /// 获取所有最近播放的歌曲
+    /// Returns the most recently started songs in reverse chronological order.
     func getAllRecent() -> [Song]? {
         var songs: [Song]?
         queue.inDatabase { db in
             guard let database = db else { return }
-            let sql = "SELECT * FROM tbl_song_list WHERE is_recent=1 ORDER BY id DESC LIMIT 20 OFFSET 0"
+            let sql = "SELECT * FROM tbl_song_list WHERE is_recent=1 ORDER BY last_played_at DESC, id DESC LIMIT 20 OFFSET 0"
             if let rs = database.executeQuery(sql, withArgumentsIn: []) {
                 songs = self.fetchResult(rs: rs)
             }
@@ -267,14 +267,14 @@ class SongList {
         return success
     }
     
-    /// 清空最近播放列表
+    /// Clears recent playback flags while preserving liked and downloaded songs.
     func cleanRecentList() -> Bool {
         var success = false
         queue.inDatabase { db in
             guard let database = db else { return }
-            // 在同一个事务中执行多个更新，保证原子性
+            // Keep the two cleanup operations atomic.
             database.beginTransaction()
-            let sql1 = "UPDATE tbl_song_list SET is_recent=0 WHERE is_dl = 1 OR is_like=1"
+            let sql1 = "UPDATE tbl_song_list SET is_recent=0, last_played_at=0 WHERE is_dl = 1 OR is_like=1"
             let ret1 = database.executeUpdate(sql1, withArgumentsIn: [])
             
             let sql2 = "DELETE FROM tbl_song_list WHERE is_recent = 1"
@@ -303,24 +303,24 @@ class SongList {
         return updateLikeStatus(sid: songId, status: 0)
     }
     
-    /// 删除单个最近播放的歌曲
+    /// Removes one song from playback history.
     func deleteRecentSong(songId: String) -> Bool {
         var success = false
         queue.inDatabase { db in
             guard let database = db else { return }
-            let sql = "UPDATE tbl_song_list SET is_recent=0 WHERE sid=?"
+            let sql = "UPDATE tbl_song_list SET is_recent=0, last_played_at=0 WHERE sid=?"
             success = database.executeUpdate(sql, withArgumentsIn: [songId])
         }
         return success
     }
     
-    /// 添加最近播放记录
+    /// Records when playback actually starts.
     func addRecentSong(songId: String) -> Bool {
         var success = false
         queue.inDatabase { db in
             guard let database = db else { return }
-            let sql = "UPDATE tbl_song_list SET is_recent=1 WHERE sid=?"
-            success = database.executeUpdate(sql, withArgumentsIn: [songId])
+            let sql = "UPDATE tbl_song_list SET is_recent=1, last_played_at=? WHERE sid=?"
+            success = database.executeUpdate(sql, withArgumentsIn: [Date().timeIntervalSince1970, songId])
         }
         return success
     }

@@ -32,12 +32,11 @@ class ChannelTableViewController: UITableViewController {
     /// Setup the basic UI elements
     private func setupUI() {
         title = L10n.channels
-        
-        // Setup pull-to-refresh
+        ExperienceTheme.styleList(tableView)
+
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
         tableView.dataSource = nil
-        
     }
     
     /// Bind ViewModel data to UI
@@ -45,19 +44,20 @@ class ChannelTableViewController: UITableViewController {
         // Bind channel list data directly to the table view
         dataCenter.channelListInfo
             .asDriver()
-            .drive(tableView.rx.items(cellIdentifier: "cell", cellType: UITableViewCell.self)) { _, channel, cell in
+            .drive(tableView.rx.items(cellIdentifier: "cell", cellType: UITableViewCell.self)) { [weak self] _, channel, cell in
+                ExperienceTheme.styleListCell(cell)
                 cell.textLabel?.text = channel.name
-                cell.accessoryType = .disclosureIndicator
+                let isCurrentChannel = channel.id == self?.dataCenter.currentChannel.value?.id
+                cell.accessoryType = isCurrentChannel ? .checkmark : .none
+                cell.accessibilityTraits = isCurrentChannel ? [.button, .selected] : .button
             }
             .disposed(by: disposeBag)
         
         // Handle row selection
         tableView.rx.modelSelected(Channel.self)
             .subscribe(onNext: { [weak self] channel in
-                // Update the current channel in DataCenter
+                ExperienceFeedback.selection()
                 self?.dataCenter.currentChannel.accept(channel)
-                
-                // Pop back to the previous view controller
                 self?.navigationController?.popViewController(animated: true)
             })
             .disposed(by: disposeBag)
@@ -119,11 +119,7 @@ class ChannelTableViewController: UITableViewController {
     // MARK: - Table view data source (Now managed by Rx)
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // Add a simple animation
-        cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1)
-        UIView.animate(withDuration: 0.25) {
-            cell.layer.transform = CATransform3DMakeScale(1, 1, 1)
-        }
+        ExperienceMotion.reveal(cell: cell)
     }
 }
 

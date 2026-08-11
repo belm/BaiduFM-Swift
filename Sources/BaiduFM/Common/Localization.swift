@@ -20,6 +20,34 @@ nonisolated enum L10n {
     static let nextTrack = value("action.next_track", defaultValue: "Next track")
     static let download = value("action.download", defaultValue: "Download")
     static let like = value("action.like", defaultValue: "Like")
+    static let liked = value("action.liked", defaultValue: "Liked")
+    static let resume = value("action.resume", defaultValue: "Resume")
+    static let downloaded = value("action.downloaded", defaultValue: "Downloaded")
+
+    static let chooseChannelHint = value(
+        "accessibility.choose_channel_hint",
+        defaultValue: "Opens the channel picker."
+    )
+    static let playPauseHint = value(
+        "accessibility.play_pause_hint",
+        defaultValue: "Starts or pauses the current track."
+    )
+    static let playbackPosition = value(
+        "accessibility.playback_position",
+        defaultValue: "Playback position"
+    )
+    static let playbackPositionHint = value(
+        "accessibility.playback_position_hint",
+        defaultValue: "Adjust to seek through the current track."
+    )
+    static let lyrics = value("accessibility.lyrics", defaultValue: "Lyrics")
+    static let selected = value("accessibility.selected", defaultValue: "Selected")
+    static let notSelected = value("accessibility.not_selected", defaultValue: "Not selected")
+    static let available = value("accessibility.available", defaultValue: "Available")
+    static let downloadCompletedAnnouncement = value(
+        "accessibility.download_completed",
+        defaultValue: "Download completed."
+    )
 
     static let error = value("alert.error", defaultValue: "Error")
     static let playbackErrorTitle = value("alert.playback_error", defaultValue: "Playback Error")

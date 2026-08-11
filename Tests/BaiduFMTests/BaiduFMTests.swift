@@ -91,6 +91,55 @@ struct BaiduFMTests {
         #expect(ReliabilityRetryPolicy.delay(forAttempt: 0) == 0.5)
         #expect(ReliabilityRetryPolicy.delay(forAttempt: 10) == 4)
     }
+
+    @Test("Restores a safe paused playback checkpoint")
+    func restoresPlaybackCheckpoint() {
+        let suiteName = "BaiduFMTests.Playback.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let store = PlaybackSessionStore(defaults: defaults, key: "test-session")
+
+        store.save(song: makeSong(), position: 42.5)
+
+        let restored = store.load()
+        #expect(restored?.song.sid == "42")
+        #expect(restored?.position == 42.5)
+
+        store.clear()
+        #expect(store.load() == nil)
+    }
+
+    @Test("Sanitizes invalid playback checkpoints")
+    func sanitizesPlaybackCheckpoint() {
+        let suiteName = "BaiduFMTests.Playback.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let store = PlaybackSessionStore(defaults: defaults, key: "test-session")
+
+        store.save(song: makeSong(), position: .infinity)
+
+        #expect(store.load()?.position == 0)
+    }
+
+    @Test("Discards a corrupt playback checkpoint")
+    func discardsCorruptPlaybackCheckpoint() {
+        let suiteName = "BaiduFMTests.Playback.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let key = "test-session"
+        let store = PlaybackSessionStore(defaults: defaults, key: key)
+        defaults.set(Data("not-json".utf8), forKey: key)
+
+        #expect(store.load() == nil)
+        #expect(defaults.data(forKey: key) == nil)
+    }
+
+    @Test("Restarts completed playback instead of restoring at the end")
+    func restartsCompletedPlayback() {
+        #expect(PlaybackRestorePolicy.safePosition(42, duration: 180) == 42)
+        #expect(PlaybackRestorePolicy.safePosition(178, duration: 180) == 0)
+        #expect(PlaybackRestorePolicy.safePosition(-5, duration: 180) == 0)
+    }
 }
 #elseif canImport(XCTest)
 import XCTest
@@ -170,6 +219,49 @@ final class BaiduFMTests: XCTestCase {
         XCTAssertFalse(ReliabilityRetryPolicy.shouldRetry(statusCode: 503, attempt: 3))
         XCTAssertEqual(ReliabilityRetryPolicy.delay(forAttempt: 0), 0.5)
         XCTAssertEqual(ReliabilityRetryPolicy.delay(forAttempt: 10), 4)
+    }
+
+    func testRestoresPlaybackCheckpoint() {
+        let suiteName = "BaiduFMTests.Playback.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let store = PlaybackSessionStore(defaults: defaults, key: "test-session")
+
+        store.save(song: makeSong(), position: 42.5)
+
+        XCTAssertEqual(store.load()?.song.sid, "42")
+        XCTAssertEqual(store.load()?.position, 42.5)
+        store.clear()
+        XCTAssertNil(store.load())
+    }
+
+    func testSanitizesPlaybackCheckpoint() {
+        let suiteName = "BaiduFMTests.Playback.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let store = PlaybackSessionStore(defaults: defaults, key: "test-session")
+
+        store.save(song: makeSong(), position: .infinity)
+
+        XCTAssertEqual(store.load()?.position, 0)
+    }
+
+    func testDiscardsCorruptPlaybackCheckpoint() {
+        let suiteName = "BaiduFMTests.Playback.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let key = "test-session"
+        let store = PlaybackSessionStore(defaults: defaults, key: key)
+        defaults.set(Data("not-json".utf8), forKey: key)
+
+        XCTAssertNil(store.load())
+        XCTAssertNil(defaults.data(forKey: key))
+    }
+
+    func testRestartsCompletedPlayback() {
+        XCTAssertEqual(PlaybackRestorePolicy.safePosition(42, duration: 180), 42)
+        XCTAssertEqual(PlaybackRestorePolicy.safePosition(178, duration: 180), 0)
+        XCTAssertEqual(PlaybackRestorePolicy.safePosition(-5, duration: 180), 0)
     }
 }
 #endif

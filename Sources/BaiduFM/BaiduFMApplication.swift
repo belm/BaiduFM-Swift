@@ -6,6 +6,7 @@ public enum BaiduFMApplication {
     /// Creates the root view controller stored in the package resource bundle.
     @MainActor
     public static func makeRootViewController() -> UIViewController {
+        ExperienceTheme.configureGlobalAppearance()
         // Restore durable transfers before the interface starts observing their state.
         _ = DownloadManager.shared
         let storyboard = UIStoryboard(name: "Main", bundle: .module)
