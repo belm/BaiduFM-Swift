@@ -174,10 +174,10 @@ final class PlayerViewModel {
                 guard let self else { return }
                 DownloadManager.shared.startDownload(song: song)
                     .subscribe(
-                        onCompleted: {},
                         onError: { [weak self] error in
                             self?.downloadErrorRelay.accept(error.localizedDescription)
-                        }
+                        },
+                        onCompleted: {}
                     )
                     .disposed(by: self.disposeBag)
             })

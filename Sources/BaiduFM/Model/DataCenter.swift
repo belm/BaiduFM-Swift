@@ -391,10 +391,10 @@ class DataCenter {
     func removeDownloadedSong(song: Song) {
         DownloadManager.shared.deleteDownload(taskId: song.sid)
             .subscribe(
-                onCompleted: { [weak self] in self?.loadDownloadedSongs() },
                 onError: { error in
                     print("Failed to remove download: \(error.localizedDescription)")
-                }
+                },
+                onCompleted: { [weak self] in self?.loadDownloadedSongs() }
             )
             .disposed(by: disposeBag)
     }
