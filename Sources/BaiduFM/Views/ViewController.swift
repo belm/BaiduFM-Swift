@@ -27,6 +27,7 @@ final class ViewController: UIViewController {
 
     private let viewModel = PlayerViewModel()
     private let disposeBag = DisposeBag()
+    private let activityIndicator = UIActivityIndicatorView(style: .medium)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +41,19 @@ final class ViewController: UIViewController {
         blurView.frame = view.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         bgImageView.addSubview(blurView)
-        playButton.accessibilityLabel = L10n.appName
+
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(activityIndicator)
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: playButton.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: playButton.centerYAnchor),
+        ])
+
+        playButton.accessibilityLabel = L10n.play
+        prevButton.accessibilityLabel = L10n.previousTrack
+        nextButton.accessibilityLabel = L10n.nextTrack
+        downloadButton.accessibilityLabel = L10n.download
+        likeButton.accessibilityLabel = L10n.like
     }
 
     private func bindViewModel() {
@@ -75,6 +88,7 @@ final class ViewController: UIViewController {
                     ? Constants.pauseButtonImageName
                     : Constants.playButtonImageName
                 playButton.setImage(Asset.image(named: imageName), for: .normal)
+                playButton.accessibilityLabel = isPlaying ? L10n.pause : L10n.play
                 isPlaying ? imgView.rotation() : imgView.layer.removeAllAnimations()
             })
             .disposed(by: disposeBag)
@@ -93,6 +107,25 @@ final class ViewController: UIViewController {
 
         viewModel.lyrics
             .drive(txtView.rx.text)
+            .disposed(by: disposeBag)
+
+        viewModel.isLoading
+            .drive(activityIndicator.rx.isAnimating)
+            .disposed(by: disposeBag)
+
+        viewModel.isLoading
+            .map { !$0 }
+            .drive(onNext: { [weak self] isEnabled in
+                self?.playButton.isEnabled = isEnabled
+                self?.prevButton.isEnabled = isEnabled
+                self?.nextButton.isEnabled = isEnabled
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.errorMessage
+            .emit(onNext: { [weak self] message in
+                self?.presentPlaybackError(message: message)
+            })
             .disposed(by: disposeBag)
 
         playButton.rx.tap
@@ -114,6 +147,17 @@ final class ViewController: UIViewController {
         downloadButton.rx.tap
             .bind(to: viewModel.downloadButtonTapped)
             .disposed(by: disposeBag)
+    }
+
+    private func presentPlaybackError(message: String) {
+        guard presentedViewController == nil else { return }
+
+        let alert = UIAlertController(title: L10n.playbackErrorTitle, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: L10n.retry, style: .default) { [weak self] _ in
+            self?.viewModel.retryButtonTapped.accept(())
+        })
+        present(alert, animated: true)
     }
 }
 

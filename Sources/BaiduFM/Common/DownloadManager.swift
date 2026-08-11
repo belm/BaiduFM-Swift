@@ -120,7 +120,7 @@ class DownloadManager {
                 if fileURL.pathExtension.lowercased() == "mp3" {
                     // 尝试从文件名解析歌曲信息
                     if let song = parseSongFromFilename(fileURL.lastPathComponent) {
-                        let task = SongDownloadTask(song: song, url: URL(string: song.song_url)!, destinationURL: fileURL)
+                        let task = SongDownloadTask(song: song, url: fileURL, destinationURL: fileURL)
                         task.status.accept(.completed)
                         task.progress.accept(1.0)
                         
@@ -160,7 +160,7 @@ class DownloadManager {
             }
             
             // 创建下载任务
-            guard let url = URL(string: song.song_url) else {
+            guard let url = URL(string: song.song_url), url.scheme?.lowercased() == "https" else {
                 observer.onError(DownloadError.invalidURL)
                 return Disposables.create()
             }

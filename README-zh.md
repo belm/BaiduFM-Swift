@@ -12,13 +12,16 @@
 ## 编译方式
 
 1. 安装包含 Swift 6.2 或更高版本的 Xcode。
-2. 使用 Xcode 打开 `Package.swift`，选择 `BaiduFM` Scheme。
-3. 选择任意可用的 iOS 模拟器进行编译或测试。
+2. 使用 Xcode 打开 `BaiduFM.xcodeproj`，选择共享的 `BaiduFMApp` Scheme。
+3. 在 `Configuration/Shared.xcconfig` 中将 `BAIDUFM_API_BASE_URL` 设置为已获授权的 HTTPS 内容服务。
+4. 选择 iOS 模拟器或真机并运行 App。
 
 也可以使用 `swift build` 验证跨平台核心代码。完整 iOS 编译需要 Xcode，因为项目使用了 UIKit、AVFoundation、Storyboard 和 Asset Catalog。
 
+历史百度 FM 地址仅作为开发默认值保留，服务可能不可用。正式发行前必须获得 API、音频流、封面、歌词、商标及下载功能的明确授权，详见[发布检查清单](Documentation/RELEASE_CHECKLIST.md)。
+
 ## API 接口声明
-- 本 APP 使用百度 FM 非公开 API，音乐版权归百度所有。
+- 本仓库是引用历史百度 FM 非公开 API 的开发示例。未获得相关权利人与服务提供方明确授权前，不得携带第三方内容、品牌、音频流或下载能力进行发行。
 
 ## 功能特性
 

@@ -1,4 +1,5 @@
 @testable import BaiduFM
+import Foundation
 
 #if canImport(Testing)
 import Testing
@@ -29,6 +30,18 @@ struct BaiduFMTests {
         #expect(song.name == "Example")
         #expect(song.time == 180)
     }
+
+    @Test("Rejects insecure API endpoints")
+    func rejectsInsecureAPIEndpoint() {
+        #expect(apiConfigurationRejectsInsecureEndpoint())
+    }
+
+    @Test("Builds encoded HTTPS API requests")
+    func buildsSecureAPIRequest() throws {
+        let queryItems = try secureAPIQueryItems()
+        #expect(queryItems["tn"] == "playlist")
+        #expect(queryItems["id"] == "rock & roll")
+    }
 }
 #elseif canImport(XCTest)
 import XCTest
@@ -54,6 +67,16 @@ final class BaiduFMTests: XCTestCase {
         XCTAssertEqual(song.name, "Example")
         XCTAssertEqual(song.time, 180)
     }
+
+    func testRejectsInsecureAPIEndpoint() {
+        XCTAssertTrue(apiConfigurationRejectsInsecureEndpoint())
+    }
+
+    func testBuildsSecureAPIRequest() throws {
+        let queryItems = try secureAPIQueryItems()
+        XCTAssertEqual(queryItems["tn"], "playlist")
+        XCTAssertEqual(queryItems["id"], "rock & roll")
+    }
 }
 #endif
 
@@ -69,4 +92,29 @@ private func makeSong() -> Song {
         format: "mp3",
         time: 180
     )
+}
+
+private func apiConfigurationRejectsInsecureEndpoint() -> Bool {
+    do {
+        _ = try APIConfiguration(baseURLString: "http://example.com")
+        return false
+    } catch let error as APIConfigurationError {
+        return error == .insecureTransport
+    } catch {
+        return false
+    }
+}
+
+private func secureAPIQueryItems() throws -> [String: String] {
+    let configuration = try APIConfiguration(baseURLString: "https://example.com")
+    let url = try configuration.endpoint(queryItems: [
+        URLQueryItem(name: "tn", value: "playlist"),
+        URLQueryItem(name: "id", value: "rock & roll"),
+    ])
+    guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+        throw APIConfigurationError.invalidEndpoint
+    }
+    return Dictionary(uniqueKeysWithValues: (components.queryItems ?? []).compactMap { item in
+        item.value.map { (item.name, $0) }
+    })
 }

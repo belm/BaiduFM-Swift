@@ -21,33 +21,23 @@ jobs:
       - name: Resolve packages
         run: swift package resolve
 
-      - name: Build for iOS Simulator
+      - name: Run package tests
+        run: swift test
+
+      - name: Validate release metadata
+        run: |
+          plutil -lint BaiduFMApp/Info.plist
+          plutil -lint Sources/BaiduFM/PrivacyInfo.xcprivacy
+          if rg --line-number 'http://' Sources/BaiduFM --glob '*.swift'; then
+            echo "Insecure HTTP URL found in Swift sources."
+            exit 1
+          fi
+
+      - name: Build application for iOS Simulator
         run: >-
           xcodebuild
-          -scheme BaiduFM
+          -project BaiduFM.xcodeproj
+          -scheme BaiduFMApp
           -destination 'generic/platform=iOS Simulator'
           CODE_SIGNING_ALLOWED=NO
           build
-
-      - name: Select an available iPhone simulator
-        id: simulator
-        run: |
-          simulator_id="$(xcrun simctl list devices available -j | python3 -c '
-          import json, sys
-          devices = json.load(sys.stdin)["devices"]
-          for runtime in sorted(devices, reverse=True):
-              for device in devices[runtime]:
-                  if device.get("isAvailable") and device["name"].startswith("iPhone"):
-                      print(device["udid"])
-                      raise SystemExit
-          raise SystemExit("No available iPhone simulator found")
-          ')"
-          echo "id=$simulator_id" >> "$GITHUB_OUTPUT"
-
-      - name: Run tests
-        run: >-
-          xcodebuild
-          -scheme BaiduFM
-          -destination 'platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}'
-          CODE_SIGNING_ALLOWED=NO
-          test

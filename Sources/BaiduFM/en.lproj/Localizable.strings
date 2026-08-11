@@ -11,8 +11,15 @@
 "action.ok" = "OK";
 "action.refresh" = "Refresh";
 "action.retry" = "Retry";
+"action.play" = "Play";
+"action.pause" = "Pause";
+"action.previous_track" = "Previous track";
+"action.next_track" = "Next track";
+"action.download" = "Download";
+"action.like" = "Like";
 
 "alert.error" = "Error";
+"alert.playback_error" = "Playback Error";
 "alert.confirm_clear" = "Confirm Clear";
 "alert.clear_downloads" = "Are you sure you want to clear all downloaded songs? This action cannot be undone.";
 "alert.clear_likes" = "Are you sure you want to clear all liked songs? This action cannot be undone.";
@@ -41,6 +48,12 @@
 "network.client_status" = "Client error: %ld";
 "network.server_status" = "Server error: %ld";
 "network.connection_failed" = "Network connection failed.";
+"network.invalid_configuration" = "The content service is not configured correctly.";
+"network.insecure_transport" = "An insecure content URL was blocked. Configure an HTTPS content provider.";
+
+"app.configuration_failed" = "Baidu FM could not load its interface. Please reinstall the app or contact support.";
+"playback.failed" = "This track could not be played. Please try again.";
+"playback.unavailable" = "Choose a track before starting playback.";
 
 "download.invalid_url" = "The download URL is invalid.";
 "download.already_exists" = "This song is already downloaded.";

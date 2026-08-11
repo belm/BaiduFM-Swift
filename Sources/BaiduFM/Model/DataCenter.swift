@@ -249,8 +249,10 @@ class DataCenter {
         currentPlayingSong.accept(song)
         
         // 使用AudioManager播放音频
-        if let url = URL(string: songLink.songLink) {
+        if let url = NetworkManager.shared.secureContentURL(from: songLink.songLink) {
             AudioManager.shared.play(from: url, song: song)
+        } else {
+            AudioManager.shared.reportPlaybackFailure(L10n.insecureConnectionBlocked)
         }
     }
     
@@ -263,8 +265,10 @@ class DataCenter {
         } else {
             // 如果不在，直接播放该歌曲对象
             currentPlayingSong.accept(song)
-            if let url = URL(string: song.song_url) {
+            if let url = NetworkManager.shared.secureContentURL(from: song.song_url) {
                 AudioManager.shared.play(from: url, song: song)
+            } else {
+                AudioManager.shared.reportPlaybackFailure(L10n.insecureConnectionBlocked)
             }
         }
     }

@@ -1,0 +1,7 @@
+IPHONEOS_DEPLOYMENT_TARGET = 15.0
+SWIFT_VERSION = 6.0
+SWIFT_STRICT_CONCURRENCY = complete
+
+// Override this value with an authorized HTTPS content provider before release.
+BAIDUFM_API_BASE_URL = https:/$()/fm.baidu.com
+BAIDUFM_CONTENT_PROVIDER_AUTHORIZED = NO

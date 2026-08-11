@@ -11,8 +11,15 @@
 "action.ok" = "确定";
 "action.refresh" = "刷新";
 "action.retry" = "重试";
+"action.play" = "播放";
+"action.pause" = "暂停";
+"action.previous_track" = "上一首";
+"action.next_track" = "下一首";
+"action.download" = "下载";
+"action.like" = "收藏";
 
 "alert.error" = "错误";
+"alert.playback_error" = "播放错误";
 "alert.confirm_clear" = "确认清除";
 "alert.clear_downloads" = "确定要清除全部已下载歌曲吗？此操作无法撤销。";
 "alert.clear_likes" = "确定要清除全部收藏歌曲吗？此操作无法撤销。";
@@ -41,6 +48,12 @@
 "network.client_status" = "客户端错误：%ld";
 "network.server_status" = "服务器错误：%ld";
 "network.connection_failed" = "网络连接失败。";
+"network.invalid_configuration" = "内容服务配置不正确。";
+"network.insecure_transport" = "已阻止不安全的内容链接，请配置 HTTPS 内容服务。";
+
+"app.configuration_failed" = "百度 FM 无法加载界面，请重新安装或联系支持。";
+"playback.failed" = "无法播放这首歌曲，请重试。";
+"playback.unavailable" = "请先选择歌曲再开始播放。";
 
 "download.invalid_url" = "下载链接无效。";
 "download.already_exists" = "该歌曲已下载。";

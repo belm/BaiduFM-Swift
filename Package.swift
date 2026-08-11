@@ -37,7 +37,6 @@ let package = Package(
             ],
             path: "Sources/BaiduFM",
             exclude: [
-                "Info.plist",
                 "MyPlayground.playground",
             ],
             resources: [
@@ -45,6 +44,7 @@ let package = Package(
                 .process("Base.lproj"),
                 .process("en.lproj"),
                 .process("zh-Hans.lproj"),
+                .copy("PrivacyInfo.xcprivacy"),
             ],
             swiftSettings: [
                 .defaultIsolation(MainActor.self),

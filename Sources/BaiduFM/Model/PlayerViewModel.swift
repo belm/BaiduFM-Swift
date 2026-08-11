@@ -5,10 +5,17 @@ import RxRelay
 import RxSwift
 
 final class PlayerViewModel {
+    private enum InitialLoadResult {
+        case success
+        case failure(String)
+    }
+
     private let disposeBag = DisposeBag()
     private let dataCenter = DataCenter.shared
     private let audioManager = AudioManager.shared
     private let parsedLyrics = BehaviorRelay<[(lrc: String, time: Int)]>(value: [])
+    private let initialLoadInProgress = BehaviorRelay<Bool>(value: false)
+    private let errorRelay = PublishRelay<String>()
 
     // MARK: Inputs
 
@@ -18,6 +25,7 @@ final class PlayerViewModel {
     let previousButtonTapped = PublishRelay<Void>()
     let likeButtonTapped = PublishRelay<Void>()
     let downloadButtonTapped = PublishRelay<Void>()
+    let retryButtonTapped = PublishRelay<Void>()
 
     // MARK: Outputs
 
@@ -31,6 +39,8 @@ final class PlayerViewModel {
     let totalTimeText: Driver<String>
     let lyrics: Driver<String>
     let channelName: Driver<String>
+    let isLoading: Driver<Bool>
+    let errorMessage: Signal<String>
 
     init() {
         let currentSong = dataCenter.currentPlayingSong
@@ -54,7 +64,7 @@ final class PlayerViewModel {
         artworkURL = currentSong
             .map { song in
                 guard let path = song?.pic_url, !path.isEmpty else { return nil }
-                return URL(string: path)
+                return NetworkManager.shared.secureContentURL(from: path)
             }
             .distinctUntilChanged { $0 == $1 }
 
@@ -83,13 +93,23 @@ final class PlayerViewModel {
             .map { $0?.name ?? L10n.appName }
             .asDriver(onErrorJustReturn: L10n.appName)
 
+        isLoading = Observable.combineLatest(
+            initialLoadInProgress,
+            audioManager.playbackState.map { $0 == .loading }
+        ) { $0 || $1 }
+            .distinctUntilChanged()
+            .asDriver(onErrorJustReturn: false)
+
+        errorMessage = errorRelay.asSignal()
+
         bindInputs()
         bindLyrics()
     }
 
     private func bindInputs() {
-        viewDidLoad
-            .flatMapLatest { [dataCenter] _ -> Observable<Void> in
+        Observable.merge(viewDidLoad.asObservable(), retryButtonTapped.asObservable())
+            .do(onNext: { [initialLoadInProgress] in initialLoadInProgress.accept(true) })
+            .flatMapLatest { [dataCenter] _ -> Observable<InitialLoadResult> in
                 let channelLoad: Observable<Void> = dataCenter.channelListInfo.value.isEmpty
                     ? dataCenter.loadChannelList()
                     : .just(())
@@ -97,17 +117,29 @@ final class PlayerViewModel {
                 return channelLoad
                     .flatMapLatest { dataCenter.loadSongList() }
                     .flatMapLatest { dataCenter.loadSongDetails() }
+                    .map { InitialLoadResult.success }
+                    .catch { error in
+                        .just(.failure(error.localizedDescription))
+                    }
             }
             .observe(on: MainScheduler.instance)
-            .subscribe(
-                onNext: { [dataCenter] in
-                    guard !dataCenter.currentSongInfoList.value.isEmpty else { return }
+            .subscribe(onNext: { [dataCenter, initialLoadInProgress, errorRelay] result in
+                initialLoadInProgress.accept(false)
+                switch result {
+                case .success:
+                    guard !dataCenter.currentSongInfoList.value.isEmpty else {
+                        errorRelay.accept(L10n.noData)
+                        return
+                    }
                     dataCenter.playSong(at: 0)
-                },
-                onError: { error in
-                    print("Initial song loading failed: \(error.localizedDescription)")
+                case .failure(let message):
+                    errorRelay.accept(message.isEmpty ? L10n.loadSongsFailed : message)
                 }
-            )
+            })
+            .disposed(by: disposeBag)
+
+        audioManager.playbackError
+            .bind(to: errorRelay)
             .disposed(by: disposeBag)
 
         playPauseButtonTapped
@@ -156,8 +188,7 @@ final class PlayerViewModel {
             .distinctUntilChanged { $0.sid == $1.sid }
             .flatMapLatest { song -> Observable<String> in
                 guard !song.lrc_url.isEmpty else { return .just("") }
-                let url = song.lrc_url.hasPrefix("http") ? song.lrc_url : http_song_lrc + song.lrc_url
-                return NetworkManager.shared.getLyrics(url: url)
+                return NetworkManager.shared.getLyrics(url: song.lrc_url)
                     .catchAndReturn("")
             }
             .map(Common.praseSongLrc)

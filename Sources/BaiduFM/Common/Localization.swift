@@ -14,8 +14,15 @@ nonisolated enum L10n {
     static let ok = value("action.ok", defaultValue: "OK")
     static let refresh = value("action.refresh", defaultValue: "Refresh")
     static let retry = value("action.retry", defaultValue: "Retry")
+    static let play = value("action.play", defaultValue: "Play")
+    static let pause = value("action.pause", defaultValue: "Pause")
+    static let previousTrack = value("action.previous_track", defaultValue: "Previous track")
+    static let nextTrack = value("action.next_track", defaultValue: "Next track")
+    static let download = value("action.download", defaultValue: "Download")
+    static let like = value("action.like", defaultValue: "Like")
 
     static let error = value("alert.error", defaultValue: "Error")
+    static let playbackErrorTitle = value("alert.playback_error", defaultValue: "Playback Error")
     static let confirmClear = value("alert.confirm_clear", defaultValue: "Confirm Clear")
     static let clearDownloadsMessage = value(
         "alert.clear_downloads",
@@ -71,6 +78,27 @@ nonisolated enum L10n {
     static let clientStatusFormat = value("network.client_status", defaultValue: "Client error: %ld")
     static let serverStatusFormat = value("network.server_status", defaultValue: "Server error: %ld")
     static let connectionFailed = value("network.connection_failed", defaultValue: "Network connection failed.")
+    static let invalidAPIConfiguration = value(
+        "network.invalid_configuration",
+        defaultValue: "The content service is not configured correctly."
+    )
+    static let insecureConnectionBlocked = value(
+        "network.insecure_transport",
+        defaultValue: "An insecure content URL was blocked. Configure an HTTPS content provider."
+    )
+
+    static let applicationConfigurationFailed = value(
+        "app.configuration_failed",
+        defaultValue: "Baidu FM could not load its interface. Please reinstall the app or contact support."
+    )
+    static let playbackFailed = value(
+        "playback.failed",
+        defaultValue: "This track could not be played. Please try again."
+    )
+    static let playbackUnavailable = value(
+        "playback.unavailable",
+        defaultValue: "Choose a track before starting playback."
+    )
 
     static let invalidDownloadURL = value("download.invalid_url", defaultValue: "The download URL is invalid.")
     static let downloadExists = value("download.already_exists", defaultValue: "This song is already downloaded.")

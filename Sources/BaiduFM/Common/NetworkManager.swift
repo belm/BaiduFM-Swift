@@ -2,8 +2,7 @@
 //  NetworkManager.swift
 //  BaiduFM
 //
-//  现代化的网络请求管理器
-//  使用Alamofire 5.x + RxSwift进行网络请求和响应式编程
+//  Secure network access for the configured content provider.
 //
 
 import Foundation
@@ -18,6 +17,7 @@ enum NetworkError: Error, LocalizedError {
     case decodingError
     case serverError(String)
     case connectionError
+    case insecureTransport
     
     var errorDescription: String? {
         switch self {
@@ -31,94 +31,38 @@ enum NetworkError: Error, LocalizedError {
             return String(format: L10n.serverErrorFormat, message)
         case .connectionError:
             return L10n.connectionFailed
+        case .insecureTransport:
+            return L10n.insecureConnectionBlocked
         }
     }
 }
 
-// MARK: - API响应模型
-struct APIResponse<T: Sendable>: Sendable {
-    let data: T?
-    let message: String?
-    let code: Int
-}
-
 // MARK: - 网络管理器
-class NetworkManager {
+final class NetworkManager {
     
     // MARK: - 单例
     static let shared = NetworkManager()
     
     // MARK: - 私有属性
     private let session: Session
-    private let baseURL = "http://fm.baidu.com"
+    private let configuration: APIConfiguration
     
     // MARK: - 初始化
-    private init() {
-        // 配置网络会话
-        let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = 30
-        configuration.timeoutIntervalForResource = 60
+    private init(configuration: APIConfiguration = .resolved()) {
+        self.configuration = configuration
+
+        let sessionConfiguration = URLSessionConfiguration.default
+        sessionConfiguration.timeoutIntervalForRequest = 30
+        sessionConfiguration.timeoutIntervalForResource = 60
+        sessionConfiguration.waitsForConnectivity = true
         
         // 创建自定义会话
-        self.session = Session(configuration: configuration)
-    }
-    
-    // MARK: - 通用请求方法
-    private func request<T: Decodable & Sendable>(
-        url: String,
-        method: HTTPMethod = .get,
-        parameters: Parameters? = nil,
-        encoding: ParameterEncoding = URLEncoding.default,
-        headers: HTTPHeaders? = nil
-    ) -> Observable<T> {
-        
-        return Observable.create { observer in
-            let observer = RxObserverBox(observer)
-            let request = self.session.request(
-                url,
-                method: method,
-                parameters: parameters,
-                encoding: encoding,
-                headers: headers
-            )
-            .validate()
-            .responseData { response in
-                
-                switch response.result {
-                case .success(let data):
-                    do {
-                        let decodedData = try JSONDecoder().decode(T.self, from: data)
-                        observer.onNext(decodedData)
-                        observer.onCompleted()
-                    } catch {
-                        observer.onError(NetworkError.decodingError)
-                    }
-                    
-                case .failure:
-                    if let statusCode = response.response?.statusCode {
-                        switch statusCode {
-                        case 400...499:
-                            observer.onError(NetworkError.serverError(String(format: L10n.clientStatusFormat, statusCode)))
-                        case 500...599:
-                            observer.onError(NetworkError.serverError(String(format: L10n.serverStatusFormat, statusCode)))
-                        default:
-                            observer.onError(NetworkError.connectionError)
-                        }
-                    } else {
-                        observer.onError(NetworkError.connectionError)
-                    }
-                }
-            }
-            
-            return Disposables.create {
-                request.cancel()
-            }
-        }
+        self.session = Session(configuration: sessionConfiguration)
     }
     
     // MARK: - JSON响应请求方法
     private func requestJSON(
-        url: String,
+        url: URL,
         method: HTTPMethod = .get,
         parameters: Parameters? = nil
     ) -> Observable<JSON> {
@@ -143,8 +87,19 @@ class NetworkManager {
                     }
                     
                 case .failure(let error):
-                    print("网络请求失败: \(error.localizedDescription)")
-                    observer.onError(NetworkError.connectionError)
+                    if let statusCode = response.response?.statusCode {
+                        switch statusCode {
+                        case 400...499:
+                            observer.onError(NetworkError.serverError(String(format: L10n.clientStatusFormat, statusCode)))
+                        case 500...599:
+                            observer.onError(NetworkError.serverError(String(format: L10n.serverStatusFormat, statusCode)))
+                        default:
+                            observer.onError(NetworkError.connectionError)
+                        }
+                    } else {
+                        print("Network request failed: \(error.localizedDescription)")
+                        observer.onError(NetworkError.connectionError)
+                    }
                 }
             }
             
@@ -157,12 +112,25 @@ class NetworkManager {
 
 // MARK: - 百度FM API接口
 extension NetworkManager {
+    func secureContentURL(from value: String) -> URL? {
+        configuration.secureContentURL(from: value)
+    }
+
+    private func apiURL(queryItems: [URLQueryItem]) -> Observable<URL> {
+        do {
+            return .just(try configuration.endpoint(queryItems: queryItems))
+        } catch {
+            return .error(error)
+        }
+    }
     
     // MARK: - 获取频道列表
     func getChannelList() -> Observable<[Channel]> {
-        let url = "\(baseURL)/dev/api/?tn=channellist"
-        
-        return requestJSON(url: url)
+        return apiURL(queryItems: [URLQueryItem(name: "tn", value: "channellist")])
+            .flatMapLatest { [weak self] url -> Observable<JSON> in
+                guard let self else { return .empty() }
+                return self.requestJSON(url: url)
+            }
             .map { json -> [Channel] in
                 let channelArray = json["channel_list"].arrayValue
                 return channelArray.compactMap { channelJSON in
@@ -181,9 +149,15 @@ extension NetworkManager {
     
     // MARK: - 获取歌曲列表
     func getSongList(channelId: String) -> Observable<[String]> {
-        let url = "\(baseURL)/dev/api/?tn=playlist&format=json&id=\(channelId)"
-        
-        return requestJSON(url: url)
+        return apiURL(queryItems: [
+            URLQueryItem(name: "tn", value: "playlist"),
+            URLQueryItem(name: "format", value: "json"),
+            URLQueryItem(name: "id", value: channelId),
+        ])
+            .flatMapLatest { [weak self] url -> Observable<JSON> in
+                guard let self else { return .empty() }
+                return self.requestJSON(url: url)
+            }
             .map { json -> [String] in
                 let songArray = json["list"].arrayValue
                 return songArray.map { $0["id"].stringValue }
@@ -193,9 +167,15 @@ extension NetworkManager {
     // MARK: - 获取歌曲详细信息
     func getSongInfo(songIds: [String]) -> Observable<[SongInfo]> {
         let idsString = songIds.joined(separator: ",")
-        let url = "\(baseURL)/dev/api/?tn=songinfo&format=json&ids=\(idsString)"
-        
-        return requestJSON(url: url)
+        return apiURL(queryItems: [
+            URLQueryItem(name: "tn", value: "songinfo"),
+            URLQueryItem(name: "format", value: "json"),
+            URLQueryItem(name: "ids", value: idsString),
+        ])
+            .flatMapLatest { [weak self] url -> Observable<JSON> in
+                guard let self else { return .empty() }
+                return self.requestJSON(url: url)
+            }
             .map { json -> [SongInfo] in
                 let songArray = json["songinfo"].arrayValue
                 return songArray.compactMap { songJSON in
@@ -213,9 +193,15 @@ extension NetworkManager {
     // MARK: - 获取歌曲播放链接
     func getSongLinks(songIds: [String]) -> Observable<[SongLink]> {
         let idsString = songIds.joined(separator: ",")
-        let url = "\(baseURL)/dev/api/?tn=songlink&format=json&ids=\(idsString)"
-        
-        return requestJSON(url: url)
+        return apiURL(queryItems: [
+            URLQueryItem(name: "tn", value: "songlink"),
+            URLQueryItem(name: "format", value: "json"),
+            URLQueryItem(name: "ids", value: idsString),
+        ])
+            .flatMapLatest { [weak self] url -> Observable<JSON> in
+                guard let self else { return .empty() }
+                return self.requestJSON(url: url)
+            }
             .map { json -> [SongLink] in
                 let linkArray = json["songlink"].arrayValue
                 return linkArray.compactMap { linkJSON in
@@ -232,18 +218,22 @@ extension NetworkManager {
     
     // MARK: - 获取歌词内容
     func getLyrics(url: String) -> Observable<String> {
-        return requestJSON(url: url)
+        guard let secureURL = configuration.secureContentURL(from: url) else {
+            return .error(NetworkError.insecureTransport)
+        }
+
+        return requestJSON(url: secureURL)
             .map { json -> String in
                 return json["lrcContent"].stringValue
             }
             .catch { _ in
                 // 如果JSON解析失败，尝试直接获取文本
-                return self.requestLyricsText(url: url)
+                return self.requestLyricsText(url: secureURL)
             }
     }
     
     // MARK: - 直接获取歌词文本
-    private func requestLyricsText(url: String) -> Observable<String> {
+    private func requestLyricsText(url: URL) -> Observable<String> {
         return Observable.create { observer in
             let observer = RxObserverBox(observer)
             let request = self.session.request(url)
@@ -266,13 +256,17 @@ extension NetworkManager {
     
     // MARK: - 下载音频文件
     func downloadAudio(from url: String, to destination: URL) -> Observable<Float> {
+        guard let secureURL = configuration.secureContentURL(from: url) else {
+            return .error(NetworkError.insecureTransport)
+        }
+
         return Observable.create { observer in
             let observer = RxObserverBox(observer)
             let destination: DownloadRequest.Destination = { _, _ in
                 return (destination, [.removePreviousFile, .createIntermediateDirectories])
             }
             
-            let request = self.session.download(url, to: destination)
+            let request = self.session.download(secureURL, to: destination)
                 .downloadProgress { progress in
                     observer.onNext(Float(progress.fractionCompleted))
                 }

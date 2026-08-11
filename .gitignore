@@ -1,2 +1,7 @@
 .build
 *.xcodeproj
+!BaiduFM.xcodeproj/
+!BaiduFM.xcodeproj/project.pbxproj
+!BaiduFM.xcodeproj/xcshareddata/
+!BaiduFM.xcodeproj/xcshareddata/xcschemes/
+!BaiduFM.xcodeproj/xcshareddata/xcschemes/BaiduFMApp.xcscheme

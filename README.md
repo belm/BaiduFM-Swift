@@ -12,13 +12,16 @@ A Baidu FM client modernized for Swift 6.2, Swift Package Manager, and iOS 15 or
 ## Build
 
 1. Install an Xcode release that includes Swift 6.2 or later.
-2. Open `Package.swift` in Xcode and select the `BaiduFM` scheme.
-3. Build or test with an iOS Simulator destination.
+2. Open `BaiduFM.xcodeproj` in Xcode and select the shared `BaiduFMApp` scheme.
+3. Set `BAIDUFM_API_BASE_URL` in `Configuration/Shared.xcconfig` to an authorized HTTPS content service.
+4. Select an iOS Simulator or connected device and run the app.
 
 Command-line core validation is also available with `swift build`. A complete iOS build requires Xcode because the app uses UIKit, AVFoundation, storyboards, and asset catalogs.
 
+The historical Baidu FM endpoint is retained only as a development default and may be unavailable. Production distribution requires explicit authorization for the API, streams, artwork, lyrics, trademarks, and downloads. See [the release checklist](Documentation/RELEASE_CHECKLIST.md).
+
 ## API Disclaimer
-- This app uses Baidu FM's non-public API. All music copyrights belong to Baidu.
+- This repository is a development sample that references a historical, non-public Baidu FM API. It must not be distributed with third-party content, branding, streaming, or download access without explicit authorization from the relevant rights holders and service provider.
 
 ## Features
 

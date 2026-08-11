@@ -21,6 +21,7 @@ final class AudioManager: NSObject {
     let currentTime = BehaviorRelay<TimeInterval>(value: 0)
     let duration = BehaviorRelay<TimeInterval>(value: 0)
     let progress = BehaviorRelay<Float>(value: 0)
+    let playbackError = PublishRelay<String>()
 
     var isPlaying: Bool {
         playbackState.value == .playing && player?.rate != 0
@@ -30,7 +31,12 @@ final class AudioManager: NSObject {
     private var currentSong: Song?
     private var periodicTimeObserver: Any?
     private var playbackEndObserver: NSObjectProtocol?
+    private var playbackFailureObserver: NSObjectProtocol?
+    private var playbackStalledObserver: NSObjectProtocol?
+    private var itemStatusObservation: NSKeyValueObservation?
+    private var timeControlStatusObservation: NSKeyValueObservation?
     private var artworkTask: Task<Void, Never>?
+    private var intendsToPlay = false
 
     private override init() {
         super.init()
@@ -41,32 +47,52 @@ final class AudioManager: NSObject {
 
     func play(from url: URL, song: Song) {
         stop(resetNowPlayingInfo: false)
-        playbackState.accept(.loading)
         currentSong = song
+        guard url.isFileURL || url.scheme?.lowercased() == "https" else {
+            reportPlaybackFailure(L10n.insecureConnectionBlocked)
+            return
+        }
+
+        intendsToPlay = true
+        playbackState.accept(.loading)
         duration.accept(TimeInterval(song.time))
 
         let item = AVPlayerItem(url: url)
         let player = AVPlayer(playerItem: item)
         self.player = player
         installPeriodicTimeObserver(on: player)
-        observePlaybackEnd(for: item)
+        observePlaybackNotifications(for: item)
+        observePlaybackState(player: player, item: item)
 
         player.play()
-        playbackState.accept(.playing)
         updateNowPlayingInfo()
         loadArtworkIfNeeded(for: song)
     }
 
     func pause() {
-        player?.pause()
+        guard let player else { return }
+        intendsToPlay = false
+        player.pause()
         playbackState.accept(.paused)
         updateNowPlayingInfo()
     }
 
     func resume() {
-        guard player != nil else { return }
-        player?.play()
-        playbackState.accept(.playing)
+        guard let player else {
+            reportPlaybackFailure(L10n.playbackUnavailable)
+            return
+        }
+        intendsToPlay = true
+        playbackState.accept(.loading)
+        player.play()
+        updateNowPlayingInfo()
+    }
+
+    func reportPlaybackFailure(_ message: String) {
+        intendsToPlay = false
+        player?.pause()
+        playbackState.accept(.error)
+        playbackError.accept(message)
         updateNowPlayingInfo()
     }
 
@@ -92,6 +118,7 @@ final class AudioManager: NSObject {
     private func stop(resetNowPlayingInfo: Bool) {
         artworkTask?.cancel()
         artworkTask = nil
+        intendsToPlay = false
         removePlayerObservers()
         player?.pause()
         player = nil
@@ -117,7 +144,7 @@ final class AudioManager: NSObject {
         }
     }
 
-    private func observePlaybackEnd(for item: AVPlayerItem) {
+    private func observePlaybackNotifications(for item: AVPlayerItem) {
         playbackEndObserver = NotificationCenter.default.addObserver(
             forName: .AVPlayerItemDidPlayToEndTime,
             object: item,
@@ -127,6 +154,85 @@ final class AudioManager: NSObject {
                 self?.playNext()
             }
         }
+
+        playbackFailureObserver = NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemFailedToPlayToEndTime,
+            object: item,
+            queue: .main
+        ) { [weak self] notification in
+            let error = notification.userInfo?[AVPlayerItemFailedToPlayToEndTimeErrorKey] as? Error
+            if let error {
+                print("Playback failed: \(error.localizedDescription)")
+            }
+            Task { @MainActor in
+                self?.reportPlaybackFailure(L10n.playbackFailed)
+            }
+        }
+
+        playbackStalledObserver = NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemPlaybackStalled,
+            object: item,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                guard let self, self.intendsToPlay else { return }
+                self.playbackState.accept(.loading)
+                self.player?.play()
+            }
+        }
+    }
+
+    private func observePlaybackState(player: AVPlayer, item: AVPlayerItem) {
+        itemStatusObservation = item.observe(\.status, options: [.initial, .new]) { [weak self] item, _ in
+            let statusRawValue = item.status.rawValue
+            let errorDescription = item.error?.localizedDescription
+            Task { @MainActor in
+                self?.handleItemStatus(statusRawValue, errorDescription: errorDescription)
+            }
+        }
+
+        timeControlStatusObservation = player.observe(\.timeControlStatus, options: [.initial, .new]) { [weak self] player, _ in
+            let statusRawValue = player.timeControlStatus.rawValue
+            Task { @MainActor in
+                self?.handleTimeControlStatus(statusRawValue)
+            }
+        }
+    }
+
+    private func handleItemStatus(_ statusRawValue: Int, errorDescription: String?) {
+        switch statusRawValue {
+        case AVPlayerItem.Status.unknown.rawValue:
+            if intendsToPlay {
+                playbackState.accept(.loading)
+            }
+        case AVPlayerItem.Status.readyToPlay.rawValue:
+            if intendsToPlay {
+                player?.play()
+            }
+        case AVPlayerItem.Status.failed.rawValue:
+            if let errorDescription {
+                print("Player item failed: \(errorDescription)")
+            }
+            reportPlaybackFailure(L10n.playbackFailed)
+        default:
+            reportPlaybackFailure(L10n.playbackFailed)
+        }
+    }
+
+    private func handleTimeControlStatus(_ statusRawValue: Int) {
+        guard playbackState.value != .error else { return }
+
+        switch statusRawValue {
+        case AVPlayer.TimeControlStatus.paused.rawValue:
+            playbackState.accept(intendsToPlay ? .loading : .paused)
+        case AVPlayer.TimeControlStatus.waitingToPlayAtSpecifiedRate.rawValue:
+            playbackState.accept(.loading)
+        case AVPlayer.TimeControlStatus.playing.rawValue:
+            playbackState.accept(.playing)
+        default:
+            playbackState.accept(.loading)
+        }
+        updateNowPlayingInfo()
     }
 
     private func removePlayerObservers() {
@@ -139,6 +245,21 @@ final class AudioManager: NSObject {
             NotificationCenter.default.removeObserver(playbackEndObserver)
         }
         playbackEndObserver = nil
+
+        if let playbackFailureObserver {
+            NotificationCenter.default.removeObserver(playbackFailureObserver)
+        }
+        playbackFailureObserver = nil
+
+        if let playbackStalledObserver {
+            NotificationCenter.default.removeObserver(playbackStalledObserver)
+        }
+        playbackStalledObserver = nil
+
+        itemStatusObservation?.invalidate()
+        itemStatusObservation = nil
+        timeControlStatusObservation?.invalidate()
+        timeControlStatusObservation = nil
     }
 
     private func updatePlaybackTime(_ time: TimeInterval) {
@@ -178,7 +299,7 @@ final class AudioManager: NSObject {
     }
 
     private func loadArtworkIfNeeded(for song: Song) {
-        guard let url = URL(string: song.pic_url) else { return }
+        guard let url = NetworkManager.shared.secureContentURL(from: song.pic_url) else { return }
 
         artworkTask = Task { [weak self] in
             do {
